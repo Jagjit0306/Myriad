@@ -19,6 +19,7 @@ class _OnBoardingState extends State<OnBoarding> {
     {'Hearing Impairment': false},
     {'Speech Impairment': false},
     {'Dexterity Impairment': false},
+    {'Wheelchair Bound': false},
     {'Limb Differences': false},
     {'Paralysis': false},
   ];

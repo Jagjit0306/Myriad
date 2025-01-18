@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:myriad/auth/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:myriad/firebase_options.dart';
+import 'package:myriad/pages/community_new_post.dart';
+import 'package:myriad/pages/community_page.dart';
 import 'package:myriad/pages/home_page.dart';
 import 'package:myriad/pages/on_boarding.dart';
 import 'package:myriad/themes/dark_mode.dart';
@@ -28,6 +30,8 @@ class MainApp extends StatelessWidget {
       routes: {
         '/home_page' : (context) => HomePage(),
         '/on_boarding' : (context) => OnBoarding(),
+        '/community_page' : (context) => CommunityPage(),
+        '/new_thread' : (context) => CommunityNewPost(),
       },
     );
   }

@@ -51,19 +51,19 @@ class MyDrawer extends StatelessWidget {
               //   },
               // ),
 
-              // //user tile
-              // ListTile(
-              //   leading: Icon(
-              //     Icons.group,
-              //     color: Theme.of(context).colorScheme.inversePrimary,
-              //   ),
-              //   title: Text('U S E R S'),
-              //   onTap: () {
-              //     //this is already the homescreen so pop drawer
-              //     Navigator.pop(context);
-              //     Navigator.pushNamed(context, '/users_page');
-              //   },
-              // ),
+              //community tile
+              ListTile(
+                leading: Icon(
+                  Icons.group,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                title: Text('C O M M U N I T Y'),
+                onTap: () {
+                  //this is already the homescreen so pop drawer
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/community_page');
+                },
+              ),
 
               //user tile
               ListTile(
@@ -93,7 +93,6 @@ class MyDrawer extends StatelessWidget {
               Navigator.pop(context);
               signOutFromGoogle();
               if (context.mounted) {
-                print("CONTEXT MOUNTED AFTER LOGOUT");
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
