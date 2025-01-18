@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1084180741966",
+    "project_id": "myriad-80085",
+    "storage_bucket": "myriad-80085.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084180741966:android:8630ab28fc6a47c994e81f",
+        "android_client_info": {
+          "package_name": "com.example.myriad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084180741966-0jjhmoa6qohpi4cbjgs1ronnh1l1rv7n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBJJ8fMXLPEdhelgtrYPwZEjvjXTZSNuQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084180741966-0jjhmoa6qohpi4cbjgs1ronnh1l1rv7n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
