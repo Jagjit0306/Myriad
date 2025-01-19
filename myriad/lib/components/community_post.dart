@@ -1,22 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:myriad/pages/community_thread.dart';
 
 class CommunityPost extends StatelessWidget {
   final String postId;
-  final String title;
-  final String content;
+  final dynamic data;
   const CommunityPost(
       {super.key,
       required this.postId,
-      required this.title,
-      required this.content});
+      required this.data});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(
         builder: (context) {
-          return CommunityThread(title: title, postId: postId);
+          return CommunityThread(title: data['title'], postId: postId);
         },
       )),
       child: Card(
@@ -30,17 +30,17 @@ class CommunityPost extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  '$title -> $postId',
+                  '${data['title']} -> $postId',
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Text(content),
-                Text(content),
-                Text(content),
-                Text(content),
-                Text(content),
+                Text(data['content']),
+                Text(data['likes'].toString()),
+                Text(jsonEncode(data['likers'])),
+                Text(data['op']),
+                // Text(content),
               ],
             ),
           ),

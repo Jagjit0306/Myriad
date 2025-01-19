@@ -33,8 +33,31 @@ class HomePage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text("Error: ${snapshot.error}");
           } else if (snapshot.hasData) {
-            return Text(
-              "DATA OBTAINED -> \n\n\n\n${jsonEncode(snapshot.data!.data())}",
+            return Column(
+              children: [
+                Image.network(
+                  currentUser!.photoURL!,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                (loadingProgress.expectedTotalBytes ?? 1)
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (BuildContext context, Object error,
+                      StackTrace? stackTrace) {
+                    return const Text('Failed to load image');
+                  },
+                ),
+                Text(
+                  "DATA OBTAINED -> \n\n\n\n${jsonEncode(snapshot.data!.data())}",
+                ),
+              ],
             );
           } else {
             return Text("NODATA");
