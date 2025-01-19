@@ -19,52 +19,54 @@ class CommunityThread extends StatelessWidget {
         appBar: AppBar(
           title: Text(title),
         ),
-        body: SizedBox(
-          width: double.infinity,
-          child: StreamBuilder(
-            stream: communityDatabase.getCommunityPostStream(postId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasData && snapshot.data != null) {
-                DocumentSnapshot postData = snapshot.data!;
-                if (postData.exists) {
-                  return Column(
-                    children: [
-                      Text(postData['title']),
-                      Text(postData['content']),
-                      Text(postData['op']),
-                      Text("LIKES -> ${postData['likes']}"),
-                      Text(jsonEncode(postData['likers'])),
-                      // MyButton(
-                      //   text: (postData is List &&
-                      //           postData['likers'].contains(
-                      //               FirebaseAuth.instance.currentUser!.email))
-                      //       ? "UNLIKE"
-                      //       : "LIKE",
-                      //   onTap: () {
-                      //     communityDatabase.likeCommunityPost(postId);
-                      //   },
-                      // ),
-                      CommunityThreadLikeButton(
-                        postId: postId,
-                        likers: postData['likers'],
-                        communityDatabase: communityDatabase,
-                      ),
-                      CommunityThreadDeleteButton(
-                          currUser: postData['op'],
+        body: Column(
+          children: [
+            StreamBuilder(
+              stream: communityDatabase.getCommunityPostStream(postId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasData && snapshot.data != null) {
+                  DocumentSnapshot postData = snapshot.data!;
+                  if (postData.exists) {
+                    return Column(
+                      children: [
+                        Text(postData['title']),
+                        Text(postData['content']),
+                        Text(postData['op']),
+                        Text("LIKES -> ${postData['likes']}"),
+                        Text(jsonEncode(postData['likers'])),
+                        // MyButton(
+                        //   text: (postData is List &&
+                        //           postData['likers'].contains(
+                        //               FirebaseAuth.instance.currentUser!.email))
+                        //       ? "UNLIKE"
+                        //       : "LIKE",
+                        //   onTap: () {
+                        //     communityDatabase.likeCommunityPost(postId);
+                        //   },
+                        // ),
+                        CommunityThreadLikeButton(
                           postId: postId,
-                          communityDatabase: communityDatabase),
-                    ],
-                  );
+                          likers: postData['likers'],
+                          communityDatabase: communityDatabase,
+                        ),
+                        CommunityThreadDeleteButton(
+                            currUser: postData['op'],
+                            postId: postId,
+                            communityDatabase: communityDatabase),
+                      ],
+                    );
+                  } else {
+                    return Text("Post not found");
+                  }
                 } else {
                   return Text("Post not found");
                 }
-              } else {
-                return Text("Post not found");
-              }
-            },
-          ),
+              },
+            ),
+            Text("COMMMENTS TO BE IMPLEMENTED SOON"),
+          ],
         ));
   }
 }

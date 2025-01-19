@@ -15,7 +15,9 @@ class CommunityDatabase {
   final CollectionReference communityPosts =
       FirebaseFirestore.instance.collection('CommunityPosts');
 
-  Future<void> addCommunityPost(String title, String content) async {
+  Future<void> addCommunityPost(
+      String title, String content, List<dynamic> prefs) async {
+    // List<String> selectedPrefs = ?
     communityPosts.add({
       "title": title,
       "content": content,
@@ -23,7 +25,10 @@ class CommunityDatabase {
       "op": currentUser?.email,
       'likes': 0,
       'likers': [],
-      // 'postId': "$userEmail[P]${Timestamp.now()}",
+      'categories': prefs
+          .where((map) => map.values.first == true)
+          .map((map) => map.keys.first)
+          .toList(),
     });
   }
 

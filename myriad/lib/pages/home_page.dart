@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myriad/components/my_drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -15,6 +16,11 @@ class HomePage extends StatelessWidget {
         .collection("Users")
         .doc(currentUser!.email)
         .get();
+  }
+
+  Future<void> _prefsSaver(List<dynamic> prefs) async {
+    SharedPreferences localPrefs = await SharedPreferences.getInstance();
+    localPrefs.setString('prefs', jsonEncode(prefs));
   }
 
   @override
@@ -33,6 +39,7 @@ class HomePage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text("Error: ${snapshot.error}");
           } else if (snapshot.hasData) {
+            _prefsSaver(snapshot.data!.data()!['prefs']);
             return Column(
               children: [
                 Image.network(

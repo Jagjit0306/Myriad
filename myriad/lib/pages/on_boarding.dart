@@ -91,6 +91,7 @@ class _OnBoardingState extends State<OnBoarding> {
                 checkUsernameUnique(value);
               },
             ),
+            if(!isUsernameUnique) const Text("THIS USERNAME IS TAKEN/INVALID"),
 
             const SizedBox(
               height: 25,
@@ -120,14 +121,16 @@ class _OnBoardingState extends State<OnBoarding> {
                   // submit the info and save it
                   // Navigator.pop(context);
                   // Navigator.pushNamed(context, '/home_page');
-                  setPrefs();
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/home_page', // The name of the route you want to push
-                    (route) => false, // This will remove all previous routes
-                  );
+                  if(isUsernameUnique) {
+                    setPrefs();
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/home_page', // The name of the route you want to push
+                      (route) => false, // This will remove all previous routes
+                    );
+                  }
                 },
-                enabled: isUsernameUnique, 
+                // enabled: isUsernameUnique, 
               ),
             ),
           ],
