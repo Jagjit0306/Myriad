@@ -24,15 +24,29 @@ class _OnBoardingState extends State<OnBoarding> {
     {'Paralysis': false},
   ];
 
+  bool isUsernameUnique = true;
+
+  Future<void> checkUsernameUnique(String username) async {
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('username', isEqualTo: username)
+        .get();
+    setState(() {
+      isUsernameUnique = result.docs.isEmpty; 
+    });
+  }
+
   Future<void> setPrefs() async {
     final User? currentUser = FirebaseAuth.instance.currentUser;
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(currentUser!.email)
-        .update({
-      "username": usernameController.text,
-      "prefs": prefs,
-    });
+    if (isUsernameUnique) {
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser!.email)
+          .update({
+        "username": usernameController.text,
+        "prefs": prefs,
+      });
+    }
   }
 
   @override
@@ -73,6 +87,9 @@ class _OnBoardingState extends State<OnBoarding> {
               hintText: 'Username',
               obscureText: false,
               controller: usernameController,
+              onChanged: (value) {
+                checkUsernameUnique(value);
+              },
             ),
 
             const SizedBox(
@@ -110,6 +127,7 @@ class _OnBoardingState extends State<OnBoarding> {
                     (route) => false, // This will remove all previous routes
                   );
                 },
+                enabled: isUsernameUnique, 
               ),
             ),
           ],
