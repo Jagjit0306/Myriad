@@ -75,7 +75,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                   const SnackBar(
                       content: Text("An error occurred. Please try again.")),
                 );
-              }
+              } 
             },
           ),
         ),
