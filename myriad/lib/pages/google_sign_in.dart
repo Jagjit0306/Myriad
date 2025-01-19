@@ -1,42 +1,86 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myriad/auth/google_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleSignInScreen extends StatefulWidget {
-  const GoogleSignInScreen({Key? key}) : super(key: key);
+  const GoogleSignInScreen({super.key});
 
   @override
   State<GoogleSignInScreen> createState() => _GoogleSignInScreenState();
 }
 
 class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
+  Future<UserCredential?> signInWithGoogle(BuildContext context) async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        // User canceled the sign-in
+        return null;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with the Google credential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      debugPrint("Google Sign-In error: $e");
+      return null; // Return null in case of error
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Google SignIn Screen')),
-        body: Center(
-          child: Card(
-            elevation: 5,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: IconButton(
-              iconSize: 40,
-              icon: Icon(Icons.fireplace),
-              onPressed: () async {
-                UserCredential userCredential = await signInWithGoogle(context);
+      appBar: AppBar(title: const Text('Google Sign-In Screen')),
+      body: Center(
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)),
+          child: IconButton(
+            iconSize: 40,
+            icon: const Icon(Icons.fireplace),
+            onPressed: () async {
+              try {
+                UserCredential? userCredential =
+                    await signInWithGoogle(context);
 
+                if (userCredential == null || userCredential.user == null) {
+                  // Sign-in failed
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text("Sign-in failed. Please try again.")),
+                  );
+                  return;
+                }
+
+                // Navigate to the next page
                 Navigator.push(
-                    // ignore: use_build_context_synchronously
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ManageLogin(email: userCredential.user!.email),
-                    ));
-              },
-            ),
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ManageLogin(
+                      email: userCredential.user!.email,
+                    ),
+                  ),
+                );
+              } catch (e) {
+                debugPrint("Error during sign-in: $e");
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text("An error occurred. Please try again.")),
+                );
+              }
+            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -63,7 +107,7 @@ class _ManageLoginState extends State<ManageLogin> {
 
   Future<void> managePage(BuildContext context) async {
     if (completed) {
-      // go to home or onboarding whatever
+      // Navigate to home or onboarding
       if (onboarding) {
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -118,18 +162,19 @@ class _ManageLoginState extends State<ManageLogin> {
         return false; // New user created
       }
     } catch (e) {
+      debugPrint("Error saving user: $e");
       return false; // Indicate failure
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircularProgressIndicator(),
-      ],
+    return Scaffold(
+      body: Center(
+        child: completed
+            ? const Text("Redirecting...")
+            : const CircularProgressIndicator(),
+      ),
     );
   }
 }
