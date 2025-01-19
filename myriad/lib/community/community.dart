@@ -73,4 +73,8 @@ class CommunityDatabase {
 
     return communityPostsStream;
   }
+
+  Stream<DocumentSnapshot> getCommunityPostStream(String postId) {
+    return communityPosts.doc(postId).snapshots();
+  }
 }
