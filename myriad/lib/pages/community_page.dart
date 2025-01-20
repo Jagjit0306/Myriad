@@ -80,6 +80,21 @@ class _CommunityPageState extends State<CommunityPage> {
                       DocumentSnapshot communityPost = allCommunityPosts[index];
                       Map<String, dynamic> data =
                           communityPost.data() as Map<String, dynamic>;
+
+                      // Verify if the 'categories' field has at least one matching category
+                      List<dynamic> postCategories = data['categories'] ?? [];
+                      bool hasMatchingCategory = postCategories.any(
+                          (category) => categories
+                              .where((map) => map.values.first == true)
+                              .map((map) => map.keys.first)
+                              .toList()
+                              .contains(category));
+
+                      if (!hasMatchingCategory) {
+                        return const SizedBox
+                            .shrink(); // Skip this post if no match
+                      }
+
                       return CommunityPost(
                         postId: communityPost.id,
                         data: data,

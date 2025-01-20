@@ -26,8 +26,7 @@ class MyButton extends StatelessWidget {
         ),
         padding: const EdgeInsets.all(25),
         child: Center(
-          child: Text(
-            text,
+          child: Text( enabled?text:"action pending",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,

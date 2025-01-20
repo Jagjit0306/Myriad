@@ -23,6 +23,7 @@ Future<dynamic> signInWithGoogle(context) async {
 Future<bool> signOutFromGoogle() async {
   try {
     await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut(); // Stop remembering last used account;
     return true;
   } on Exception catch (_) {
     return false;
