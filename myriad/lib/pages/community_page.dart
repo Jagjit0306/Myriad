@@ -1,20 +1,43 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myriad/community/community.dart';
 import 'package:myriad/components/community_post.dart';
+import 'package:myriad/components/my_chips.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CommunityPage extends StatelessWidget {
-  CommunityPage({super.key});
+class CommunityPage extends StatefulWidget {
+  const CommunityPage({super.key});
 
-  final List<List<String>> tempList = [
-    ['abc', 'title', 'This is the content of the post'],
-    ['bcd', 'title', 'This is the content of the post'],
-    ['cde', 'title', 'This is the content of the post'],
-    ['def', 'title', 'This is the content of the post'],
-    ['efg', 'title', 'This is the content of the post'],
+  @override
+  State<CommunityPage> createState() => _CommunityPageState();
+}
+
+class _CommunityPageState extends State<CommunityPage> {
+  final CommunityDatabase communityDatabase = CommunityDatabase();
+
+  List<dynamic> categories = [
+    {'General': true}
   ];
 
-  final CommunityDatabase communityDatabase = CommunityDatabase();
+  @override
+  void initState() {
+    super.initState();
+    _getPrefs();
+  }
+
+  Future<void> _getPrefs() async {
+    SharedPreferences localPrefs = await SharedPreferences.getInstance();
+    List<dynamic> temp =
+        (jsonDecode(localPrefs.getString('prefs') ?? "") as List)
+            .where((map) => map.values.first == true)
+            .map((map) => {map.keys.first: false})
+            .toList();
+    setState(() {
+      categories.insertAll(1, temp);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,40 +52,47 @@ class CommunityPage extends StatelessWidget {
           Navigator.pushNamed(context, '/new_thread');
         },
       ),
-      // body: ListView.builder(
-      //   itemCount: tempList.length,
-      //   itemBuilder: (context, index) {
-      //     return CommunityPost(
-      //       postId: tempList[index][0],
-      //       title: tempList[index][1],
-      //       content: tempList[index][2],
-      //     );
-      //   },
-      // ),
-      body: StreamBuilder(
-        stream: communityDatabase.getCommunityPostsStream(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasData) {
-            List allCommunityPosts = snapshot.data!.docs;
+      body: Column(
+        children: [
+          MyChips(
+            categories: categories,
+            updateChips: (currCat, index) {
+              setState(() {
+                categories[index] = {currCat.keys.first: !currCat.values.first};
+              });
+            },
+          ),
+          Expanded(
+            child: StreamBuilder(
+              stream: communityDatabase.getCommunityPostsStream(categories
+                  .where((map) => map.values.first == true)
+                  .map((map) => map.keys.first)
+                  .toList()),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasData) {
+                  List allCommunityPosts = snapshot.data!.docs;
 
-            return ListView.builder(
-              itemCount: allCommunityPosts.length,
-              itemBuilder: (context, index) {
-                DocumentSnapshot communityPost = allCommunityPosts[index];
-                Map<String, dynamic> data =
-                    communityPost.data() as Map<String, dynamic>;
-                return CommunityPost(
-                  postId: communityPost.id,
-                  data: data,
-                );
+                  return ListView.builder(
+                    itemCount: allCommunityPosts.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot communityPost = allCommunityPosts[index];
+                      Map<String, dynamic> data =
+                          communityPost.data() as Map<String, dynamic>;
+                      return CommunityPost(
+                        postId: communityPost.id,
+                        data: data,
+                      );
+                    },
+                  );
+                } else {
+                  return const Text('No Data');
+                }
               },
-            );
-          } else {
-            return const Text('No Data');
-          }
-        },
+            ),
+          ),
+        ],
       ),
     );
   }

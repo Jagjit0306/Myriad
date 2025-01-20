@@ -72,7 +72,7 @@ class CommunityDatabase {
     }
   }
 
-  Stream<QuerySnapshot> getCommunityPostsStream() {
+  Stream<QuerySnapshot> getCommunityPostsStream(List<dynamic> categories) {
     final communityPostsStream =
         communityPosts.orderBy('timestamp', descending: true).snapshots();
 

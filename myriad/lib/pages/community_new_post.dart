@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:myriad/community/community.dart';
 import 'package:myriad/components/my_button.dart';
+import 'package:myriad/components/my_chips.dart';
 import 'package:myriad/components/my_textfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -70,36 +71,13 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
             "Tags",
             style: TextStyle(fontSize: 16),
           ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 20.0),
-            height: 50,
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: categories.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                Map<dynamic, bool> currCat = categories[index];
-                return Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        categories[index] = {
-                          currCat.keys.first: !currCat.values.first
-                        };
-                      });
-                    },
-                    child: Chip(
-                      label: Text(currCat.keys.first),
-                      backgroundColor: currCat.values.first
-                          ? Colors.blue.shade200
-                          : Colors.transparent,
-                      elevation: 4,
-                    ),
-                  ),
-                );
-              },
-            ),
+          MyChips(
+            categories: categories,
+            updateChips: (currCat, index) {
+              setState(() {
+                categories[index] = {currCat.keys.first: !currCat.values.first};
+              });
+            },
           ),
           Expanded(
               child: MyTextfield(

@@ -6,10 +6,7 @@ import 'package:myriad/pages/community_thread.dart';
 class CommunityPost extends StatelessWidget {
   final String postId;
   final dynamic data;
-  const CommunityPost(
-      {super.key,
-      required this.postId,
-      required this.data});
+  const CommunityPost({super.key, required this.postId, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +27,7 @@ class CommunityPost extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  '${data['title']} -> $postId',
+                  data['title'],
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(
@@ -40,7 +37,6 @@ class CommunityPost extends StatelessWidget {
                 Text(data['likes'].toString()),
                 Text(jsonEncode(data['likers'])),
                 Text(data['op']),
-                // Text(content),
               ],
             ),
           ),
