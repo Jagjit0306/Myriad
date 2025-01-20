@@ -17,7 +17,6 @@ class CommunityDatabase {
 
   Future<void> addCommunityPost(
       String title, String content, List<dynamic> prefs) async {
-    // List<String> selectedPrefs = ?
     communityPosts.add({
       "title": title,
       "content": content,
@@ -72,7 +71,7 @@ class CommunityDatabase {
     }
   }
 
-  Stream<QuerySnapshot> getCommunityPostsStream(List<dynamic> categories) {
+  Stream<QuerySnapshot> getCommunityPostsStream() {
     final communityPostsStream =
         communityPosts.orderBy('timestamp', descending: true).snapshots();
 
@@ -81,5 +80,51 @@ class CommunityDatabase {
 
   Stream<DocumentSnapshot> getCommunityPostStream(String postId) {
     return communityPosts.doc(postId).snapshots();
+  }
+
+  final CollectionReference communityComments =
+      FirebaseFirestore.instance.collection("CommunityComments");
+
+  Future<void> addCommunityComment(String postId, String content) async {
+    await communityComments.add({
+      "content": content,
+      "op": currentUser?.email,
+      "likes": 0,
+      "likers": [],
+      "timestamp": Timestamp.now(),
+      "postId": postId,
+    });
+  }
+
+  Future<void> likeCommunityComment(String commentId) async {
+    try {
+      final String? currUserEmail = currentUser?.email;
+      final currComment = communityComments.doc(commentId);
+      final currCommentSnapshot = await currComment.get();
+      final currCommentData =
+          currCommentSnapshot.data() as Map<String, dynamic>?; // Cast the data
+      final currCommentLikers =
+          currCommentData?['likers'] ?? []; // Safely access 'likers' field
+
+      if (currCommentLikers.contains(currUserEmail)) {
+        // unlike the post
+        currComment.update({
+          "likes": FieldValue.increment(-1),
+          "likers": FieldValue.arrayRemove([currUserEmail])
+        });
+      } else {
+        // like the post
+        currComment.update({
+          "likes": FieldValue.increment(1),
+          "likers": FieldValue.arrayUnion([currUserEmail]),
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Stream<QuerySnapshot> getCommunityCommentsStream(String postId) {
+    return communityComments.where('postId', isEqualTo: postId).snapshots();
   }
 }

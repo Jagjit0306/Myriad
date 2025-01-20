@@ -15,6 +15,7 @@ class MyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        Feedback.forTap(context);
         if (enabled) {
           onTap!();
         }
@@ -26,7 +27,8 @@ class MyButton extends StatelessWidget {
         ),
         padding: const EdgeInsets.all(25),
         child: Center(
-          child: Text( enabled?text:"action pending",
+          child: Text(
+            enabled ? text : "action pending",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,

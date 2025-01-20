@@ -64,17 +64,21 @@ class _CommunityPageState extends State<CommunityPage> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream: communityDatabase.getCommunityPostsStream(categories
-                  .where((map) => map.values.first == true)
-                  .map((map) => map.keys.first)
-                  .toList()),
+              stream: communityDatabase.getCommunityPostsStream(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                    ],
+                  );
                 } else if (snapshot.hasData) {
                   List allCommunityPosts = snapshot.data!.docs;
 
                   return ListView.builder(
+                    // physics: BouncingScrollPhysics(),
                     itemCount: allCommunityPosts.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot communityPost = allCommunityPosts[index];
