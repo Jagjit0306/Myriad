@@ -32,7 +32,7 @@ class _OnBoardingState extends State<OnBoarding> {
         .where('username', isEqualTo: username)
         .get();
     setState(() {
-      isUsernameUnique = result.docs.isEmpty; 
+      isUsernameUnique = result.docs.isEmpty;
     });
   }
 
@@ -54,14 +54,10 @@ class _OnBoardingState extends State<OnBoarding> {
     return Scaffold(
       appBar: AppBar(
         title: Text('On Boarding'),
-        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // foregroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        // decoration: BoxDecoration(
-        //     border: Border.all(color: Colors.greenAccent, width: 2)),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +87,7 @@ class _OnBoardingState extends State<OnBoarding> {
                 checkUsernameUnique(value);
               },
             ),
-            if(!isUsernameUnique) const Text("THIS USERNAME IS TAKEN/INVALID"),
+            if (!isUsernameUnique) const Text("THIS USERNAME IS TAKEN/INVALID"),
 
             const SizedBox(
               height: 25,
@@ -118,19 +114,14 @@ class _OnBoardingState extends State<OnBoarding> {
               child: MyButton(
                 text: 'Lets get started',
                 onTap: () {
-                  // submit the info and save it
-                  // Navigator.pop(context);
-                  // Navigator.pushNamed(context, '/home_page');
-                  if(isUsernameUnique) {
-                    setPrefs();
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/home_page', // The name of the route you want to push
-                      (route) => false, // This will remove all previous routes
-                    );
-                  }
+                  setPrefs();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/home_page',
+                    (route) => false,
+                  );
                 },
-                // enabled: isUsernameUnique, 
+                enabled: isUsernameUnique,
               ),
             ),
           ],

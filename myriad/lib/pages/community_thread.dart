@@ -113,6 +113,7 @@ class _CommunityThreadLikeButtonState extends State<CommunityThreadLikeButton> {
           liked = !liked;
         });
       },
+      enabled: true,
     );
   }
 }
@@ -156,6 +157,7 @@ class _CommunityThreadDeleteButtonState
               widget.communityDatabase.deleteCommunityPost(widget.postId);
               Navigator.pop(context);
             },
+            enabled: true,
           )
         : Container();
   }

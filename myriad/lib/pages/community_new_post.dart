@@ -97,6 +97,7 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
               contentController.clear();
               Navigator.pop(context);
             },
+            enabled: true,
           ),
         ],
       ),
