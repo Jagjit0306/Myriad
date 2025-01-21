@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 
-
 ThemeData darkMode = ThemeData(
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-    surface: Colors.grey.shade900,
-    primary: Colors.grey.shade800,
-    secondary: Colors.grey.shade700,
-    inversePrimary: Colors.grey.shade300,
+    surface: Color(0xFF010101),
+    primary: Color(0xFF131313),
+    secondary: Color(0xFF161515),
+    inversePrimary: Color(0xFFFFFFFF),
   ),
   textTheme: ThemeData.dark().textTheme.apply(
     bodyColor: Colors.grey[300],
     displayColor: Colors.white,
   ),
 );
+
+LinearGradient darkGradient = const LinearGradient(
+  colors: [
+    Color(0xFF131313),
+    Color(0xFF0C0C0C),
+  ],
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+);
+
