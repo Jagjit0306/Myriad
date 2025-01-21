@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class GoogleSignInScreen extends StatefulWidget {
   const GoogleSignInScreen({super.key});
@@ -37,47 +38,107 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Google Sign-In Screen')),
       body: Center(
-        child: Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)),
-          child: IconButton(
-            iconSize: 40,
-            icon: const Icon(Icons.fireplace),
-            onPressed: () async {
-              try {
-                UserCredential? userCredential =
-                    await signInWithGoogle(context);
-
-                if (userCredential == null || userCredential.user == null) {
-                  // Sign-in failed
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text("Sign-in failed. Please try again.")),
-                  );
-                  return;
-                }
-
-                // Navigate to the next page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ManageLogin(
-                      email: userCredential.user!.email,
-                    ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/logo.svg',
+              height: 200,
+              placeholderBuilder: (BuildContext context) => Container(
+                height: 120,
+                width: 120,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+              semanticsLabel: 'Logo',
+            ),
+            const SizedBox(height: 48),
+            const Text(
+              'Your AI-powered disability companion',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Image.asset(
+              'assets/login_asset.png',
+              height: 320,
+            ),
+            const SizedBox(height: 48),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                );
-              } catch (e) {
-                debugPrint("Error during sign-in: $e");
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text("An error occurred. Please try again.")),
-                );
-              } 
-            },
-          ),
+                  elevation: 0,
+                ),
+                onPressed: () async {
+                  try {
+                    UserCredential? userCredential = await signInWithGoogle(context);
+
+                    if (userCredential == null || userCredential.user == null) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Sign-in failed. Please try again."),
+                          ),
+                        );
+                      }
+                      return;
+                    }
+
+                    if (context.mounted) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ManageLogin(
+                            email: userCredential.user!.email,
+                          ),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    debugPrint("Error during sign-in: $e");
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("An error occurred. Please try again."),
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      'assets/google_icon.png',
+                      height: 24,
+                    ),
+                    const SizedBox(width: 12),
+                    const Text(
+                      'Continue with Google',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
