@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myriad/community/community.dart';
 import 'package:myriad/components/my_button.dart';
 
+// ignore: must_be_immutable
 class CommunityComment extends StatelessWidget {
   final String commentId;
   final dynamic data;

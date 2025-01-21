@@ -65,6 +65,20 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
 
+              //community tile
+              ListTile(
+                leading: Icon(
+                  Icons.self_improvement_rounded ,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                title: Text('T H E R A P Y'),
+                onTap: () {
+                  //this is already the homescreen so pop drawer
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/gemini_chat');
+                },
+              ),
+
               //user tile
               ListTile(
                 leading: Icon(

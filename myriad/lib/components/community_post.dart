@@ -11,11 +11,14 @@ class CommunityPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(
-        builder: (context) {
-          return CommunityThread(title: data['title'], postId: postId);
-        },
-      )),
+      onTap: () {
+        Feedback.forTap(context);
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return CommunityThread(title: data['title'], postId: postId);
+          },
+        ));
+      },
       child: Card(
         color: Theme.of(context).colorScheme.secondary,
         margin: EdgeInsets.all(10),

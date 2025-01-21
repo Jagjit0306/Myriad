@@ -56,10 +56,10 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
             ),
             const SizedBox(height: 48),
             const Text(
-              'Your AI-powered disability companion',
+              'Overcoming challenges together, with AI',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),

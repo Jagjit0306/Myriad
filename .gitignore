@@ -20,6 +20,9 @@ bin/internal/engine.version
 **/firebase_options.dart
 # **/google-services.json
 
+# Passwords
+**/passwords.dart
+
 # IntelliJ related
 *.iml
 *.ipr
