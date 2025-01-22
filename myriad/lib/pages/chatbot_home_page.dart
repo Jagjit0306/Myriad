@@ -16,14 +16,35 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
   List<ChatMessage> messages = [];
 
   ChatUser currentUser = ChatUser(
-    id: "0",
-    firstName: FirebaseAuth.instance.currentUser!.displayName,
-  );
+      id: "0",
+      firstName: FirebaseAuth.instance.currentUser!.displayName,
+      profileImage: FirebaseAuth.instance.currentUser!.photoURL);
 
   ChatUser geminiUser = ChatUser(
     firstName: "Therapist",
     id: '1',
+    profileImage:
+        "https://res.cloudinary.com/startup-grind/image/upload/c_fill,dpr_2.0,f_auto,g_center,h_1080,q_100,w_1080/v1/gcs/platform-data-goog/events/IMG_20240224_201158.jpg",
   );
+
+  String _chatPrompt(String input) {
+    List<String> instructions = [
+      // TODO: add a list of conditions faced by the user
+      'you are an AI assistant designed to give motivation to people with special needs',
+      'Send Messages like you are having a conversation with the person',
+      'Respond like a human',
+      'Do not deny that you are a therapist',
+      'You may even ask the person how their day went and if they want to talk about something that is on their mind',
+      'Do not use bold text',
+      'Your purpose is to provide emotional support to the user.',
+    ];
+
+    return "FOLLOW THE INSTRUCTIONS AND RESPOND TO THE PROMPT->\n"
+        "instructions->"
+        "$instructions"
+        "\n"
+        "prompt->'$input'";
+  }
 
   void _sendMessage(ChatMessage chatMessage) {
     setState(() {
@@ -31,7 +52,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
     });
     try {
       String question = chatMessage.text;
-      gemini.streamGenerateContent(question).listen(
+      gemini.streamGenerateContent(_chatPrompt(question)).listen(
         (event) {
           ChatMessage? lastMessage = messages.firstOrNull;
           if (lastMessage != null && lastMessage.user == geminiUser) {
@@ -83,7 +104,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
           inputDecoration: InputDecoration(
             filled: true,
             fillColor: Colors.black, // Background color of the typing field
-            hintText: "Type your message...",
+            hintText: "Chat with Therapist...",
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               // borderSide: BorderSide.none,
