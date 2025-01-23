@@ -71,7 +71,7 @@ class MyDrawer extends StatelessWidget {
                   Icons.self_improvement_rounded ,
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
-                title: Text('T H E R A P Y'),
+                title: Text('M Y   A I'),
                 onTap: () {
                   //this is already the homescreen so pop drawer
                   Navigator.pop(context);

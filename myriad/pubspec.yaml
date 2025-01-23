@@ -15,7 +15,7 @@ dependencies:
   google_sign_in: ^6.2.2
   shared_preferences: ^2.3.5
   dash_chat_2: ^0.0.20
-  flutter_gemini: ^2.0.3
+  flutter_gemini: ^3.0.0
   flutter_svg: ^2.0.17
 
 dev_dependencies:
