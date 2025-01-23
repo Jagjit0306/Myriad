@@ -1,8 +1,7 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:myriad/community/community.dart';
+import 'package:myriad/database/community.dart';
 import 'package:myriad/components/community_post.dart';
 import 'package:myriad/components/my_chips.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,43 +43,47 @@ class _CommunityPageState extends State<CommunityPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Community"),
-        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.edit_square),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        child: Icon(
+          Icons.edit_square,
+          color: Theme.of(context).colorScheme.surface,
+        ),
         onPressed: () {
           Navigator.pushNamed(context, '/new_thread');
         },
       ),
-      body: Column(
-        children: [
-          MyChips(
-            categories: categories,
-            updateChips: (currCat, index) {
-              setState(() {
-                categories[index] = {currCat.keys.first: !currCat.values.first};
-              });
-            },
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(), // Enable bouncing physics
+        slivers: [
+          // Add MyChips in a Sliver
+          SliverToBoxAdapter(
+            child: MyChips(
+              categories: categories,
+              updateChips: (currCat, index) {
+                setState(() {
+                  categories[index] = {currCat.keys.first: !currCat.values.first};
+                });
+              },
+            ),
           ),
-          Expanded(
-            child: StreamBuilder(
-              stream: communityDatabase.getCommunityPostsStream(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                    ],
-                  );
-                } else if (snapshot.hasData) {
-                  List allCommunityPosts = snapshot.data!.docs;
+          // Add Community Posts
+          StreamBuilder(
+            stream: communityDatabase.getCommunityPostsStream(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SliverFillRemaining(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                List allCommunityPosts = snapshot.data!.docs;
 
-                  return ListView.builder(
-                    // physics: BouncingScrollPhysics(),
-                    itemCount: allCommunityPosts.length,
-                    itemBuilder: (context, index) {
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
                       DocumentSnapshot communityPost = allCommunityPosts[index];
                       Map<String, dynamic> data =
                           communityPost.data() as Map<String, dynamic>;
@@ -95,8 +98,7 @@ class _CommunityPageState extends State<CommunityPage> {
                               .contains(category));
 
                       if (!hasMatchingCategory) {
-                        return const SizedBox
-                            .shrink(); // Skip this post if no match
+                        return const SizedBox.shrink(); // Skip this post if no match
                       }
 
                       return CommunityPost(
@@ -104,12 +106,17 @@ class _CommunityPageState extends State<CommunityPage> {
                         data: data,
                       );
                     },
-                  );
-                } else {
-                  return const Text('No Data');
-                }
-              },
-            ),
+                    childCount: allCommunityPosts.length,
+                  ),
+                );
+              } else {
+                return const SliverFillRemaining(
+                  child: Center(
+                    child: Text('No Data'),
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),

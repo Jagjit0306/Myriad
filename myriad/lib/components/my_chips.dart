@@ -31,9 +31,17 @@ class MyChips extends StatelessWidget {
                 updateChips(currCat, index);
               },
               child: Chip(
-                label: Text(currCat.keys.first),
+                label: Text(
+                  currCat.keys.first,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: currCat.values.first
+                        ? Theme.of(context).colorScheme.surface
+                        : Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                ),
                 backgroundColor: currCat.values.first
-                    ? Colors.blue.shade200
+                    ? Theme.of(context).colorScheme.inversePrimary
                     : Colors.transparent,
                 elevation: 4,
               ),

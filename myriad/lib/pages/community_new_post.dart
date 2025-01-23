@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:myriad/community/community.dart';
+import 'package:myriad/database/community.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_chips.dart';
 import 'package:myriad/components/my_textfield.dart';

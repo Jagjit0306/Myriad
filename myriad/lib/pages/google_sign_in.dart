@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:myriad/database/user.dart';
 
 class GoogleSignInScreen extends StatefulWidget {
   const GoogleSignInScreen({super.key});
@@ -76,7 +77,8 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -84,7 +86,8 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                 ),
                 onPressed: () async {
                   try {
-                    UserCredential? userCredential = await signInWithGoogle(context);
+                    UserCredential? userCredential =
+                        await signInWithGoogle(context);
 
                     if (userCredential == null || userCredential.user == null) {
                       if (context.mounted) {
@@ -158,6 +161,8 @@ class _ManageLoginState extends State<ManageLogin> {
   bool completed = false;
   bool onboarding = false;
 
+  UserDatabase userDatabase = UserDatabase();
+
   @override
   void initState() {
     super.initState();
@@ -168,6 +173,7 @@ class _ManageLoginState extends State<ManageLogin> {
 
   Future<void> managePage(BuildContext context) async {
     if (completed) {
+      userDatabase.UserCosmeticSync();
       // Navigate to home or onboarding
       if (onboarding) {
         Navigator.pushNamedAndRemoveUntil(

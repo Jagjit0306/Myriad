@@ -17,18 +17,24 @@ class CommunityDatabase {
 
   Future<void> addCommunityPost(
       String title, String content, List<dynamic> prefs) async {
-    communityPosts.add({
-      "title": title,
-      "content": content,
-      "timestamp": Timestamp.now(),
-      "op": currentUser?.email,
-      'likes': 0,
-      'likers': [],
-      'categories': prefs
-          .where((map) => map.values.first == true)
-          .map((map) => map.keys.first)
-          .toList(),
-    });
+    final you = await FirebaseFirestore.instance
+        .collection("Users")
+        .where("email", isEqualTo: FirebaseAuth.instance.currentUser!.email)
+        .get();
+    if (you.docs.isNotEmpty) {
+      communityPosts.add({
+        "title": title,
+        "content": content,
+        "timestamp": Timestamp.now(),
+        "op": you.docs.first.id,
+        'likes': 0,
+        'likers': [],
+        'categories': prefs
+            .where((map) => map.values.first == true)
+            .map((map) => map.keys.first)
+            .toList(),
+      });
+    }
   }
 
   Future<void> deleteCommunityPost(String postId) async {

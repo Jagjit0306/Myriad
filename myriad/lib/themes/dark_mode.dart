@@ -4,8 +4,8 @@ ThemeData darkMode = ThemeData(
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
     surface: Color(0xFF010101),
-    primary: Color(0xFF131313),
-    secondary: Color(0xFF161515),
+    primary: Color.fromARGB(255, 19, 19, 19),
+    secondary: Color.fromARGB(255, 65, 65, 65),
     inversePrimary: Color(0xFFFFFFFF),
   ),
   textTheme: ThemeData.dark().textTheme.apply(

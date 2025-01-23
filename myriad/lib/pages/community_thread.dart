@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myriad/community/community.dart';
+import 'package:myriad/database/community.dart';
 import 'package:myriad/components/community_comment.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/pages/community_new_comment.dart';
