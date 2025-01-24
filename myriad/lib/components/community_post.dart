@@ -37,17 +37,9 @@ class CommunityPost extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  PosterData(op: data['op']),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: Text(timeSince(data['timestamp']),
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary)),
-                  ),
-                ],
+              PosterData(
+                op: data['op'],
+                timestamp: data['timestamp'],
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(45, 0, 0, 0),
@@ -143,7 +135,8 @@ class CommunityPost extends StatelessWidget {
 
 class PosterData extends StatefulWidget {
   final String op;
-  const PosterData({super.key, required this.op});
+  final Timestamp timestamp;
+  const PosterData({super.key, required this.op, required this.timestamp});
 
   @override
   State<PosterData> createState() => _PosterDataState();
@@ -174,23 +167,33 @@ class _PosterDataState extends State<PosterData> {
       _getUserData();
     });
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CircularImage(
-          imageUrl: userData != null ? userData['profileLink'] ?? "" : "",
-          placeholder: Icon(
-            Icons.person,
-            size: 40,
-          ),
-          size: 40.0,
+        Row(
+          children: [
+            CircularImage(
+              imageUrl: userData != null ? userData['profileLink'] ?? "" : "",
+              placeholder: Icon(
+                Icons.person,
+                size: 40,
+              ),
+              size: 40.0,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              userData != null
+                  ? userData['username'] ?? "Name Error"
+                  : "Loading...",
+              style: TextStyle(fontSize: 15),
+            ),
+          ],
         ),
-        SizedBox(
-          width: 10,
-        ),
-        Text(
-          userData != null
-              ? userData['username'] ?? "Name Error"
-              : "Loading...",
-          style: TextStyle(fontSize: 15),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+          child: Text(timeSince(widget.timestamp),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
         ),
       ],
     );

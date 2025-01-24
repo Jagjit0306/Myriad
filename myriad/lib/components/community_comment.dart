@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myriad/components/community_post.dart';
 import 'package:myriad/database/community.dart';
 import 'package:myriad/components/my_button.dart';
 
@@ -13,28 +14,60 @@ class CommunityComment extends StatelessWidget {
 
   bool liked = false;
 
-
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.secondary,
+      // color: Theme.of(context).colorScheme.primary,
       margin: EdgeInsets.all(10),
       elevation: 2.0,
       child: SizedBox(
         width: double.infinity,
-        child: Column(
-          children: [
-            Text(data['content']),
-            Text("Likes -> ${data['likes']}"),
-            MyButton(
-              text: data['likers'].contains(FirebaseAuth.instance.currentUser!.email) ? "-" : "+",
-              enabled: true,
-              onTap: () {
-                //call like function
-                communityDatabase.likeCommunityComment(commentId);
-              },
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PosterData(
+                op: data['op'],
+                timestamp: data['timestamp'],
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(data['content']),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              communityDatabase.likeCommunityComment(commentId);
+                            },
+                            child: Icon((data['likers'].contains(
+                                    FirebaseAuth.instance.currentUser!.email))
+                                ? Icons.thumb_up_off_alt_rounded
+                                : Icons.thumb_up_off_alt_outlined),
+                          ),
+                          SizedBox(width: 10,),
+                          Text("${data['likes']}"),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // MyButton(
+              //   text: data['likers'].contains(FirebaseAuth.instance.currentUser!.email) ? "-" : "+",
+              //   enabled: true,
+              //   onTap: () {
+              //     //call like function
+              //     communityDatabase.likeCommunityComment(commentId);
+              //   },
+              // ),
+            ],
+          ),
         ),
       ),
     );

@@ -58,6 +58,8 @@ class CommunityThread extends StatelessWidget {
                 },
               ),
             ),
+            CommentThreadCommentField(
+                postId: postId, communityDatabase: communityDatabase),
             StreamBuilder(
               stream: communityDatabase.getCommunityPostStream(postId),
               builder: (context, snapshot) {
@@ -75,8 +77,6 @@ class CommunityThread extends StatelessWidget {
                 }
               },
             ),
-            CommentThreadCommentField(
-                postId: postId, communityDatabase: communityDatabase),
           ],
         ));
   }
