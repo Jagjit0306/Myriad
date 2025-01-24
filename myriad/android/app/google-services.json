@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "1084180741966",
-    "project_id": "myriad-80085",
-    "storage_bucket": "myriad-80085.firebasestorage.app"
+    "project_number": "410010145330",
+    "project_id": "myriad-17-21a1b",
+    "storage_bucket": "myriad-17-21a1b.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1084180741966:android:8630ab28fc6a47c994e81f",
+        "mobilesdk_app_id": "1:410010145330:android:35315651aa25090078a22b",
         "android_client_info": {
           "package_name": "com.example.myriad"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1084180741966-0jjhmoa6qohpi4cbjgs1ronnh1l1rv7n.apps.googleusercontent.com",
+          "client_id": "410010145330-c85mc52jrkmrtqmbgfr5s00pmp5bp368.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDBJJ8fMXLPEdhelgtrYPwZEjvjXTZSNuQ"
+          "current_key": "AIzaSyA6UT-5zefQt2vwSe5IQXDWOKbSygtiy7A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1084180741966-0jjhmoa6qohpi4cbjgs1ronnh1l1rv7n.apps.googleusercontent.com",
+              "client_id": "410010145330-c85mc52jrkmrtqmbgfr5s00pmp5bp368.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "410010145330-cqf543uqhrtuu2sfsp5vapia45ghbpi4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.myriad"
+              }
             }
           ]
         }
