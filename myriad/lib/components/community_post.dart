@@ -54,6 +54,37 @@ class CommunityPost extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (data['categories'] != null && (data['categories'] as List).isNotEmpty)
+                      Container(
+                        height: 30,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: (data['categories'] as List).length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                border: Border.all(
+                                  color: Theme.of(context).colorScheme.inversePrimary,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                data['categories'][index].toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.inversePrimary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 1.0),
                       child: Text(
