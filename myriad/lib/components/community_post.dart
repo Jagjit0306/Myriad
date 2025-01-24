@@ -20,7 +20,11 @@ class CommunityPost extends StatelessWidget {
         Feedback.forTap(context);
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
-            return CommunityThread(title: data['title'], postId: postId);
+            return CommunityThread(
+              title: data['title'],
+              postId: postId,
+              op: data['op'],
+            );
           },
         ));
       },
@@ -36,7 +40,7 @@ class CommunityPost extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  PosterData(email: data['op']),
+                  PosterData(op: data['op']),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                     child: Text(timeSince(data['timestamp']),
@@ -69,8 +73,10 @@ class CommunityPost extends StatelessWidget {
                       // mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         GestureDetector(
-                          onTap: () =>
-                              communityDatabase.likeCommunityPost(postId),
+                          onTap: () {
+                            Feedback.forTap(context);
+                            communityDatabase.likeCommunityPost(postId);
+                          },
                           child: Icon(
                             Icons.favorite,
                             size: 35,
@@ -105,8 +111,8 @@ class CommunityPost extends StatelessWidget {
 }
 
 class PosterData extends StatefulWidget {
-  final String email;
-  const PosterData({super.key, required this.email});
+  final String op;
+  const PosterData({super.key, required this.op});
 
   @override
   State<PosterData> createState() => _PosterDataState();
@@ -123,7 +129,7 @@ class _PosterDataState extends State<PosterData> {
   Future<void> _getUserData() async {
     final CollectionReference users =
         FirebaseFirestore.instance.collection("Users");
-    final op = await users.where('email', isEqualTo: widget.email).get();
+    final op = await users.where('email', isEqualTo: widget.op).get();
     if (op.docs.isNotEmpty && mounted) {
       setState(() {
         userData = op.docs.first.data() as Map<String, dynamic>;

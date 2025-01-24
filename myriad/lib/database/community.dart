@@ -131,6 +131,9 @@ class CommunityDatabase {
   }
 
   Stream<QuerySnapshot> getCommunityCommentsStream(String postId) {
-    return communityComments.where('postId', isEqualTo: postId).snapshots();
-  }
+  return communityComments
+      .where('postId', isEqualTo: postId)
+      .orderBy('timestamp', descending: true)
+      .snapshots();
+}
 }

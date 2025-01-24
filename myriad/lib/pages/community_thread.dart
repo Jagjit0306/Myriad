@@ -1,80 +1,39 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myriad/components/community_post.dart';
+import 'package:myriad/components/my_textfield.dart';
 import 'package:myriad/database/community.dart';
 import 'package:myriad/components/community_comment.dart';
-import 'package:myriad/components/my_button.dart';
-import 'package:myriad/pages/community_new_comment.dart';
 
 class CommunityThread extends StatelessWidget {
   final String title;
   final String postId;
+  final String op;
 
-  CommunityThread({super.key, required this.title, required this.postId});
+  CommunityThread(
+      {super.key, required this.title, required this.postId, required this.op});
 
   final CommunityDatabase communityDatabase = CommunityDatabase();
+
+  final TextEditingController commentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(title),
+          title: const Text("Thread"),
+          actions: [
+            CommunityThreadDeleteOption(
+                currUser: op,
+                postId: postId,
+                communityDatabase: communityDatabase)
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.edit_note_rounded),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return CommunityNewComment(postId: postId);
-            }));
-          },
-        ),
-        body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              StreamBuilder(
-                stream: communityDatabase.getCommunityPostStream(postId),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasData && snapshot.data != null) {
-                    DocumentSnapshot postData = snapshot.data!;
-                    if (postData.exists) {
-                      return Column(
-                        children: [
-                          Text(postData['title']),
-                          Text(postData['content']),
-                          Text(postData['op']),
-                          Text("LIKES -> ${postData['likes']}"),
-                          Text(jsonEncode(postData['likers'])),
-                          CommunityThreadLikeButton(
-                            postId: postId,
-                            likers: postData['likers'],
-                            communityDatabase: communityDatabase,
-                          ),
-                          CommunityThreadDeleteButton(
-                              currUser: postData['op'],
-                              postId: postId,
-                              communityDatabase: communityDatabase),
-                        ],
-                      );
-                    } else {
-                      return Text("Post not found");
-                    }
-                  } else {
-                    return Text("Post not found");
-                  }
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  "C O M M E N T S",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              StreamBuilder(
+        body: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder(
                 stream: communityDatabase.getCommunityCommentsStream(postId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -82,8 +41,8 @@ class CommunityThread extends StatelessWidget {
                   } else if (snapshot.hasData) {
                     List allCommunityPostComments = snapshot.data!.docs;
                     return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: BouncingScrollPhysics(),
+                      reverse: true,
                       itemCount: allCommunityPostComments.length,
                       itemBuilder: (context, index) {
                         DocumentSnapshot communityPostComment =
@@ -98,76 +57,48 @@ class CommunityThread extends StatelessWidget {
                   }
                 },
               ),
-            ],
-          ),
+            ),
+            StreamBuilder(
+              stream: communityDatabase.getCommunityPostStream(postId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasData && snapshot.data != null) {
+                  DocumentSnapshot postData = snapshot.data!;
+                  if (postData.exists) {
+                    return CommunityPost(postId: postId, data: postData);
+                  } else {
+                    return Text("Post not found");
+                  }
+                } else {
+                  return Text("Post not found");
+                }
+              },
+            ),
+            CommentThreadCommentField(
+                postId: postId, communityDatabase: communityDatabase),
+          ],
         ));
   }
 }
 
-class CommunityThreadLikeButton extends StatefulWidget {
-  final String postId;
-  final List likers;
-  final CommunityDatabase communityDatabase;
-  const CommunityThreadLikeButton(
-      {super.key,
-      required this.postId,
-      required this.likers,
-      required this.communityDatabase});
-
-  @override
-  State<CommunityThreadLikeButton> createState() =>
-      _CommunityThreadLikeButtonState();
-}
-
-class _CommunityThreadLikeButtonState extends State<CommunityThreadLikeButton> {
-  bool liked = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.likers.contains(FirebaseAuth.instance.currentUser!.email)) {
-      setState(() {
-        liked = true;
-      });
-    } else {
-      setState(() {
-        liked = false;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MyButton(
-      text: liked ? "UNLIKE" : "LIKE",
-      onTap: () {
-        widget.communityDatabase.likeCommunityPost(widget.postId);
-        setState(() {
-          liked = !liked;
-        });
-      },
-      enabled: true,
-    );
-  }
-}
-
-class CommunityThreadDeleteButton extends StatefulWidget {
+class CommunityThreadDeleteOption extends StatefulWidget {
   final String currUser;
   final String postId;
   final CommunityDatabase communityDatabase;
-  const CommunityThreadDeleteButton(
+  const CommunityThreadDeleteOption(
       {super.key,
       required this.currUser,
       required this.postId,
       required this.communityDatabase});
 
   @override
-  State<CommunityThreadDeleteButton> createState() =>
-      _CommunityThreadDeleteButtonState();
+  State<CommunityThreadDeleteOption> createState() =>
+      _CommunityThreadDeleteOptionState();
 }
 
-class _CommunityThreadDeleteButtonState
-    extends State<CommunityThreadDeleteButton> {
+class _CommunityThreadDeleteOptionState
+    extends State<CommunityThreadDeleteOption> {
   bool isOP = false;
 
   @override
@@ -184,14 +115,86 @@ class _CommunityThreadDeleteButtonState
   @override
   Widget build(BuildContext context) {
     return isOP
-        ? MyButton(
-            text: "Delete",
-            onTap: () {
-              widget.communityDatabase.deleteCommunityPost(widget.postId);
-              Navigator.pop(context);
+        ? PopupMenuButton(
+            onSelected: (value) {
+              switch (value) {
+                case "dltpst":
+                  widget.communityDatabase.deleteCommunityPost(widget.postId);
+                  Navigator.pop(context);
+                  break;
+                default:
+                  break;
+              }
             },
-            enabled: true,
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'dltpst',
+                child: const Text("Delete Post"),
+              )
+            ],
           )
         : Container();
+  }
+}
+
+class CommentThreadCommentField extends StatefulWidget {
+  final String postId;
+  final CommunityDatabase communityDatabase;
+
+  const CommentThreadCommentField({
+    super.key,
+    required this.postId,
+    required this.communityDatabase,
+  });
+
+  @override
+  State<CommentThreadCommentField> createState() =>
+      _CommentThreadCommentFieldState();
+}
+
+class _CommentThreadCommentFieldState extends State<CommentThreadCommentField> {
+  final TextEditingController commentController = TextEditingController();
+  final ValueNotifier<bool> emptyState = ValueNotifier<bool>(true);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: MyTextfield(
+              hintText: 'Join the conversation!',
+              obscureText: false,
+              controller: commentController,
+              onChanged: (val) {
+                emptyState.value = val.isEmpty;
+              },
+            ),
+          ),
+          ValueListenableBuilder<bool>(
+            valueListenable: emptyState,
+            builder: (context, isEmpty, child) {
+              if (isEmpty) return SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    widget.communityDatabase.addCommunityComment(
+                      widget.postId,
+                      commentController.text.trim(),
+                    );
+                    commentController.clear();
+                    emptyState.value = true; // Reset empty state
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: Icon(Icons.send),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
