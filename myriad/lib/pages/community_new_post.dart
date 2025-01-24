@@ -32,7 +32,7 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
           .where((map) => map.values.first == true)
           .map((map) => {map.keys.first: false})
           .toList();
-      categories.insert(0, {"General": false});
+      categories.insert(0, {"General": true});
     });
   }
 
