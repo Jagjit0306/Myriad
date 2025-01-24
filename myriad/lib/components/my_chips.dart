@@ -30,20 +30,26 @@ class MyChips extends StatelessWidget {
               onTap: () {
                 updateChips(currCat, index);
               },
-              child: Chip(
+              child: FilterChip(
                 label: Text(
                   currCat.keys.first,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: currCat.values.first
-                        ? Theme.of(context).colorScheme.surface
+                        ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),
-                backgroundColor: currCat.values.first
-                    ? Theme.of(context).colorScheme.inversePrimary
-                    : Colors.transparent,
-                elevation: 4,
+                selected: currCat.values.first,
+                showCheckmark: false,
+                selectedColor: Theme.of(context).colorScheme.inversePrimary,
+                backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                onSelected: (bool selected) {
+                  updateChips(currCat, index);
+                },
               ),
             ),
           );
