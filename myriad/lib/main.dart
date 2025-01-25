@@ -11,6 +11,7 @@ import 'package:myriad/pages/on_boarding.dart';
 import 'package:myriad/passwords.dart';
 import 'package:myriad/themes/dark_mode.dart';
 import 'package:myriad/themes/light_mode.dart';
+import 'package:myriad/pages/sos_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,7 @@ class MainApp extends StatelessWidget {
         '/community_page': (context) => CommunityPage(),
         '/new_thread': (context) => CommunityNewPost(),
         '/gemini_chat': (context) => ChatbotHomePage(),
+        '/sos_page': (context) => SosPage(),
       },
     );
   }

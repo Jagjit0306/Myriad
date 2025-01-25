@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myriad/components/my_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:myriad/pages/sos_page.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});

@@ -46,7 +46,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
             SvgPicture.asset(
               'assets/logo.svg',
               height: 200,
-              placeholderBuilder: (BuildContext context) => Container(
+              placeholderBuilder: (BuildContext context) => SizedBox(
                 height: 120,
                 width: 120,
                 child: const Center(

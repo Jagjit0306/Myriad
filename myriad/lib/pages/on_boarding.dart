@@ -64,7 +64,7 @@ class _OnBoardingState extends State<OnBoarding> {
       appBar: AppBar(
         title: Text('On Boarding'),
       ),
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: Column(

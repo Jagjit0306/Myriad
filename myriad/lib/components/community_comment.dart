@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myriad/components/community_post.dart';
 import 'package:myriad/database/community.dart';
-import 'package:myriad/components/my_button.dart';
 
 // ignore: must_be_immutable
 class CommunityComment extends StatelessWidget {
