@@ -54,43 +54,41 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.1084180741966-qhti6bh3pfpo42b8jbl1j2si2k76n2rv</string>
+				<string>com.googleusercontent.apps.410010145330-cqf543uqhrtuu2sfsp5vapia45ghbpi4</string>
 			</array>
 		</dict>
 	</array>
 	<key>GIDClientID</key>
-	<string>1084180741966-qhti6bh3pfpo42b8jbl1j2si2k76n2rv.apps.googleusercontent.com</string>
+	<string>410010145330-cqf543uqhrtuu2sfsp5vapia45ghbpi4.apps.googleusercontent.com</string>
 
 	<!-- Additional Firebase Configuration -->
 	<key>CLIENT_ID</key>
-	<string>1084180741966-qhti6bh3pfpo42b8jbl1j2si2k76n2rv.apps.googleusercontent.com</string>
+	<string>410010145330-cqf543uqhrtuu2sfsp5vapia45ghbpi4.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1084180741966-qhti6bh3pfpo42b8jbl1j2si2k76n2rv</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>1084180741966-6gbo3lvgs8pfvlnqe9qtem9br8if256n.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.410010145330-cqf543uqhrtuu2sfsp5vapia45ghbpi4</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBVqLZnx7oI5doLNKyWg9aNOKuQRsvSv38</string>
+	<string>AIzaSyAU4hjPiM_3C2jHzwpI8usinX5aOfr5WT0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1084180741966</string>
+	<string>410010145330</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.myriad</string>
 	<key>PROJECT_ID</key>
-	<string>myriad-80085</string>
+	<string>myriad-17-21a1b</string>
 	<key>STORAGE_BUCKET</key>
-	<string>myriad-80085.firebasestorage.app</string>
+	<string>myriad-17-21a1b.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1084180741966:ios:4a3fd04a96e1a99894e81f</string>
+	<string>1:410010145330:ios:0fcd3bb13a7598ea78a22b</string>
 </dict>
 </plist>
