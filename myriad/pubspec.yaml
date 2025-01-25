@@ -17,6 +17,7 @@ dependencies:
   dash_chat_2: ^0.0.20
   flutter_gemini: ^3.0.0
   flutter_svg: ^2.0.17
+  url_launcher: ^6.0.20
 
 dev_dependencies:
   flutter_test:
