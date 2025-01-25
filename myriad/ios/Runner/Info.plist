@@ -46,6 +46,13 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>App requires access to the microphone for audio playback and recording.</string>
+
 	<!-- Google Sign-In Configuration -->
 	<key>CFBundleURLTypes</key>
 	<array>

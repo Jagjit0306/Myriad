@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+// import 'package:audioplayers/audioplayers.dart'; // Commenting out the import
 
 class SosPage extends StatelessWidget {
   const SosPage({super.key});
@@ -94,7 +95,7 @@ class SosPage extends StatelessWidget {
                     _buildEmergencyOption(context, "Access Wheels", Icons.location_on),
                     _buildEmergencyOption(context, "Guardian", Icons.phone),
                     _buildEmergencyOption(context, "SOS", Icons.notification_important),
-                    _buildEmergencyOption(context, "Scream", Icons.campaign),
+                    _buildEmergencyOption(context, "Scream", Icons.campaign, onTap: _playScreamSound),
                   ],
                 ),
               ],
@@ -103,6 +104,13 @@ class SosPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _playScreamSound() async {
+    final AudioPlayer audioPlayer = AudioPlayer();
+    await audioPlayer.setSource(AssetSource('assets/scream.mp3'));
+    await audioPlayer.setVolume(1.0);
+    await audioPlayer.resume();
   }
 
   Widget _buildDistanceCard(BuildContext context, String title, IconData icon, String distance) {
@@ -146,11 +154,13 @@ class SosPage extends StatelessWidget {
     );
   }
 
-  Widget _buildEmergencyOption(BuildContext context, String title, IconData icon) {
+  Widget _buildEmergencyOption(BuildContext context, String title, IconData icon, {Function? onTap}) {
     return GestureDetector(
       onTap: () {
         if (title == "SOS") {
           _launchDialer("112");
+        } else if (title == "Scream") {
+          onTap?.call();
         }
       },
       child: Container(
