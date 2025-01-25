@@ -85,7 +85,7 @@ class MyDrawer extends StatelessWidget {
                   Icons.star,
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
-                title: Text('O N B O A R D I  G'),
+                title: Text('O N B O A R D I N G'),
                 onTap: () {
                   //this is already the homescreen so pop drawer
                   Navigator.pop(context);
