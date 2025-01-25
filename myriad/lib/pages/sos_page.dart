@@ -9,6 +9,39 @@ class SosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(width: 20),
+            SvgPicture.asset(
+              'assets/logo.svg',
+              height: 80,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              "x",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontSize: 28,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Icon(
+              Icons.notification_important,
+              color: Theme.of(context).colorScheme.inversePrimary,
+              size: 50,
+            ),
+            const SizedBox(width: 70),
+          ],
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -16,30 +49,6 @@ class SosPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/logo.svg',
-                      height: 80,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      "x",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: 40,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Icon(
-                      Icons.notification_important,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      size: 50,
-                    ),
-                  ],
-                ),
-
                 const SizedBox(height: 30),
 
                 // Emergency services distance indicators
