@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:audioplayers/audioplayers.dart'; // Commenting out the import
+import 'package:audioplayers/audioplayers.dart';
 
 class SosPage extends StatelessWidget {
   const SosPage({super.key});
