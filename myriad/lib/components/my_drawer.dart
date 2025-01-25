@@ -37,21 +37,6 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
 
-              // //profile tile
-              // ListTile(
-              //   leading: Icon(
-              //     Icons.person,
-              //     color: Theme.of(context).colorScheme.inversePrimary,
-              //   ),
-              //   title: Text('P R O F I L E'),
-              //   onTap: () {
-              //     //this is already the homescreen so pop drawer
-              //     Navigator.pop(context);
-              //     Navigator.pushNamed(context, '/profile_page');
-              //   },
-              // ),
-
-              //community tile
               ListTile(
                 leading: Icon(
                   Icons.group,
@@ -76,6 +61,19 @@ class MyDrawer extends StatelessWidget {
                   //this is already the homescreen so pop drawer
                   Navigator.pop(context);
                   Navigator.pushNamed(context, '/gemini_chat');
+                },
+              ),
+
+              //wheelchair map tile
+              ListTile(
+                leading: Icon(
+                  Icons.accessible,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                title: Text('W H E E L C H A I R'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/wheelchair_map');
                 },
               ),
 

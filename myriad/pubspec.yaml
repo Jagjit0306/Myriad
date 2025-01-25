@@ -16,7 +16,10 @@ dependencies:
   shared_preferences: ^2.3.5
   dash_chat_2: ^0.0.20
   flutter_gemini: ^3.0.0
-  flutter_svg: ^2.0.17
+  google_maps_flutter: ^2.10.0
+  geolocator: ^13.0.2
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  http: ^0.13.6
   url_launcher: ^6.0.20
   audioplayers: ^6.1.0
 

@@ -7,6 +7,7 @@ import 'package:myriad/pages/chatbot_home_page.dart';
 import 'package:myriad/pages/community_new_post.dart';
 import 'package:myriad/pages/community_page.dart';
 import 'package:myriad/pages/home_page.dart';
+import 'package:myriad/pages/maps_wheelchair_home_page.dart';
 import 'package:myriad/pages/on_boarding.dart';
 import 'package:myriad/passwords.dart';
 import 'package:myriad/themes/dark_mode.dart';
@@ -40,6 +41,7 @@ class MainApp extends StatelessWidget {
         '/community_page': (context) => CommunityPage(),
         '/new_thread': (context) => CommunityNewPost(),
         '/gemini_chat': (context) => ChatbotHomePage(),
+        '/wheelchair_map': (context) => MapsWheelchairHomePage(),
         '/sos_page': (context) => SosPage(),
       },
     );

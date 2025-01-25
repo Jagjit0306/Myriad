@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myriad/database/user.dart';
 
 class GoogleSignInScreen extends StatefulWidget {
@@ -43,18 +43,18 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              'assets/logo.svg',
-              height: 200,
-              placeholderBuilder: (BuildContext context) => SizedBox(
-                height: 120,
-                width: 120,
-                child: const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-              semanticsLabel: 'Logo',
-            ),
+            // SvgPicture.asset(
+            //   'assets/logo.svg',
+            //   height: 200,
+            //   placeholderBuilder: (BuildContext context) => Container(
+            //     height: 120,
+            //     width: 120,
+            //     child: const Center(
+            //       child: CircularProgressIndicator(),
+            //     ),
+            //   ),
+            //   semanticsLabel: 'Logo',
+            // ),
             const SizedBox(height: 48),
             const Text(
               'Overcoming challenges together, with AI',

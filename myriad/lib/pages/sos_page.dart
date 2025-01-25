@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -15,10 +15,10 @@ class SosPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(width: 20),
-            SvgPicture.asset(
-              'assets/logo.svg',
-              height: 80,
-            ),
+            // SvgPicture.asset(
+            //   'assets/logo.svg',
+            //   height: 80,
+            // ),
             const SizedBox(width: 10),
             Text(
               "x",
@@ -108,7 +108,7 @@ class SosPage extends StatelessWidget {
 
   void _playScreamSound() async {
     final AudioPlayer audioPlayer = AudioPlayer();
-    await audioPlayer.setSource(AssetSource('assets/scream.mp3'));
+    await audioPlayer.setSource(AssetSource('scream.mp3'));
     await audioPlayer.setVolume(1.0);
     await audioPlayer.resume();
   }
