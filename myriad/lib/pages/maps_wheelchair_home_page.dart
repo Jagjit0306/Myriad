@@ -28,6 +28,8 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
     _getCurrentLocation();
   }
 
+  
+
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -114,10 +116,12 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
   }
 
   void _onTap(LatLng position) async {
+    if (!mounted) return; 
     final result = _places.searchNearbyWithRadius(
         Location(lat: position.latitude, lng: position.longitude), 20);
 
     result.then((placesResult) {
+      if (!mounted) return; 
       if (placesResult.results.isNotEmpty) {
         showDialog(
           context: context,

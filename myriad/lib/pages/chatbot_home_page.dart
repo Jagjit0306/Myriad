@@ -29,7 +29,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
     firstName: "Eva",
     id: '1',
     profileImage:
-        "https://res.cloudinary.com/startup-grind/image/upload/c_fill,dpr_2.0,f_auto,g_center,h_1080,q_100,w_1080/v1/gcs/platform-data-goog/events/IMG_20240224_201158.jpg",
+        "https://res.cloudinary.com/deysmiqsk/image/upload/v1737875387/Frame_1000002608_b6ulwd.png",
   );
 
   @override
@@ -194,10 +194,10 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
               onSend: _sendMessage,
               currentUser: currentUser,
               messageOptions: MessageOptions(
-                currentUserContainerColor: Colors.pink.shade100,
-                containerColor: Colors.grey,
-                textColor: Colors.white,
-                currentUserTextColor: Colors.black,
+                currentUserContainerColor: Theme.of(context).colorScheme.inversePrimary,
+                containerColor: Theme.of(context).colorScheme.secondary,
+                textColor: Theme.of(context).colorScheme.inversePrimary,
+                currentUserTextColor: Theme.of(context).colorScheme.surface,
               ),
               inputOptions: InputOptions(
                 cursorStyle: CursorStyle(
@@ -206,7 +206,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
                 inputDecoration: InputDecoration(
                   filled: true,
                   fillColor:
-                      Colors.black, // Background color of the typing field
+                      Theme.of(context).colorScheme.surface, // Background color of the typing field
                   hintText: "Chat with Eva...",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -216,16 +216,15 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
                 sendButtonBuilder: (void Function() onSend) {
                   return GestureDetector(
                     onTap: onSend,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color:
-                            Colors.blue, // Background color of the send button
-                        shape: BoxShape.circle,
-                      ),
-                      padding: EdgeInsets.all(12),
-                      child: Icon(
-                        Icons.send,
-                        color: Colors.white, // Icon color
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
+                      child: Transform.rotate(
+                        angle: -0.42,
+                        child: Icon(
+                          Icons.send_rounded,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          size: 35, // Icon color
+                        ),
                       ),
                     ),
                   );
@@ -247,6 +246,51 @@ class ChatBotIntro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text("ADD SOME GRAPHICS TO SHOW LIKE IN FIGMA @Gurshaan");
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: 80),
+        const Text(
+          'Featuring',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.w400,
+            decorationThickness: 2,
+          ),
+        ),
+        const SizedBox(height: 40),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              'M',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 60,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(width: 10),
+            Text(
+              'x',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 40,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            SizedBox(width: 10),
+            Icon(
+              Icons.auto_awesome,
+              color: Colors.white,
+              size: 60,
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }

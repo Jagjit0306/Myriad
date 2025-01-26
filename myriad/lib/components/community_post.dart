@@ -88,7 +88,8 @@ class CommunityPost extends StatelessWidget {
                     Text(data['content'],
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            color: Theme.of(context).colorScheme.secondary)),
+                            // color: Theme.of(context).colorScheme.bodyColor
+                            )),
                     SizedBox(
                       height: 10,
                     ),
