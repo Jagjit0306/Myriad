@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -15,10 +14,6 @@ class SosPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(width: 20),
-            // SvgPicture.asset(
-            //   'assets/logo.svg',
-            //   height: 80,
-            // ),
             const SizedBox(width: 10),
             Text(
               "x",
@@ -51,8 +46,6 @@ class SosPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 30),
-
-                // Emergency services distance indicators
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -60,42 +53,47 @@ class SosPage extends StatelessWidget {
                       child: Container(
                         height: 130,
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: _buildDistanceCard(context, "Hospital", Icons.local_hospital, "26m"),
+                        child: _buildDistanceCard(
+                            context, "Hospital", Icons.local_hospital, "26m"),
                       ),
                     ),
                     Expanded(
                       child: Container(
                         height: 130,
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: _buildDistanceCard(context, "Fire\nStation", Icons.local_fire_department, "26m"),
+                        child: _buildDistanceCard(context, "Fire\nStation",
+                            Icons.local_fire_department, "26m"),
                       ),
                     ),
                     Expanded(
                       child: Container(
                         height: 130,
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: _buildDistanceCard(context, "Police\nStation", Icons.local_police, "26m"),
+                        child: _buildDistanceCard(context, "Police\nStation",
+                            Icons.local_police, "26m"),
                       ),
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 40),
-
                 GridView.count(
-                  shrinkWrap: true, 
+                  shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
                   childAspectRatio: 1.5,
                   children: [
-                    _buildEmergencyOption(context, "Ambulance", Icons.medical_services),
-                    _buildEmergencyOption(context, "Fire Station", Icons.local_fire_department),
-                    _buildEmergencyOption(context, "Access Wheels", Icons.location_on),
+                    _buildEmergencyOption(
+                        context, "Ambulance", Icons.medical_services),
+                    _buildEmergencyOption(
+                        context, "Fire Station", Icons.local_fire_department),
+                    _buildEmergencyOption(
+                        context, "Access Wheels", Icons.location_on),
                     _buildEmergencyOption(context, "Guardian", Icons.phone),
-                    _buildEmergencyOption(context, "SOS", Icons.notification_important),
-                    _buildEmergencyOption(context, "Scream", Icons.campaign, onTap: _playScreamSound),
+                    _buildEmergencyOption(
+                        context, "SOS", Icons.notification_important),
+                    _ScreamButton(),
                   ],
                 ),
               ],
@@ -106,14 +104,8 @@ class SosPage extends StatelessWidget {
     );
   }
 
-  void _playScreamSound() async {
-    final AudioPlayer audioPlayer = AudioPlayer();
-    await audioPlayer.setSource(AssetSource('scream.mp3'));
-    await audioPlayer.setVolume(1.0);
-    await audioPlayer.resume();
-  }
-
-  Widget _buildDistanceCard(BuildContext context, String title, IconData icon, String distance) {
+  Widget _buildDistanceCard(
+      BuildContext context, String title, IconData icon, String distance) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -154,13 +146,12 @@ class SosPage extends StatelessWidget {
     );
   }
 
-  Widget _buildEmergencyOption(BuildContext context, String title, IconData icon, {Function? onTap}) {
+  Widget _buildEmergencyOption(
+      BuildContext context, String title, IconData icon) {
     return GestureDetector(
       onTap: () {
         if (title == "SOS") {
           _launchDialer("112");
-        } else if (title == "Scream") {
-          onTap?.call();
         }
       },
       child: Container(
@@ -199,5 +190,79 @@ class SosPage extends StatelessWidget {
       path: number,
     );
     await launchUrl(launchUri);
+  }
+}
+
+class _ScreamButton extends StatefulWidget {
+  @override
+  State<_ScreamButton> createState() => _ScreamButtonState();
+}
+
+class _ScreamButtonState extends State<_ScreamButton> {
+  late AudioPlayer _audioPlayer;
+  bool _isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer = AudioPlayer();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _toggleScreamSound,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.inversePrimary,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: SizedBox(
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Scream",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Icon(
+                Icons.campaign,
+                color: Theme.of(context).colorScheme.primary,
+                size: 40,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _toggleScreamSound() async {
+    if (_isPlaying) {
+      await _audioPlayer.pause();
+      setState(() {
+        _isPlaying = false;
+      });
+    } else {
+      await _audioPlayer
+          .stop(); // Stop any previous playback to avoid conflicts
+      await _audioPlayer.setSource(AssetSource('scream.mp3'));
+      await _audioPlayer.setVolume(1.0);
+      await _audioPlayer.resume();
+      setState(() {
+        _isPlaying = true;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
   }
 }
