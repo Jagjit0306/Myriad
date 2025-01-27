@@ -201,7 +201,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
               ),
               inputOptions: InputOptions(
                 cursorStyle: CursorStyle(
-                  color: Colors.red,
+                  color: Theme.of(context).colorScheme.inversePrimary,
                 ),
                 inputDecoration: InputDecoration(
                   filled: true,
