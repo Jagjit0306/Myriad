@@ -9,9 +9,9 @@ import 'package:myriad/pages/community_page.dart';
 import 'package:myriad/pages/home_page.dart';
 import 'package:myriad/pages/maps_wheelchair_home_page.dart';
 import 'package:myriad/pages/on_boarding.dart';
-import 'package:myriad/pages/deaf_page.dart';
-import 'package:myriad/pages/dumb_page.dart';
-import 'package:myriad/pages/deaf_dumb_page.dart';
+import 'package:myriad/pages/hearify_page.dart';
+import 'package:myriad/pages/speakify_page.dart';
+import 'package:myriad/pages/voicify_page.dart';
 import 'package:myriad/passwords.dart';
 import 'package:myriad/themes/dark_mode.dart';
 import 'package:myriad/themes/light_mode.dart';
@@ -46,9 +46,9 @@ class MainApp extends StatelessWidget {
         '/gemini_chat': (context) => ChatbotHomePage(),
         '/wheelchair_map': (context) => MapsWheelchairHomePage(),
         '/sos_page': (context) => SosPage(),
-        '/deaf_page': (context) => DeafPage(),
-        '/dumb_page': (context) => DumbPage(),
-        '/deaf_dumb_page': (context) => DeafDumbPage(),
+        '/hearify': (context) => HearifyPage(),
+        '/speakify': (context) => SpeakifyPage(),
+        '/voicify': (context) => VoicifyPage(),
       },
     );
   }

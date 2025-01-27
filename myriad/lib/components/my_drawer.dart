@@ -64,6 +64,42 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
 
+              ListTile(
+                leading: Icon(
+                  Icons.record_voice_over,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                title: Text('S P E A K I F Y'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/speakify');
+                },
+              ),
+
+              ListTile(
+                leading: Icon(
+                  Icons.hearing,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                title: Text('H E A R I F Y'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/hearify');
+                },
+              ),
+
+              ListTile(
+                leading: Icon(
+                  Icons.loop,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                title: Text('V O I C I F Y'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/voicify');
+                },
+              ),
+
               //wheelchair map tile
               ListTile(
                 leading: Icon(
@@ -77,7 +113,6 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
 
-              //user tile
               ListTile(
                 leading: Icon(
                   Icons.star,
@@ -105,26 +140,26 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
 
-              ListTile(
-                title: const Text('Deaf'),
-                onTap: () {
-                  Navigator.pushNamed(context, '/deaf_page');
-                },
-              ),
+              // ListTile(
+              //   title: const Text('H E A R I F Y'),
+              //   onTap: () {
+              //     Navigator.pushNamed(context, '/hearify');
+              //   },
+              // ),
 
-              ListTile(
-                title: const Text('Dumb'),
-                onTap: () {
-                  Navigator.pushNamed(context, '/dumb_page');
-                },
-              ),
+              // ListTile(
+              //   title: const Text('Dumb'),
+              //   onTap: () {
+              //     Navigator.pushNamed(context, '/dumb_page');
+              //   },
+              // ),
 
-              ListTile(
-                title: const Text('Deaf and Dumb'),
-                onTap: () {
-                  Navigator.pushNamed(context, '/deaf_dumb_page');
-                },
-              ),
+              // ListTile(
+              //   title: const Text('Deaf and Dumb'),
+              //   onTap: () {
+              //     Navigator.pushNamed(context, '/deaf_dumb_page');
+              //   },
+              // ),
             ],
           ),
 

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class DeafPage extends StatelessWidget {
-  const DeafPage({super.key});
+class HearifyPage extends StatelessWidget {
+  const HearifyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Deaf Page'),
+        title: const Text('Hearify'),
       ),
       body: Center(
-        child: const Text('Content for Deaf Page'),
+        child: const Text('Content for Hearify Page'),
       ),
     );
   }

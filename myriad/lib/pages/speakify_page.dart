@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:myriad/themes/light_mode.dart'; // Import your theme file
+// import 'package:myriad/themes/light_mode.dart'; // Import your theme file
 
-class DumbPage extends StatefulWidget {
-  const DumbPage({super.key});
+class SpeakifyPage extends StatefulWidget {
+  const SpeakifyPage({super.key});
 
   @override
-  State<DumbPage> createState() => _DumbPageState();
+  State<SpeakifyPage> createState() => _SpeakifyPageState();
 }
 
-class _DumbPageState extends State<DumbPage> {
+class _SpeakifyPageState extends State<SpeakifyPage> {
   final FlutterTts _flutterTts = FlutterTts();
   final TextEditingController _controller = TextEditingController();
 
@@ -28,7 +28,7 @@ class _DumbPageState extends State<DumbPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dumb Page'),
+        title: const Text('Speakify'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
