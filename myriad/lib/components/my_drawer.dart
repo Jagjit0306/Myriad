@@ -104,6 +104,27 @@ class MyDrawer extends StatelessWidget {
                   Navigator.pushNamed(context, '/sos_page');
                 },
               ),
+
+              ListTile(
+                title: const Text('Deaf'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/deaf_page');
+                },
+              ),
+
+              ListTile(
+                title: const Text('Dumb'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/dumb_page');
+                },
+              ),
+
+              ListTile(
+                title: const Text('Deaf and Dumb'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/deaf_dumb_page');
+                },
+              ),
             ],
           ),
 
