@@ -208,15 +208,19 @@ class _VoicifyPageState extends State<VoicifyPage> {
                 _saveChats();
               },
               messageOptions: MessageOptions(
-                currentUserContainerColor:
-                    Theme.of(context).colorScheme.inversePrimary,
-                containerColor: Theme.of(context).colorScheme.secondary,
-                textColor: Theme.of(context).colorScheme.inversePrimary,
-                currentUserTextColor: Theme.of(context).colorScheme.surface,
-              ),
+                  currentUserContainerColor:
+                      Theme.of(context).colorScheme.inversePrimary,
+                  containerColor: Theme.of(context).colorScheme.secondary,
+                  textColor: Theme.of(context).colorScheme.inversePrimary,
+                  currentUserTextColor: Theme.of(context).colorScheme.surface,
+                  onPressMessage: (m) {
+                    if (m.user == _currentUser) {
+                      _speak(m.text);
+                    }
+                  }),
               inputOptions: InputOptions(
                 cursorStyle: CursorStyle(
-                  color: Colors.red,
+                  color: Theme.of(context).colorScheme.inversePrimary,
                 ),
                 inputDecoration: InputDecoration(
                   filled: true,
@@ -231,13 +235,10 @@ class _VoicifyPageState extends State<VoicifyPage> {
                     onTap: onSend,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
-                      child: Transform.rotate(
-                        angle: -0.42,
-                        child: Icon(
-                          Icons.send_rounded,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          size: 35,
-                        ),
+                      child: Icon(
+                        Icons.record_voice_over,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        size: 35, // Icon color
                       ),
                     ),
                   );
