@@ -10,6 +10,7 @@ import 'package:myriad/pages/home_page.dart';
 import 'package:myriad/pages/maps_wheelchair_home_page.dart';
 import 'package:myriad/pages/on_boarding.dart';
 import 'package:myriad/pages/hearify_page.dart';
+import 'package:myriad/pages/sightify_page.dart';
 import 'package:myriad/pages/speakify_page.dart';
 import 'package:myriad/pages/voicify_page.dart';
 import 'package:myriad/passwords.dart';
@@ -49,6 +50,7 @@ class MainApp extends StatelessWidget {
         '/hearify': (context) => HearifyPage(),
         '/speakify': (context) => SpeakifyPage(),
         '/voicify': (context) => VoicifyPage(),
+        '/sightify': (context) => SightifyPage(),
       },
     );
   }

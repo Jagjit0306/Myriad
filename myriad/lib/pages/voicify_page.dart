@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:myriad/components/banner_1.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart'; // Add this import
 import 'package:dash_chat_2/dash_chat_2.dart';
@@ -15,20 +19,20 @@ class VoicifyPage extends StatefulWidget {
 class _VoicifyPageState extends State<VoicifyPage> {
   final FlutterTts _flutterTts = FlutterTts();
   final SpeechToText _speech = SpeechToText();
-  final List<ChatMessage> _messages = [];
+  List<ChatMessage> messages = [];
   bool _isListening = false;
   bool _speechEnabled = false;
   String _lastWords = '';
   final TextEditingController _textController = TextEditingController();
-  
+
   final ChatUser _currentUser = ChatUser(
-    id: '1',
+    id: '0',
     firstName: 'User',
   );
-  
+
   final ChatUser _botUser = ChatUser(
-    id: '2',
-    firstName: 'Assistant',
+    id: '1',
+    firstName: 'Partner',
   );
 
   @override
@@ -36,6 +40,7 @@ class _VoicifyPageState extends State<VoicifyPage> {
     super.initState();
     _initializeSpeech();
     _initializeTts();
+    _getChats();
   }
 
   Future<void> _initializeTts() async {
@@ -52,7 +57,9 @@ class _VoicifyPageState extends State<VoicifyPage> {
           if (mounted) {
             setState(() => _isListening = false);
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Speech recognition error: ${errorNotification.errorMsg}')),
+              SnackBar(
+                  content: Text(
+                      'Speech recognition error: ${errorNotification.errorMsg}')),
             );
           }
         },
@@ -109,46 +116,103 @@ class _VoicifyPageState extends State<VoicifyPage> {
       setState(() => _isListening = false);
       await _speech.stop();
     }
+    _saveChats();
   }
 
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       _lastWords = "${_lastWords}${result.recognizedWords} ";
       _textController.text = _lastWords;
-      _messages.add(
-        ChatMessage(
-          user: _currentUser,
-          text: result.recognizedWords,
-          createdAt: DateTime.now(),
-        ),
-      );
+
+      if (result.recognizedWords.isNotEmpty) {
+        messages = [
+          ChatMessage(
+            user: _botUser,
+            text: result.recognizedWords,
+            createdAt: DateTime.now(),
+          ),
+          ...messages,
+        ];
+      }
     });
   }
-  
+
+  Future<void> _getChats() async {
+    SharedPreferences localPrefs = await SharedPreferences.getInstance();
+    String dataString = localPrefs.getString("voicify_chats") ?? "";
+    if (dataString.isNotEmpty) {
+      final decodedJson = jsonDecode(dataString) as List;
+      final castedList = decodedJson.cast<Map<String, dynamic>>();
+      List<ChatMessage> chatData =
+          castedList.map((e) => ChatMessage.fromJson(e)).toList();
+      // final listSize = chatData.length;
+      if (chatData.length > 50) {
+        chatData = chatData.sublist(0, 50); //only 50 recent chats are saved
+      }
+      setState(() {
+        messages = chatData;
+      });
+    }
+  }
+
+  Future<void> _saveChats() async {
+    SharedPreferences localPrefs = await SharedPreferences.getInstance();
+    localPrefs.setString('voicify_chats', jsonEncode(messages));
+  }
+
+  Future<void> _clearChats() async {
+    setState(() {
+      messages = [];
+      _saveChats();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Voice Assistant'),
+        title: const Text('Voicify'),
+        actions: [
+          PopupMenuButton(
+            onSelected: (value) {
+              switch (value) {
+                case 'clrcht':
+                  _clearChats();
+                  break;
+                default:
+                  break;
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'clrcht',
+                child: Text("Clear Chat"),
+              ),
+            ],
+          )
+        ],
       ),
       body: Column(
         children: [
+          if (messages.isEmpty) Banner1(bannerIcon: Icons.loop),
           Expanded(
             child: DashChat(
               currentUser: _currentUser,
-              messages: _messages,
+              messages: messages,
               onSend: (ChatMessage message) {
                 setState(() {
-                  _messages.add(message);
+                  // messages.add(message);
+                  messages = [message, ...messages];
                 });
                 _speak(message.text);
+                _saveChats();
               },
               messageOptions: MessageOptions(
-                showTime: true,
-                containerColor: Theme.of(context).colorScheme.inversePrimary,
-                textColor: Colors.white,
-                currentUserContainerColor: Theme.of(context).colorScheme.primary,
-                currentUserTextColor: Colors.white,
+                currentUserContainerColor:
+                    Theme.of(context).colorScheme.inversePrimary,
+                containerColor: Theme.of(context).colorScheme.secondary,
+                textColor: Theme.of(context).colorScheme.inversePrimary,
+                currentUserTextColor: Theme.of(context).colorScheme.surface,
               ),
               inputOptions: InputOptions(
                 cursorStyle: CursorStyle(
@@ -157,7 +221,7 @@ class _VoicifyPageState extends State<VoicifyPage> {
                 inputDecoration: InputDecoration(
                   filled: true,
                   fillColor: Theme.of(context).colorScheme.surface,
-                  hintText: "Type your message...",
+                  hintText: "Type something...",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),

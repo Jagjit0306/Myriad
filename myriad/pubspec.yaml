@@ -23,7 +23,7 @@ dependencies:
   url_launcher: ^6.0.20
   audioplayers: ^6.1.0
   flutter_tts: ^3.4.0
-  speech_to_text: ^5.5.0
+  speech_to_text: ^7.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
