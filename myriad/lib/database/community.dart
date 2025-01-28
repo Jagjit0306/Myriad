@@ -38,7 +38,17 @@ class CommunityDatabase {
   }
 
   Future<void> deleteCommunityPost(String postId) async {
-    await communityPosts.doc(postId).delete();
+      await FirebaseFirestore.instance.collection('CommunityPosts').doc(postId).delete();
+
+
+      var commentsSnapshot = await FirebaseFirestore.instance
+          .collection('comments')
+          .where('postId', isEqualTo: postId)
+          .get();
+
+      for (var doc in commentsSnapshot.docs) {
+        await doc.reference.delete();
+      }
   }
 
   Future<void> updateCommunityPost(
