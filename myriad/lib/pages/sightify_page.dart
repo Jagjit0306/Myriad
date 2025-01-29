@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/components/round_button.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:camera/camera.dart';
 
 class SightifyPage extends StatefulWidget {
   const SightifyPage({super.key});
@@ -13,18 +13,45 @@ class SightifyPage extends StatefulWidget {
 
 class _SightifyPageState extends State<SightifyPage> {
   File? _imageFile;
-  final ImagePicker _picker = ImagePicker();
+  CameraController? _controller;
+  bool _isTakingPicture = false;
 
-  Future<void> _takePicture() async {
+  Future<void> _takeInstantPicture() async {
+    if (_isTakingPicture) return;
+
+    setState(() {
+      _isTakingPicture = true;
+    });
+
     try {
-      final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-      if (photo != null) {
-        setState(() {
-          _imageFile = File(photo.path);
-        });
-      }
+      // Initialize cameras
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) return;
+
+      // Create and initialize the controller
+      _controller = CameraController(
+        cameras[0],
+        ResolutionPreset.high,
+        enableAudio: false,
+      );
+
+      await _controller!.initialize();
+
+      // Take picture immediately
+      final XFile photo = await _controller!.takePicture();
+      
+      setState(() {
+        _imageFile = File(photo.path);
+      });
+
     } catch (e) {
       print('Error taking picture: $e');
+    } finally {
+      // Clean up
+      await _controller?.dispose();
+      setState(() {
+        _isTakingPicture = false;
+      });
     }
   }
 
@@ -60,14 +87,10 @@ class _SightifyPageState extends State<SightifyPage> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(27),
-                    child: _imageFile != null
-                        ? Image.file(
-                            _imageFile!,
-                            fit: BoxFit.cover,
-                          )
-                        : const Center(
-                            child: Text('No image selected'),
-                          ),
+                    child: Image.file(
+                      _imageFile!,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -79,13 +102,19 @@ class _SightifyPageState extends State<SightifyPage> {
             children: [
               RoundButton(
                 icon: Icons.camera_alt,
-                onPressed: _takePicture,
+                onPressed: (_isTakingPicture) ? (){} : _takeInstantPicture,
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          // const SizedBox(height: 20),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
   }
 }
