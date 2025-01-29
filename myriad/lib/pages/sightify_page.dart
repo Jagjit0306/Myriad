@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/components/round_button.dart';
 import 'package:camera/camera.dart';
@@ -12,9 +15,17 @@ class SightifyPage extends StatefulWidget {
 }
 
 class _SightifyPageState extends State<SightifyPage> {
+  final FlutterTts _flutterTts = FlutterTts();
   File? _imageFile;
   CameraController? _controller;
   bool _isTakingPicture = false;
+  final Gemini gemini = Gemini.instance;
+
+  Future<void> _speak(String text) async {
+    await _flutterTts.setLanguage("en-US");
+    await _flutterTts.setPitch(1.0);
+    await _flutterTts.speak(text);
+  }
 
   Future<void> _takeInstantPicture() async {
     if (_isTakingPicture) return;
@@ -39,11 +50,12 @@ class _SightifyPageState extends State<SightifyPage> {
 
       // Take picture immediately
       final XFile photo = await _controller!.takePicture();
-      
+
       setState(() {
         _imageFile = File(photo.path);
+        askGemini();
       });
-
+      //TODO: trigger gemini
     } catch (e) {
       print('Error taking picture: $e');
     } finally {
@@ -53,6 +65,20 @@ class _SightifyPageState extends State<SightifyPage> {
         _isTakingPicture = false;
       });
     }
+  }
+
+  void askGemini() {
+    gemini.textAndImage(
+      text:
+          "Describe what you see in this picture to a person with visual impairment",
+      images: [_imageFile!.readAsBytesSync()],
+    ).then(
+      (value) {
+        final dataContent = jsonDecode(jsonEncode(value!.content!.parts![0]))
+            as Map<String, dynamic>;
+        _speak(dataContent['text'] ?? "Error encountered !");
+      },
+    );
   }
 
   @override
@@ -102,11 +128,10 @@ class _SightifyPageState extends State<SightifyPage> {
             children: [
               RoundButton(
                 icon: Icons.camera_alt,
-                onPressed: (_isTakingPicture) ? (){} : _takeInstantPicture,
+                onPressed: (_isTakingPicture) ? () {} : _takeInstantPicture,
               ),
             ],
           ),
-          // const SizedBox(height: 20),
         ],
       ),
     );
