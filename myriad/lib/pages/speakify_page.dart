@@ -16,7 +16,6 @@ class SpeakifyPage extends StatefulWidget {
 
 class _SpeakifyPageState extends State<SpeakifyPage> {
   final FlutterTts _flutterTts = FlutterTts();
-  final TextEditingController _controller = TextEditingController();
 
   ChatUser currentUser = ChatUser(
       id: "0",
