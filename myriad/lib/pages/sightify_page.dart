@@ -72,18 +72,23 @@ class _SightifyPageState extends State<SightifyPage> {
   }
 
   void askGemini() {
+    print("ASKING GEMINI");
     // ignore: deprecated_member_use
     gemini.textAndImage(
       text:
-          "Describe what you see in this picture to a person with visual impairment",
+          "Describe what you see in this picture to a person with visual impairment, keep it short",
       images: [_imageFile!.readAsBytesSync()],
     ).then(
       (value) {
+        print("Response recieved");
         final dataContent = jsonDecode(jsonEncode(value!.content!.parts![0]))
             as Map<String, dynamic>;
         _speak(dataContent['text'] ?? "Error encountered !");
       },
-    );
+    ).catchError((e) {
+      print("GEMINI ERROR");
+      print(e);
+    });
   }
 
   // ignore: non_constant_identifier_names
@@ -98,7 +103,10 @@ class _SightifyPageState extends State<SightifyPage> {
             as Map<String, dynamic>;
         _speak(dataContent['text'] ?? "Error encountered !");
       },
-    );
+    ).catchError((e) {
+      print("GEMINI ERROR");
+      print(e);
+    });
   }
 
   Future<void> temp(double x, double y) async {
