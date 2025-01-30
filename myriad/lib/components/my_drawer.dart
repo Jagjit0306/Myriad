@@ -117,7 +117,7 @@ class MyDrawer extends StatelessWidget {
 
                   ListTile(
                     leading: Icon(
-                      Icons.loop,
+                      Icons.drag_indicator,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                     title: Text('F E E L I F Y'),

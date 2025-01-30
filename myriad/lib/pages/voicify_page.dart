@@ -109,7 +109,7 @@ class _VoicifyPageState extends State<VoicifyPage> {
         listenFor: const Duration(seconds: 30),
         localeId: "en_US",
         cancelOnError: true,
-        partialResults: true,
+        partialResults: false,
         listenMode: stt.ListenMode.confirmation,
       );
     } else {
