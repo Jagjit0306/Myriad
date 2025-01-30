@@ -115,6 +115,18 @@ class MyDrawer extends StatelessWidget {
                     },
                   ),
 
+                  ListTile(
+                    leading: Icon(
+                      Icons.loop,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                    title: Text('F E E L I F Y'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/feelify');
+                    },
+                  ),
+
                   //wheelchair map tile
                   ListTile(
                     leading: Icon(

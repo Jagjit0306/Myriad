@@ -6,6 +6,7 @@ import 'package:myriad/firebase_options.dart';
 import 'package:myriad/pages/chatbot_home_page.dart';
 import 'package:myriad/pages/community_new_post.dart';
 import 'package:myriad/pages/community_page.dart';
+import 'package:myriad/pages/feelify_page.dart';
 import 'package:myriad/pages/home_page.dart';
 import 'package:myriad/pages/maps_wheelchair_home_page.dart';
 import 'package:myriad/pages/on_boarding.dart';
@@ -51,6 +52,7 @@ class MainApp extends StatelessWidget {
         '/speakify': (context) => SpeakifyPage(),
         '/voicify': (context) => VoicifyPage(),
         '/sightify': (context) => SightifyPage(),
+        '/feelify': (context) => const FeelifyPage(),
       },
     );
   }
