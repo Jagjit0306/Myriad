@@ -13,6 +13,7 @@ class OnBoarding extends StatefulWidget {
 
 class _OnBoardingState extends State<OnBoarding> {
   final TextEditingController usernameController = TextEditingController();
+  final TextEditingController guardianPhoneController = TextEditingController();
 
   List<Map<String, bool>> prefs = [
     {'Visual Impairment': false},
@@ -54,6 +55,7 @@ class _OnBoardingState extends State<OnBoarding> {
           .update({
         "username": usernameController.text,
         "prefs": prefs,
+        "guardianPhone": guardianPhoneController.text,
       });
     }
   }
@@ -79,10 +81,10 @@ class _OnBoardingState extends State<OnBoarding> {
             ),
 
             // app name
-            Text(
-              "U S E R N A M E",
-              style: TextStyle(fontSize: 20),
-            ),
+            // Text(
+            //   "U S E R N A M E",
+            //   style: TextStyle(fontSize: 20),
+            // ),
 
             const SizedBox(
               height: 25,
@@ -98,6 +100,19 @@ class _OnBoardingState extends State<OnBoarding> {
             ),
             if (!isUsernameUnique && usernameController.text.isNotEmpty)
               const Text("THIS USERNAME IS TAKEN/INVALID"),
+
+            const SizedBox(
+              height: 25,
+            ),
+
+            MyTextfield(
+              hintText: 'Guardian Phone',
+              obscureText: false,
+              controller: guardianPhoneController,
+              onChanged: (value) {
+                
+              },
+            ),
 
             const SizedBox(
               height: 25,
