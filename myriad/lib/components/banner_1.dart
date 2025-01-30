@@ -17,10 +17,10 @@ class Banner1 extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(height: 80),
-        const Text(
+        Text(
           'Featuring',
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.inversePrimary,
             fontSize: 24,
             fontWeight: FontWeight.w400,
             decorationThickness: 2,
@@ -33,7 +33,7 @@ class Banner1 extends StatelessWidget {
             Text(
               'M',
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.inversePrimary,
                 fontSize: 60,
                 fontWeight: FontWeight.bold,
               ),
@@ -42,7 +42,7 @@ class Banner1 extends StatelessWidget {
             Text(
               'x',
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.inversePrimary,
                 fontSize: 40,
                 fontWeight: FontWeight.w400,
               ),
@@ -52,7 +52,7 @@ class Banner1 extends StatelessWidget {
               angle: tilt,
               child: Icon(
                 bannerIcon,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.inversePrimary,
                 size: 60,
               ),
             ),

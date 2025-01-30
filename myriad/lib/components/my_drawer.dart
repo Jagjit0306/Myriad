@@ -69,6 +69,19 @@ class MyDrawer extends StatelessWidget {
 
                   ListTile(
                     leading: Icon(
+                      Icons.self_improvement_rounded,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                    title: Text('S E R E N I F Y'),
+                    onTap: () {
+                      //this is already the homescreen so pop drawer
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/serenify');
+                    },
+                  ),
+
+                  ListTile(
+                    leading: Icon(
                       Icons.visibility,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
