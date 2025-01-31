@@ -88,9 +88,8 @@ class _SightifyPageState extends State<SightifyPage> {
     ).catchError((e) {
       print("GEMINI ERROR");
       print(e);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: const Text("We cannot reach our service right now"))
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text("We cannot reach our service right now")));
     });
   }
 
@@ -109,9 +108,8 @@ class _SightifyPageState extends State<SightifyPage> {
     ).catchError((e) {
       print("GEMINI ERROR");
       print(e);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: const Text("We cannot reach our service right now"))
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text("We cannot reach our service right now")));
     });
   }
 
@@ -210,6 +208,7 @@ class _SightifyPageState extends State<SightifyPage> {
   @override
   void dispose() {
     _controller?.dispose();
+    _flutterTts.stop();
     super.dispose();
   }
 }
