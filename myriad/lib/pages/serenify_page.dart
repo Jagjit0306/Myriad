@@ -73,10 +73,22 @@ class _SerenifyPageState extends State<SerenifyPage> {
                   crossAxisCount: 2,
                   shrinkWrap: true,
                   children: [
-                    SerenifySubWidget(imgPath: 'assets/Frame_Meditate.png'),
-                    SerenifySubWidget(imgPath: 'assets/Frame_Sleep.png'),
-                    SerenifySubWidget(imgPath: 'assets/Frame_Breath.png'),
-                    SerenifySubWidget(imgPath: 'assets/Frame_Affirmate.png'),
+                    SerenifySubWidget(
+                      imgPath: 'assets/Frame_Meditate.png',
+                      link: '/serenify_meditate',
+                    ),
+                    SerenifySubWidget(
+                      imgPath: 'assets/Frame_Sleep.png',
+                      link: '/serenify_meditate',
+                    ),
+                    SerenifySubWidget(
+                      imgPath: 'assets/Frame_Breath.png',
+                      link: '/serenify_breathe',
+                    ),
+                    SerenifySubWidget(
+                      imgPath: 'assets/Frame_Affirmate.png',
+                      link: '/serenify_meditate',
+                    ),
                   ],
                 ),
               ),
@@ -90,24 +102,28 @@ class _SerenifyPageState extends State<SerenifyPage> {
 
 class SerenifySubWidget extends StatelessWidget {
   String imgPath;
-  SerenifySubWidget({super.key, required this.imgPath});
+  String link;
+  SerenifySubWidget({super.key, required this.imgPath, required this.link});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(imgPath),
-            fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: () => Navigator.pushNamed(context, link),
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(imgPath),
+              fit: BoxFit.cover,
+            ),
+            border: Border.all(color: Colors.black, width: 1),
+            borderRadius: BorderRadius.circular(20),
           ),
-          border: Border.all(color: Colors.black, width: 1),
-          borderRadius: BorderRadius.circular(20),
+          // child: const Text('heyy'),
         ),
-        // child: const Text('heyy'),
       ),
     );
   }

@@ -11,6 +11,8 @@ import 'package:myriad/pages/home_page.dart';
 import 'package:myriad/pages/maps_wheelchair_home_page.dart';
 import 'package:myriad/pages/on_boarding.dart';
 import 'package:myriad/pages/hearify_page.dart';
+import 'package:myriad/pages/serenify_breathe_page.dart';
+import 'package:myriad/pages/serenify_meditate_page.dart';
 import 'package:myriad/pages/serenify_page.dart';
 import 'package:myriad/pages/sightify_page.dart';
 import 'package:myriad/pages/speakify_page.dart';
@@ -56,6 +58,8 @@ class MainApp extends StatelessWidget {
         '/sightify': (context) => SightifyPage(),
         '/feelify': (context) => const FeelifyPage(),
         '/serenify': (context) => const SerenifyPage(),
+        '/serenify_meditate': (context) => const SerenifyMeditatePage(),
+        '/serenify_breathe': (context) => const SerenifyBreathePage(),
         '/colorify': (context) => const ColorifyPage(),
       },
     );

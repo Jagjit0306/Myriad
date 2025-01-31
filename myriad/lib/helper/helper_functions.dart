@@ -43,3 +43,34 @@ String timeSince(Timestamp timestamp) {
   final seconds = difference.inSeconds;
   return '${seconds}s';
 }
+
+String timeSinceInSeconds(int seconds) {
+  final duration = Duration(seconds: seconds);
+
+  final years = duration.inDays ~/ 365;
+  if (years > 0) {
+    return '${years}y';
+  }
+
+  final months = duration.inDays ~/ 30;
+  if (months > 0) {
+    return '${months}m';
+  }
+
+  final days = duration.inDays;
+  if (days > 0) {
+    return '${days}d';
+  }
+
+  final hours = duration.inHours;
+  if (hours > 0) {
+    return '${hours}h';
+  }
+
+  final minutes = duration.inMinutes;
+  if (minutes > 0) {
+    return '${minutes}m';
+  }
+
+  return '${seconds}s';
+}
