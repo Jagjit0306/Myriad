@@ -145,10 +145,10 @@ class MyDrawer extends StatelessWidget {
                       Icons.drag_indicator,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
-                    title: Text('F E E L I F Y'),
+                    title: Text('V I B R A I L L I F Y'),
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/feelify');
+                      Navigator.pushNamed(context, '/vibraillify');
                     },
                   ),
 

@@ -9,14 +9,14 @@ import 'package:speech_to_text/speech_recognition_result.dart'; // Add this impo
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
-class FeelifyPage extends StatefulWidget {
-  const FeelifyPage({super.key});
+class VibraillifyPage extends StatefulWidget {
+  const VibraillifyPage({super.key});
 
   @override
-  State<FeelifyPage> createState() => _FeelifyPageState();
+  State<VibraillifyPage> createState() => _VibraillifyPageState();
 }
 
-class _FeelifyPageState extends State<FeelifyPage> {
+class _VibraillifyPageState extends State<VibraillifyPage> {
   final SpeechToText _speech = SpeechToText();
   List<ChatMessage> messages = [];
   bool _isListening = false;
@@ -102,7 +102,7 @@ class _FeelifyPageState extends State<FeelifyPage> {
       setState(() => _isListening = false);
       await _speech.stop();
     }
-    _saveChats();
+    // _saveChats();
   }
 
   void _onSpeechResult(SpeechRecognitionResult result) {
@@ -119,6 +119,7 @@ class _FeelifyPageState extends State<FeelifyPage> {
           ),
           ...messages,
         ];
+        _saveChats();
         activateVibraille(result.recognizedWords);
       }
     });
@@ -126,7 +127,7 @@ class _FeelifyPageState extends State<FeelifyPage> {
 
   Future<void> _getChats() async {
     SharedPreferences localPrefs = await SharedPreferences.getInstance();
-    String dataString = localPrefs.getString("feelify_chats") ?? "";
+    String dataString = localPrefs.getString("vibraillify_chats") ?? "";
     if (dataString.isNotEmpty) {
       final decodedJson = jsonDecode(dataString) as List;
       final castedList = decodedJson.cast<Map<String, dynamic>>();
@@ -143,7 +144,7 @@ class _FeelifyPageState extends State<FeelifyPage> {
 
   Future<void> _saveChats() async {
     SharedPreferences localPrefs = await SharedPreferences.getInstance();
-    localPrefs.setString('feelify_chats', jsonEncode(messages));
+    localPrefs.setString('vibraillify_chats', jsonEncode(messages));
   }
 
   Future<void> _clearChats() async {
@@ -151,6 +152,7 @@ class _FeelifyPageState extends State<FeelifyPage> {
       messages = [];
       _saveChats();
     });
+    vibraille.stopVib();
   }
 
   @override
