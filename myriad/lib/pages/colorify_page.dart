@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data'; 
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as img;
@@ -101,11 +101,11 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            const SizedBox(height: 10),
-            Text(
-              'RGB: (${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b})',
-              style: const TextStyle(fontSize: 12),
-            ),
+            // const SizedBox(height: 10),
+            // Text(
+            //   'RGB: (${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b})',
+            //   style: const TextStyle(fontSize: 12),
+            // ),
           ],
         ),
         actions: [
@@ -140,21 +140,53 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Color Detection'),
+        title: const Text('Colorify'),
       ),
-      body: Stack(
-        children: [
-          CameraPreview(_controller!),
-          GestureDetector(
-            onTap: _takePicture,
-            child: Center(
-              child: CustomPaint(
-                size: Size.infinite,
-                painter: CrosshairPainter(),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (_controller == null || !_controller!.value.isInitialized) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          // Get the camera preview aspect ratio
+          double aspectRatio = _controller!.value.previewSize!.height /
+              _controller!.value.previewSize!.width;
+
+          Widget cameraPreview = CameraPreview(_controller!);
+
+          // Apply fix only for Android
+          if (Platform.isAndroid) {
+            cameraPreview = Transform.rotate(
+              angle: 90 * 3.1415926535 / 180, // Rotate preview 90 degrees
+              child: AspectRatio(
+                aspectRatio: aspectRatio,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: constraints.maxWidth,
+                    height: constraints.maxWidth * aspectRatio,
+                    child: CameraPreview(_controller!),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
+            );
+          }
+          return Stack(
+            children: [
+              cameraPreview,
+              // const Text('hi'),
+              GestureDetector(
+                onTap: _takePicture,
+                child: Center(
+                  child: CustomPaint(
+                    size: Size.infinite,
+                    painter: CrosshairPainter(),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
