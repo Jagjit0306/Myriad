@@ -6,14 +6,14 @@ import 'package:camera/camera.dart';
 import 'package:image/image.dart' as img;
 import 'package:colornames/colornames.dart';
 
-class ColorDetectionPage extends StatefulWidget {
-  const ColorDetectionPage({super.key});
+class ColorifyPage extends StatefulWidget {
+  const ColorifyPage({super.key});
 
   @override
-  State<ColorDetectionPage> createState() => _ColorDetectionPageState();
+  State<ColorifyPage> createState() => _ColorDetectionPageState();
 }
 
-class _ColorDetectionPageState extends State<ColorDetectionPage> {
+class _ColorDetectionPageState extends State<ColorifyPage> {
   CameraController? _controller;
   List<CameraDescription>? cameras;
   Color selectedColor = Colors.white;
