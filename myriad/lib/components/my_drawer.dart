@@ -179,6 +179,18 @@ class MyDrawer extends StatelessWidget {
                       Navigator.pushNamed(context, '/sos_page');
                     },
                   ),
+
+                  ListTile(
+                    leading: Icon(
+                      Icons.color_lens,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                    title: Text('C O L O R   D E T E C T I O N'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/color_detection');
+                    },
+                  ),
                 ],
               ),
             ),
