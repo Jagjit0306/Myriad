@@ -19,7 +19,7 @@ import 'package:myriad/passwords.dart';
 import 'package:myriad/themes/dark_mode.dart';
 import 'package:myriad/themes/light_mode.dart';
 import 'package:myriad/pages/sos_page.dart';
-import 'package:myriad/pages/color_detection_page.dart';
+import 'package:myriad/pages/colorify_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,7 +56,7 @@ class MainApp extends StatelessWidget {
         '/sightify': (context) => SightifyPage(),
         '/feelify': (context) => const FeelifyPage(),
         '/serenify': (context) => const SerenifyPage(),
-        '/color_detection': (context) => const ColorDetectionPage(),
+        '/colorify': (context) => const ColorifyPage(),
       },
     );
   }

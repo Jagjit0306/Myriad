@@ -94,6 +94,18 @@ class MyDrawer extends StatelessWidget {
 
                   ListTile(
                     leading: Icon(
+                      Icons.color_lens,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                    title: Text('C O L O R I F Y'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/colorify');
+                    },
+                  ),
+
+                  ListTile(
+                    leading: Icon(
                       Icons.record_voice_over,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
@@ -177,18 +189,6 @@ class MyDrawer extends StatelessWidget {
                       //this is already the homescreen so pop drawer
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/sos_page');
-                    },
-                  ),
-
-                  ListTile(
-                    leading: Icon(
-                      Icons.color_lens,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                    title: Text('C O L O R   D E T E C T I O N'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/color_detection');
                     },
                   ),
                 ],
