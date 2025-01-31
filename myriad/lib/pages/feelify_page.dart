@@ -209,19 +209,22 @@ class _FeelifyPageState extends State<FeelifyPage> {
               ),
             ),
           ),
-          Slider(
-            activeColor: Theme.of(context).colorScheme.secondary,
-            inactiveColor: Theme.of(context).colorScheme.primary,
-            thumbColor: Theme.of(context).colorScheme.inversePrimary,
-            value: speed,
-            min: 0.1,
-            max: 1.9,
-            onChanged: (double value) {
-              setState(() {
-                speed = value;
-              });
-              vibraille.stopVib();
-            },
+          Padding(
+            padding: const EdgeInsets.only(bottom: 32.0),
+            child: Slider(
+              activeColor: Theme.of(context).colorScheme.secondary,
+              inactiveColor: Theme.of(context).colorScheme.primary,
+              thumbColor: Theme.of(context).colorScheme.inversePrimary,
+              value: speed,
+              min: 0.1,
+              max: 1.9,
+              onChanged: (double value) {
+                setState(() {
+                  speed = value;
+                });
+                vibraille.stopVib();
+              },
+            ),
           )
         ],
       ),
