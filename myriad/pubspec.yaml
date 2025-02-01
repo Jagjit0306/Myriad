@@ -39,6 +39,7 @@ flutter:
   assets:
     - assets/logo.svg
     - assets/login_asset.png
+    - assets/community_asset.png
     - assets/google_icon.png
     - assets/scream.mp3
     - assets/chirping.mp3

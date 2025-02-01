@@ -54,69 +54,78 @@ class _CommunityPageState extends State<CommunityPage> {
           Navigator.pushNamed(context, '/new_thread');
         },
       ),
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(), // Enable bouncing physics
-        slivers: [
-          // Add MyChips in a Sliver
-          SliverToBoxAdapter(
-            child: MyChips(
-              categories: categories,
-              updateChips: (currCat, index) {
-                setState(() {
-                  categories[index] = {currCat.keys.first: !currCat.values.first};
-                });
-              },
-            ),
+      body: Column(
+        children: [
+          MyChips(
+        categories: categories,
+        updateChips: (currCat, index) {
+          setState(() {
+            categories[index] = {
+          currCat.keys.first: !currCat.values.first
+            };
+          });
+        },
           ),
-          // Add Community Posts
-          StreamBuilder(
-            stream: communityDatabase.getCommunityPostsStream(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverFillRemaining(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+          Expanded(
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(), // Enable bouncing physics
+          slivers: [
+            SliverToBoxAdapter(
+          child: Image.asset('assets/community_asset.png'),
+            ),
+            // Add Community Posts
+            StreamBuilder(
+          stream: communityDatabase.getCommunityPostsStream(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SliverFillRemaining(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+              );
+            } else if (snapshot.hasData) {
+              List allCommunityPosts = snapshot.data!.docs;
+
+              return SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                DocumentSnapshot communityPost = allCommunityPosts[index];
+                Map<String, dynamic> data =
+                communityPost.data() as Map<String, dynamic>;
+
+                // Verify if the 'categories' field has at least one matching category
+                List<dynamic> postCategories = data['categories'] ?? [];
+                bool hasMatchingCategory = postCategories.any(
+                (category) => categories
+                .where((map) => map.values.first == true)
+                .map((map) => map.keys.first)
+                .toList()
+                .contains(category));
+
+                if (!hasMatchingCategory) {
+              return const SizedBox
+                  .shrink(); // Skip this post if no match
+                }
+
+                return CommunityPost(
+              postId: communityPost.id,
+              data: data,
                 );
-              } else if (snapshot.hasData) {
-                List allCommunityPosts = snapshot.data!.docs;
-
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      DocumentSnapshot communityPost = allCommunityPosts[index];
-                      Map<String, dynamic> data =
-                          communityPost.data() as Map<String, dynamic>;
-
-                      // Verify if the 'categories' field has at least one matching category
-                      List<dynamic> postCategories = data['categories'] ?? [];
-                      bool hasMatchingCategory = postCategories.any(
-                          (category) => categories
-                              .where((map) => map.values.first == true)
-                              .map((map) => map.keys.first)
-                              .toList()
-                              .contains(category));
-
-                      if (!hasMatchingCategory) {
-                        return const SizedBox.shrink(); // Skip this post if no match
-                      }
-
-                      return CommunityPost(
-                        postId: communityPost.id,
-                        data: data,
-                      );
-                    },
-                    childCount: allCommunityPosts.length,
-                  ),
-                );
-              } else {
-                return const SliverFillRemaining(
-                  child: Center(
-                    child: Text('No Data'),
-                  ),
-                );
-              }
-            },
+              },
+              childCount: allCommunityPosts.length,
+            ),
+              );
+            } else {
+              return const SliverFillRemaining(
+            child: Center(
+              child: Text('No Data'),
+            ),
+              );
+            }
+          },
+            ),
+          ],
+        ),
           ),
         ],
       ),
