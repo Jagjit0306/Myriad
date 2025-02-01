@@ -22,7 +22,7 @@ import 'package:myriad/themes/dark_mode.dart';
 import 'package:myriad/themes/light_mode.dart';
 import 'package:myriad/pages/sos_page.dart';
 import 'package:myriad/pages/colorify_page.dart';
-import 'package:myriad/helper/helper_functions.dart';
+// import 'package:myriad/helper/helper_functions.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

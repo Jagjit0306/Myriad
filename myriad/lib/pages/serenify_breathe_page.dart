@@ -138,6 +138,7 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
                           Text(
                             timeSinceInSeconds(millisecondsSince ~/ 1000),
                             style: TextStyle(
+                              // color: Color.fromRGBO(0, 0, 0, getOpac(countdown.toDouble())),
                               color: Colors.black,
                               fontSize: 40,
                               fontWeight: FontWeight.w700,
@@ -185,7 +186,8 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
                             countdown > (duration * 500) ? 'Inhale' : 'Exhale',
                             key: ValueKey<int>(countdown),
                             style: TextStyle(
-                              color: Colors.white,
+                              // color: Colors.white,
+                              color: Color.fromRGBO(255, 255, 255, getOpac(countdown.toDouble())),
                               fontSize: 26,
                               fontWeight: FontWeight.w600,
                             ),
