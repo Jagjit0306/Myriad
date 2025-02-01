@@ -159,9 +159,10 @@ class _VibraillifyPageState extends State<VibraillifyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Feelify'),
+        title: const Text('Vibraillify'),
         actions: [
           PopupMenuButton(
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
             onSelected: (value) {
               switch (value) {
                 case 'clrcht':
@@ -192,7 +193,7 @@ class _VibraillifyPageState extends State<VibraillifyPage> {
                 onPressMessage: (m) => activateVibraille(m.text),
                 currentUserContainerColor:
                     Theme.of(context).colorScheme.inversePrimary,
-                containerColor: Theme.of(context).colorScheme.secondary,
+                containerColor: Theme.of(context).colorScheme.onSecondaryContainer,
                 textColor: Theme.of(context).colorScheme.inversePrimary,
                 currentUserTextColor: Theme.of(context).colorScheme.surface,
                 showCurrentUserAvatar: true,

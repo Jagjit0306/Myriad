@@ -165,6 +165,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
         title: const Text("My AI - Eva"),
         actions: [
           PopupMenuButton(
+            color: Theme.of(context).colorScheme.onSecondaryContainer, // Set the background color to red
             onSelected: (value) {
               switch (value) {
                 case 'clrcht':
@@ -194,8 +195,10 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
               onSend: _sendMessage,
               currentUser: currentUser,
               messageOptions: MessageOptions(
-                currentUserContainerColor: Theme.of(context).colorScheme.inversePrimary,
-                containerColor: Theme.of(context).colorScheme.secondary,
+                currentUserContainerColor:
+                    Theme.of(context).colorScheme.inversePrimary,
+                containerColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
                 textColor: Theme.of(context).colorScheme.inversePrimary,
                 currentUserTextColor: Theme.of(context).colorScheme.surface,
               ),
@@ -205,8 +208,9 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
                 ),
                 inputDecoration: InputDecoration(
                   filled: true,
-                  fillColor:
-                      Theme.of(context).colorScheme.surface, // Background color of the typing field
+                  fillColor: Theme.of(context)
+                      .colorScheme
+                      .surface, // Background color of the typing field
                   hintText: "Chat with Eva...",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),

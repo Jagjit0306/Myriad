@@ -151,6 +151,7 @@ class _HearifyPageState extends State<HearifyPage> {
         title: const Text('Hearify'),
         actions: [
           PopupMenuButton(
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
             onSelected: (value) {
               switch (value) {
                 case 'clrcht':
@@ -180,7 +181,7 @@ class _HearifyPageState extends State<HearifyPage> {
               messageOptions: MessageOptions(
                 currentUserContainerColor:
                     Theme.of(context).colorScheme.inversePrimary,
-                containerColor: Theme.of(context).colorScheme.secondary,
+                containerColor: Theme.of(context).colorScheme.onSecondaryContainer,
                 textColor: Theme.of(context).colorScheme.inversePrimary,
                 currentUserTextColor: Theme.of(context).colorScheme.surface,
                 showCurrentUserAvatar: true,

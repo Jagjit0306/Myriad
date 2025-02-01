@@ -57,6 +57,8 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
       desiredAccuracy: LocationAccuracy.high,
     );
 
+  // TODO : untested
+    if (!mounted) return;
     setState(() {
       _center =
           LatLng(position.latitude, position.longitude); // Update the center
@@ -76,7 +78,7 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
     showModalBottomSheet(
       context: context,
       barrierColor: const Color.fromARGB(134, 0, 0, 0),
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -256,7 +258,10 @@ class _WheelchairRequestSectionState extends State<WheelchairRequestSection> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow.shade700,
               ),
-              child: const Text("Request Wheelchair"),
+                child: Text(
+                "Request Wheelchair Accessibility",
+                style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
+                ),
             ),
           ),
         if (sent)
@@ -300,9 +305,10 @@ class _WheelchairRequestSectionState extends State<WheelchairRequestSection> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
+                        color: Colors.grey.shade200,
                       ),
                     ),
-                    Icon(Icons.accessible),
+                    Icon(Icons.accessible, color: Colors.grey.shade200,),
                   ],
                 ),
               ),

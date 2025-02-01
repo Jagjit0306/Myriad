@@ -29,7 +29,7 @@ class CommunityPost extends StatelessWidget {
         ));
       },
       child: Card(
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.secondary,
         margin: EdgeInsets.all(10),
         elevation: 2.0,
         child: Padding(
@@ -58,7 +58,7 @@ class CommunityPost extends StatelessWidget {
                               margin: const EdgeInsets.only(right: 8),
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
+                                // color: Theme.of(context).colorScheme.primary,
                                 border: Border.all(
                                   color: Theme.of(context).colorScheme.inversePrimary,
                                   width: 1.0,
@@ -144,12 +144,8 @@ class PosterData extends StatefulWidget {
 }
 
 class _PosterDataState extends State<PosterData> {
+  // ignore: prefer_typing_uninitialized_variables
   var userData;
-
-  // void initState() {
-  //   super.initState();
-  //   _getUserData();
-  // }
 
   Future<void> _getUserData() async {
     final CollectionReference users =
@@ -194,7 +190,7 @@ class _PosterDataState extends State<PosterData> {
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
           child: Text(timeSince(widget.timestamp),
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
         ),
       ],
     );
