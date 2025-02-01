@@ -211,11 +211,12 @@ class _VoicifyPageState extends State<VoicifyPage> {
               messageOptions: MessageOptions(
                   currentUserContainerColor:
                       Theme.of(context).colorScheme.inversePrimary,
-                  containerColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                  containerColor:
+                      Theme.of(context).colorScheme.onSecondaryContainer,
                   textColor: Theme.of(context).colorScheme.inversePrimary,
                   currentUserTextColor: Theme.of(context).colorScheme.surface,
                   onPressMessage: (m) {
-                    if (m.user == _currentUser) {
+                    if (m.user.id == _currentUser.id) {
                       _speak(m.text);
                     }
                   }),
