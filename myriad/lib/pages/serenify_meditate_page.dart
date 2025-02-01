@@ -26,8 +26,12 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
   final double slowBlobChance = 0.4; // 40% chance for a blob to be slow
 
   final List<dynamic> audios = [
-    {'chirping': true},
-    {'scream': false},
+    {'Angelic': true},
+    {'Chirping': false},
+    {'Bells': false},
+    {'Bowls': false},
+    {'Kalimba': false},
+    {'Vocal': false},
   ];
   late AudioPlayer _audioPlayer;
   bool _isPlaying = false;
@@ -35,7 +39,7 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
   String getAudio() {
     for (int i = 0; i < audios.length; i++) {
       if (audios[i].values.first) {
-        return audios[i].keys.first;
+        return audios[i].keys.first.toString().toLowerCase();
       }
     }
     return '';

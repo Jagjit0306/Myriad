@@ -42,6 +42,11 @@ flutter:
     - assets/community_asset.png
     - assets/google_icon.png
     - assets/scream.mp3
+    - assets/angelic.mp3
+    - assets/kalimba.mp3
+    - assets/bells.mp3
+    - assets/bowls.mp3
+    - assets/vocal.mp3
     - assets/chirping.mp3
     - assets/Frame_Meditate.png
     - assets/Frame_Sleep.png
