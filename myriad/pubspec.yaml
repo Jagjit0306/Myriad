@@ -28,6 +28,7 @@ dependencies:
   image: ^4.5.2
   vibration: ^3.1.2
   colornames: ^0.2.0
+  sensors_plus: ^6.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
