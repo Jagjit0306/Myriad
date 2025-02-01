@@ -1,9 +1,8 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-
 import 'package:myriad/components/my_chips.dart';
 
 class SerenifyMeditatePage extends StatefulWidget {
@@ -20,7 +19,7 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
   late Timer timer;
   String elapsedTime = '00:00';
   late List<ShapeData> shapes;
-  final int numberOfShapes = 5;
+  final int numberOfShapes = 6;
   final random = math.Random();
   final double minDuration = 20.0; // Slowest animation (more seconds = slower)
   final double maxDuration = 30.0; // Fastest animation (more seconds = slower)
@@ -49,8 +48,7 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
         _isPlaying = false;
       });
     } else {
-      await _audioPlayer
-          .stop(); // Stop any previous playback to avoid conflicts
+      await _audioPlayer.stop(); // Stop any previous playback to avoid conflicts
       await _audioPlayer.setSource(AssetSource('${getAudio()}.mp3'));
       await _audioPlayer.setVolume(1.0);
       await _audioPlayer.resume();
@@ -67,19 +65,20 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
     _audioPlayer = AudioPlayer();
   }
 
+  /// Generates a random path with one of several curve types.
   List<Offset> generateRandomPath(
       double centerX, double centerY, double maxRadius) {
     final pathType = random.nextInt(4);
     final points = <Offset>[];
-    final numPoints = 100;
+    final numPoints = 8; // fewer control points for a smoother spline
 
     // Use the provided maxRadius instead of a random one
     final radius = (0.15 + random.nextDouble() * 0.1).clamp(0.0, maxRadius);
-    final frequency1 = 1 + random.nextInt(3); // Reduced max frequency
-    final frequency2 = 1 + random.nextInt(3); // Reduced max frequency
+    final frequency1 = 1 + random.nextInt(3); // reduced max frequency
+    final frequency2 = 1 + random.nextInt(3); // reduced max frequency
     final phase = random.nextDouble() * math.pi * 2;
 
-    for (int i = 0; i <= numPoints; i++) {
+    for (int i = 0; i < numPoints; i++) {
       final progress = i / numPoints;
       final angle = progress * math.pi * 2 + phase;
       double x = centerX;
@@ -90,18 +89,15 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
           x += radius * math.sin(frequency1 * angle);
           y += radius * math.cos(frequency2 * angle);
           break;
-
         case 1: // Figure-8
           x += radius * math.sin(2 * angle);
           y += radius * math.sin(angle);
           break;
-
         case 2: // Spiral
           final spiral = radius * (1 - progress * 0.5);
           x += spiral * math.cos(angle * 3);
           y += spiral * math.sin(angle * 3);
           break;
-
         case 3: // Rose curve
           final k = random.nextInt(5) + 2;
           final r = radius * math.cos(k * angle);
@@ -122,6 +118,7 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
     return points;
   }
 
+  /// Initialize shapes and set up their animation controllers.
   void initializeShapes() {
     shapes = List.generate(numberOfShapes, (index) {
       final centerX = 0.3 + random.nextDouble() * 0.4;
@@ -133,8 +130,7 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
       // Calculate duration - slower blobs take longer to complete their path
       final duration = isSlowBlob
           ? maxDuration + random.nextDouble() * 10 // Slow blobs: 30-40 seconds
-          : minDuration +
-              random.nextDouble() * 5; // Normal blobs: 20-25 seconds
+          : minDuration + random.nextDouble() * 5; // Normal blobs: 20-25 seconds
 
       return ShapeData(
         controller: AnimationController(
@@ -164,20 +160,40 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
     }
   }
 
-  Offset getPositionOnPath(List<Offset> path, double progress) {
-    final pathLength = path.length - 1;
-    final exactIndex = progress * pathLength;
-    final index1 = exactIndex.floor();
-    final index2 = (index1 + 1) % path.length;
-    final remainder = exactIndex - index1;
+  /// Returns a smoothly interpolated position on the path using Catmull-Rom spline.
+  Offset getSmoothPositionOnPath(List<Offset> path, double t) {
+    // Number of segments equals number of control points (assuming closed loop)
+    final n = path.length;
+    // Scale t to the number of segments.
+    final totalSegments = n - 1;
+    final segment = (t * totalSegments).floor();
+    // local parameter within the segment [0,1]
+    final localT = (t * totalSegments) - segment;
 
-    final point1 = path[index1];
-    final point2 = path[index2];
+    // Wrap indices around for closed-loop Catmull-Rom
+    Offset p0 = path[(segment - 1 + n) % n];
+    Offset p1 = path[segment % n];
+    Offset p2 = path[(segment + 1) % n];
+    Offset p3 = path[(segment + 2) % n];
 
-    return Offset(
-      point1.dx + (point2.dx - point1.dx) * remainder,
-      point1.dy + (point2.dy - point1.dy) * remainder,
-    );
+    // Catmull-Rom spline formula
+    double tt = localT;
+    double tt2 = tt * tt;
+    double tt3 = tt2 * tt;
+
+    double x = 0.5 *
+        ((2 * p1.dx) +
+            (-p0.dx + p2.dx) * tt +
+            (2 * p0.dx - 5 * p1.dx + 4 * p2.dx - p3.dx) * tt2 +
+            (-p0.dx + 3 * p1.dx - 3 * p2.dx + p3.dx) * tt3);
+
+    double y = 0.5 *
+        ((2 * p1.dy) +
+            (-p0.dy + p2.dy) * tt +
+            (2 * p0.dy - 5 * p1.dy + 4 * p2.dy - p3.dy) * tt2 +
+            (-p0.dy + 3 * p1.dy - 3 * p2.dy + p3.dy) * tt3);
+
+    return Offset(x, y);
   }
 
   @override
@@ -188,8 +204,8 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
     if (isMeditating) {
       timer.cancel();
     }
-    super.dispose();
     _audioPlayer.dispose();
+    super.dispose();
   }
 
   void toggleMeditation() {
@@ -241,8 +257,10 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
               return AnimatedBuilder(
                 animation: shape.controller,
                 builder: (context, child) {
-                  final position = getPositionOnPath(
-                      shape.pathPoints, shape.controller.value);
+                  // Wrap the raw controller value with an easing curve for more natural motion.
+                  final easedValue = Curves.easeInOut.transform(shape.controller.value);
+                  final position =
+                      getSmoothPositionOnPath(shape.pathPoints, easedValue);
 
                   return Positioned(
                     left: position.dx * size.width - shape.size / 2,
@@ -367,9 +385,7 @@ class BlobPainter extends CustomPainter {
       final angle = i * math.pi / 180;
       final currentVariance =
           math.sin(angle * points + progress * 2 * math.pi) * variance +
-              math.cos(angle * (points - 1) + progress * 3 * math.pi) *
-                  variance *
-                  0.5;
+          math.cos(angle * (points - 1) + progress * 3 * math.pi) * variance * 0.5;
 
       final x = center.dx + (radius + currentVariance) * math.cos(angle);
       final y = center.dy + (radius + currentVariance) * math.sin(angle);
