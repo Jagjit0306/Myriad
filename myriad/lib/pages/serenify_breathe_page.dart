@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -16,12 +17,39 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
   int countdown = 0;
   int millisecondsSince = 0;
   Timer? timer;
+  late AudioPlayer _audioPlayer;
+  bool _isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer = AudioPlayer();
+  }
+
+  void _toggleChirpingSound() async {
+    if (_isPlaying) {
+      await _audioPlayer.pause();
+      setState(() {
+        _isPlaying = false;
+      });
+    } else {
+      await _audioPlayer
+          .stop(); // Stop any previous playback to avoid conflicts
+      await _audioPlayer.setSource(AssetSource('chirping.mp3'));
+      await _audioPlayer.setVolume(1.0);
+      await _audioPlayer.resume();
+      setState(() {
+        _isPlaying = true;
+      });
+    }
+  }
 
   void startMeditation() {
     setState(() {
       isMeditating = true;
       countdown = duration * 1000; // Convert duration to milliseconds
     });
+    _toggleChirpingSound();
     timer = Timer.periodic(Duration(milliseconds: 20), (timer) {
       setState(() {
         millisecondsSince += 20;
@@ -35,6 +63,7 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
   }
 
   void stopMeditation() {
+    _toggleChirpingSound();
     timer?.cancel();
     setState(() {
       isMeditating = false;
@@ -46,6 +75,7 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
   @override
   void dispose() {
     timer?.cancel();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -65,9 +95,11 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
           'Relax - Serenify',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Color.fromRGBO(255, 255, 255, getOpac(countdown.toDouble())),
+        backgroundColor:
+            Color.fromRGBO(255, 255, 255, getOpac(countdown.toDouble())),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
+      backgroundColor: Colors.black,
       body: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -100,7 +132,9 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
                             "Meditating since",
                             style: TextStyle(color: Colors.black, fontSize: 20),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Text(
                             timeSinceInSeconds(millisecondsSince ~/ 1000),
                             style: TextStyle(
@@ -151,6 +185,7 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
                             countdown > (duration * 500) ? 'Inhale' : 'Exhale',
                             key: ValueKey<int>(countdown),
                             style: TextStyle(
+                              color: Colors.white,
                               fontSize: 26,
                               fontWeight: FontWeight.w600,
                             ),

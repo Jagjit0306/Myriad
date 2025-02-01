@@ -41,6 +41,7 @@ flutter:
     - assets/login_asset.png
     - assets/google_icon.png
     - assets/scream.mp3
+    - assets/chirping.mp3
     - assets/Frame_Meditate.png
     - assets/Frame_Sleep.png
     - assets/Frame_Breathe.png
