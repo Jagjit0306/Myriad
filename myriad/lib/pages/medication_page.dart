@@ -59,9 +59,14 @@ class _MedicationPageState extends State<MedicationPage> {
   }
 
   Future<void> _initializeNotifications() async {
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
+
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    
+
     const DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -69,7 +74,8 @@ class _MedicationPageState extends State<MedicationPage> {
       requestSoundPermission: true,
     );
 
-    const InitializationSettings initializationSettings = InitializationSettings(
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
@@ -118,8 +124,8 @@ class _MedicationPageState extends State<MedicationPage> {
 
   Future<void> _saveMedications() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-        'medications', jsonEncode(_medications.map((m) => m.toJson()).toList()));
+    await prefs.setString('medications',
+        jsonEncode(_medications.map((m) => m.toJson()).toList()));
     await prefs.setInt('lastId', _nextId);
   }
 
@@ -173,13 +179,19 @@ class _MedicationPageState extends State<MedicationPage> {
 
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), backgroundColor: Theme.of(context).colorScheme.error),
+      SnackBar(
+          content: Text(message,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+          backgroundColor: Theme.of(context).colorScheme.error),
     );
   }
 
   void _showSuccess(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), backgroundColor: Theme.of(context).colorScheme.secondary),
+      SnackBar(
+          content: Text(message,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+          backgroundColor: Theme.of(context).colorScheme.secondary),
     );
   }
 
@@ -247,13 +259,7 @@ class _MedicationPageState extends State<MedicationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:Text(
-          'Medication Schedule',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface
-          )
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: const Text('Medication Schedule'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -265,12 +271,15 @@ class _MedicationPageState extends State<MedicationPage> {
                 controller: _medicineNameController,
                 decoration: InputDecoration(
                   labelText: 'Medicine Name',
-                  labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                  labelStyle:
+                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Theme.of(context).colorScheme.inversePrimary),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.inversePrimary),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Theme.of(context).colorScheme.inversePrimary),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.inversePrimary),
                   ),
                 ),
               ),
@@ -282,12 +291,16 @@ class _MedicationPageState extends State<MedicationPage> {
                       controller: _timesPerDayController,
                       decoration: InputDecoration(
                         labelText: 'Times Per Day',
-                        labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).colorScheme.inversePrimary),
+                          borderSide: BorderSide(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
                         ),
                       ),
                       keyboardType: TextInputType.number,
@@ -297,7 +310,8 @@ class _MedicationPageState extends State<MedicationPage> {
                   ElevatedButton(
                     onPressed: _createTimeInputs,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.inversePrimary,
                     ),
                     child: const Text('Set Times'),
                   ),
@@ -313,10 +327,11 @@ class _MedicationPageState extends State<MedicationPage> {
                       decoration: InputDecoration(
                         labelText: 'Time ${index + 1} (HH:mm)',
                         hintText: 'Example: 14:30',
-                        labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
                         border: const OutlineInputBorder(),
                       ),
-                      keyboardType: TextInputType.datetime,
+                      // keyboardType: TextInputType.datetime,
                     ),
                   );
                 }),
@@ -324,7 +339,8 @@ class _MedicationPageState extends State<MedicationPage> {
                 ElevatedButton(
                   onPressed: _saveMedication,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.inversePrimary,
                   ),
                   child: const Text('Save Medication'),
                 ),
@@ -346,10 +362,13 @@ class _MedicationPageState extends State<MedicationPage> {
                   final medication = _medications[index];
                   return Card(
                     child: ListTile(
-                      title: Text(medication.medicineName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                      title: Text(medication.medicineName,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface)),
                       subtitle: Text(
                         'Times: ${medication.times.join(", ")}',
-                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
