@@ -32,7 +32,7 @@ void main() async {
   Gemini.init(
     apiKey: GEMINI_API_KEY,
   );
-  FallDetectionService();
+  // FallDetectionService();
   runApp(const MainApp());
 }
 

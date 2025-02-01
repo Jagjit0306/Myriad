@@ -111,7 +111,7 @@ class FallDetectionService {
       double acceleration = _calculateAcceleration(event);
       
       // Threshold can be adjusted based on testing
-      if (acceleration > 5.0 && !_hasFallen) { 
+      if (acceleration > 15.0 && !_hasFallen) { 
         fallTrigger();
       }
     });
