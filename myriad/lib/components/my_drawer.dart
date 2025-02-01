@@ -191,6 +191,18 @@ class MyDrawer extends StatelessWidget {
                       Navigator.pushNamed(context, '/sos_page');
                     },
                   ),
+
+                  ListTile(
+                    leading: Icon(
+                      Icons.medical_services,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                    title: Text('M E D I C A T I O N'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/medication');
+                    },
+                  ),
                 ],
               ),
             ),

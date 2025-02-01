@@ -22,6 +22,8 @@ import 'package:myriad/themes/dark_mode.dart';
 import 'package:myriad/themes/light_mode.dart';
 import 'package:myriad/pages/sos_page.dart';
 import 'package:myriad/pages/colorify_page.dart';
+import 'package:myriad/pages/medication_page.dart';
+import 'package:timezone/data/latest.dart' as tz;
 // import 'package:myriad/helper/helper_functions.dart';
 
 void main() async {
@@ -33,6 +35,7 @@ void main() async {
     apiKey: GEMINI_API_KEY,
   );
   // FallDetectionService();
+  tz.initializeTimeZones();
   runApp(const MainApp());
 }
 
@@ -63,6 +66,7 @@ class MainApp extends StatelessWidget {
         '/serenify_meditate': (context) => const SerenifyMeditatePage(),
         '/serenify_breathe': (context) => const SerenifyBreathePage(),
         '/colorify': (context) => const ColorifyPage(),
+        '/medication': (context) => const MedicationPage(),
       },
     );
   }
