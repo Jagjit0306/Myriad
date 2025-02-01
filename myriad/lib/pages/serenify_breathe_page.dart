@@ -130,7 +130,7 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
                         children: [
                           Text(
                             "Meditating since",
-                            style: TextStyle(color: Colors.black, fontSize: 20),
+                            style: TextStyle(color: Colors.grey.shade900, fontSize: 20),
                           ),
                           SizedBox(
                             height: 10,
@@ -220,22 +220,30 @@ class SerenifyRoundButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Feedback.forTap(context);
-        onPressed();
+      Feedback.forTap(context);
+      onPressed();
       },
       child: Container(
-        width: 250.0,
-        height: 250.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: AssetImage('assets/Serenify_Round_Button.png'),
-            fit: BoxFit.cover,
-          ),
+      width: 250.0,
+      height: 250.0,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+        BoxShadow(
+          color: Color.fromRGBO(0, 0, 0, 0.2),
+          spreadRadius: 4,
+          blurRadius: 7,
+          offset: Offset(0, 3), // changes position of shadow
         ),
-        child: Center(
-          child: child,
+        ],
+        image: DecorationImage(
+        image: AssetImage('assets/Serenify_Round_Button.png'),
+        fit: BoxFit.cover,
         ),
+      ),
+      child: Center(
+        child: child,
+      ),
       ),
     );
   }
