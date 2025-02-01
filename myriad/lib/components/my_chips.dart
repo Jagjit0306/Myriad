@@ -20,13 +20,6 @@ class MyChips extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(5.0),
             child: GestureDetector(
-              // onTap: () {
-              //   setState(() {
-              //     categories[index] = {
-              //       currCat.keys.first: !currCat.values.first
-              //     };
-              //   });
-              // },
               onTap: () {
                 updateChips(currCat, index);
               },
