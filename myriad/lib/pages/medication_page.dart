@@ -60,7 +60,7 @@ class _MedicationPageState extends State<MedicationPage> {
 
   Future<void> _initializeNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
     
     const DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
