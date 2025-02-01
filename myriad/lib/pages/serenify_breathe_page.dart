@@ -14,21 +14,21 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
   bool isMeditating = false;
   int duration = 10; // Duration of each breathing cycle in seconds
   int countdown = 0;
-  int secondsSince = 0;
+  int millisecondsSince = 0;
   Timer? timer;
 
   void startMeditation() {
     setState(() {
       isMeditating = true;
-      countdown = duration;
+      countdown = duration * 1000; // Convert duration to milliseconds
     });
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(Duration(milliseconds: 20), (timer) {
       setState(() {
-        secondsSince++;
+        millisecondsSince += 20;
         if (countdown > 0) {
-          countdown--;
+          countdown -= 20;
         } else {
-          countdown = duration;
+          countdown = duration * 1000;
         }
       });
     });
@@ -39,7 +39,7 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
     setState(() {
       isMeditating = false;
       countdown = 0;
-      secondsSince = 0;
+      millisecondsSince = 0;
     });
   }
 
@@ -47,6 +47,14 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
   void dispose() {
     timer?.cancel();
     super.dispose();
+  }
+
+  double getOpac(double dur) {
+    if (dur > 5000) {
+      return ((dur - 5000) / 5000) * 1;
+    } else {
+      return 1 - (dur / 5000) * 1;
+    }
   }
 
   @override
@@ -57,16 +65,19 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
           'Relax - Serenify',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromRGBO(255, 255, 255, getOpac(countdown.toDouble())),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.white, Colors.black],
+            colors: [
+              Color.fromRGBO(255, 255, 255, getOpac(countdown.toDouble())),
+              Color.fromRGBO(0, 0, 0, 1)
+            ],
           ),
         ),
         child: Stack(
@@ -86,14 +97,15 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
                       Column(
                         children: [
                           Text(
-                            "You have been meditating for",
-                            style: TextStyle(color: Colors.black, fontSize: 15),
+                            "Meditating since",
+                            style: TextStyle(color: Colors.black, fontSize: 20),
                           ),
+                          SizedBox(height: 10,),
                           Text(
-                            timeSinceInSeconds(secondsSince),
+                            timeSinceInSeconds(millisecondsSince ~/ 1000),
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 25,
+                              fontSize: 40,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -135,15 +147,12 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AnimatedSwitcher(
-                            duration: Duration(seconds: 1),
-                            child: Text(
-                              countdown > duration / 2 ? 'Inhale' : 'Exhale',
-                              key: ValueKey<int>(countdown),
-                              style: TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w600,
-                              ),
+                          Text(
+                            countdown > (duration * 500) ? 'Inhale' : 'Exhale',
+                            key: ValueKey<int>(countdown),
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text("Press to stop",
@@ -151,8 +160,11 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
                         ],
                       )
                     : const Text(
-                        'Start Meditation',
-                        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400),
+                        'Start',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w600),
                       ),
               ),
             ),
