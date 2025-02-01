@@ -22,6 +22,9 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
   late List<ShapeData> shapes;
   final int numberOfShapes = 5;
   final random = math.Random();
+  final double minDuration = 20.0; // Slowest animation (more seconds = slower)
+  final double maxDuration = 30.0; // Fastest animation (more seconds = slower)
+  final double slowBlobChance = 0.4; // 40% chance for a blob to be slow
 
   final List<dynamic> audios = [
     {'chirping': true},
@@ -64,15 +67,16 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
     _audioPlayer = AudioPlayer();
   }
 
-  List<Offset> generateRandomPath(double centerX, double centerY) {
-    final pathType = random.nextInt(4); // Different path patterns
+  List<Offset> generateRandomPath(
+      double centerX, double centerY, double maxRadius) {
+    final pathType = random.nextInt(4);
     final points = <Offset>[];
     final numPoints = 100;
 
-    // Randomize parameters for each path
-    final radius = 0.15 + random.nextDouble() * 0.25;
-    final frequency1 = 1 + random.nextInt(4);
-    final frequency2 = 1 + random.nextInt(4);
+    // Use the provided maxRadius instead of a random one
+    final radius = (0.15 + random.nextDouble() * 0.1).clamp(0.0, maxRadius);
+    final frequency1 = 1 + random.nextInt(3); // Reduced max frequency
+    final frequency2 = 1 + random.nextInt(3); // Reduced max frequency
     final phase = random.nextDouble() * math.pi * 2;
 
     for (int i = 0; i <= numPoints; i++) {
@@ -120,19 +124,31 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
 
   void initializeShapes() {
     shapes = List.generate(numberOfShapes, (index) {
-      // Generate random center point within safe bounds
       final centerX = 0.3 + random.nextDouble() * 0.4;
       final centerY = 0.3 + random.nextDouble() * 0.4;
 
+      // Determine if this blob should be slow
+      final isSlowBlob = random.nextDouble() < slowBlobChance;
+
+      // Calculate duration - slower blobs take longer to complete their path
+      final duration = isSlowBlob
+          ? maxDuration + random.nextDouble() * 10 // Slow blobs: 30-40 seconds
+          : minDuration +
+              random.nextDouble() * 5; // Normal blobs: 20-25 seconds
+
       return ShapeData(
         controller: AnimationController(
-          duration: Duration(seconds: 15 + random.nextInt(10)),
+          duration: Duration(seconds: duration.round()),
           vsync: this,
         ),
         size: 50.0 + random.nextDouble() * 100,
         points: 3 + random.nextInt(5),
         variance: 5 + random.nextDouble() * 15,
-        pathPoints: generateRandomPath(centerX, centerY),
+        pathPoints: generateRandomPath(
+          centerX,
+          centerY,
+          isSlowBlob ? 0.15 : 0.25, // Smaller radius for slow blobs
+        ),
         color: HSLColor.fromAHSL(
           0.6,
           random.nextDouble() * 360,
@@ -173,6 +189,7 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
       timer.cancel();
     }
     super.dispose();
+    _audioPlayer.dispose();
   }
 
   void toggleMeditation() {
@@ -279,24 +296,26 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
               ],
             ),
           ),
-          if(!isMeditating)
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              MyChips(
-                categories: audios,
-                updateChips: (currAud, index) {
-                  setState(() {
-                    for (int i = 0; i < audios.length; i++) {
-                      audios[i] = {audios[i].keys.first: false};
-                    }
-                    audios[index] = {currAud.keys.first: !currAud.values.first};
-                  });
-                },
-              ),
-            ],
-          )
+          if (!isMeditating)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                MyChips(
+                  categories: audios,
+                  updateChips: (currAud, index) {
+                    setState(() {
+                      for (int i = 0; i < audios.length; i++) {
+                        audios[i] = {audios[i].keys.first: false};
+                      }
+                      audios[index] = {
+                        currAud.keys.first: !currAud.values.first
+                      };
+                    });
+                  },
+                ),
+              ],
+            )
         ],
       ),
     );
