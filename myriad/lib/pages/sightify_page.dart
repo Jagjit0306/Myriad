@@ -156,7 +156,7 @@ class _SightifyPageState extends State<SightifyPage> {
           if (_imageFile != null)
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
                 child: GestureDetector(
                   key: _key,
                   onTapDown: (details) {
@@ -174,7 +174,7 @@ class _SightifyPageState extends State<SightifyPage> {
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 3,
-                        color: Theme.of(context).colorScheme.inversePrimary,
+                        color: Theme.of(context).colorScheme.onSecondaryContainer,
                       ),
                       borderRadius: const BorderRadius.all(Radius.circular(30)),
                     ),
@@ -189,16 +189,19 @@ class _SightifyPageState extends State<SightifyPage> {
                 ),
               ),
             ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              RoundButton(
-                icon: Icons.camera_alt,
-                onPressed: (_isTakingPicture) ? () {} : _takeInstantPicture,
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RoundButton(
+                  icon: Icons.camera_alt,
+                  onPressed: (_isTakingPicture) ? () {} : _takeInstantPicture,
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -10,7 +10,7 @@ class RoundButton extends StatelessWidget {
   const RoundButton({
     Key? key,
     required this.icon,
-    this.size = 120.0,
+    this.size = 100.0,
     // this.backgroundColor;,
     // this.iconColor = Colors.white,
     required this.onPressed,
@@ -27,15 +27,15 @@ class RoundButton extends StatelessWidget {
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.secondary,
           shape: BoxShape.circle,
           border: Border.all(
-              width: 5, color: Theme.of(context).colorScheme.inversePrimary),
+              width: 5, color: Theme.of(context).colorScheme.onSecondaryContainer),
         ),
         child: Center(
           child: Icon(
             icon,
-            color: Theme.of(context).colorScheme.inversePrimary,
+            color: Theme.of(context).colorScheme.primary,
             size: size * 0.5, // Icon size relative to the button size
           ),
         ),
