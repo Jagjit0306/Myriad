@@ -69,63 +69,125 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
             colors: [Colors.white, Colors.black],
           ),
         ),
-        child: Center(
-          child: isMeditating
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 60, 0, 60),
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: isMeditating
+                      ? MainAxisAlignment.start
+                      : MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(
-                      "You have been meditating for ${timeSinceInSeconds(secondsSince)}",
-                      style: TextStyle(color: Colors.black, fontSize: 15),
-                    ),
-                    Text(
-                      countdown > duration / 2 ? 'Breathe In' : 'Breathe Out',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                    Text(
-                      '$countdown',
-                      style: TextStyle(fontSize: 48),
-                    ),
-                    ElevatedButton(
-                      onPressed: stopMeditation,
-                      child: const Text(
-                        'Stop Meditation',
-                        style: TextStyle(color: Colors.white),
+                    if (isMeditating)
+                      Column(
+                        children: [
+                          Text(
+                            "You have been meditating for",
+                            style: TextStyle(color: Colors.black, fontSize: 15),
+                          ),
+                          Text(
+                            timeSinceInSeconds(secondsSince),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Slider(
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      inactiveColor: Theme.of(context).colorScheme.primary,
-                      thumbColor: Theme.of(context).colorScheme.inversePrimary,
-                      value: duration.toDouble(),
-                      min: 5,
-                      max: 15,
-                      divisions: 10,
-                      // label: '$duration seconds',
-                      onChanged: (value) {
-                        setState(() {
-                          duration = value.toInt();
-                        });
-                      },
-                    ),
-                    ElevatedButton(
-                      onPressed: startMeditation,
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
-                        padding: EdgeInsets.all(24),
+                    if (!isMeditating)
+                      Theme(
+                        data: ThemeData.light(),
+                        child: Slider(
+                          activeColor: Colors.grey.shade500,
+                          inactiveColor: Colors.grey.shade800,
+                          thumbColor: Colors.white,
+                          value: duration.toDouble(),
+                          min: 5,
+                          max: 15,
+                          divisions: 10,
+                          onChanged: (value) {
+                            setState(() {
+                              duration = value.toInt();
+                            });
+                          },
+                        ),
                       ),
-                      child: const Text(
-                        'Start Meditation',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
                   ],
                 ),
+              ),
+            ),
+            Center(
+              child: SerenifyRoundButton(
+                onPressed: () {
+                  if (isMeditating) {
+                    stopMeditation();
+                  } else {
+                    startMeditation();
+                  }
+                },
+                child: isMeditating
+                    ? Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AnimatedSwitcher(
+                            duration: Duration(seconds: 1),
+                            child: Text(
+                              countdown > duration / 2 ? 'Inhale' : 'Exhale',
+                              key: ValueKey<int>(countdown),
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Text("Press to stop",
+                              style: TextStyle(color: Colors.grey.shade400)),
+                        ],
+                      )
+                    : const Text(
+                        'Start Meditation',
+                        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400),
+                      ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SerenifyRoundButton extends StatelessWidget {
+  Widget child;
+  VoidCallback onPressed;
+  SerenifyRoundButton(
+      {super.key, required this.child, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Feedback.forTap(context);
+        onPressed();
+      },
+      child: Container(
+        width: 250.0,
+        height: 250.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: AssetImage('assets/Serenify_Round_Button.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: child,
         ),
       ),
     );

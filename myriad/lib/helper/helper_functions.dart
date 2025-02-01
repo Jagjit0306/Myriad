@@ -51,32 +51,18 @@ String timeSince(Timestamp timestamp) {
 String timeSinceInSeconds(int seconds) {
   final duration = Duration(seconds: seconds);
 
-  final years = duration.inDays ~/ 365;
-  if (years > 0) {
-    return '${years}y';
-  }
-
-  final months = duration.inDays ~/ 30;
-  if (months > 0) {
-    return '${months}m';
-  }
-
   final days = duration.inDays;
-  if (days > 0) {
-    return '${days}d';
-  }
+  final hours = duration.inHours.remainder(24);
+  final minutes = duration.inMinutes.remainder(60);
+  final secs = duration.inSeconds.remainder(60);
 
-  final hours = duration.inHours;
-  if (hours > 0) {
-    return '${hours}h';
-  }
+  final parts = <String>[];
+  if (days > 0) parts.add(days.toString().padLeft(2, '0'));
+  if (hours > 0 || parts.isNotEmpty) parts.add(hours.toString().padLeft(2, '0'));
+  parts.add(minutes.toString().padLeft(2, '0'));
+  parts.add(secs.toString().padLeft(2, '0'));
 
-  final minutes = duration.inMinutes;
-  if (minutes > 0) {
-    return '${minutes}m';
-  }
-
-  return '${seconds}s';
+  return parts.join(':');
 }
 
 class FallDetectionService {
