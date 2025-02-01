@@ -28,8 +28,6 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
     _getCurrentLocation();
   }
 
-  
-
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -98,11 +96,12 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
                   textAlign: TextAlign.center,
                 ),
                 MyImage(imageUrl: place.icon ?? ""),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text('${place.rating}'), Icon(Icons.star)],
-                ),
+                if (place.rating != null)
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [Text('${place.rating}'), Icon(Icons.star)],
+                  ),
                 WheelchairRequestSection(
                   placeId: place.placeId,
                   places: _places,
@@ -116,12 +115,12 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
   }
 
   void _onTap(LatLng position) async {
-    if (!mounted) return; 
+    if (!mounted) return;
     final result = _places.searchNearbyWithRadius(
         Location(lat: position.latitude, lng: position.longitude), 20);
 
     result.then((placesResult) {
-      if (!mounted) return; 
+      if (!mounted) return;
       if (placesResult.results.isNotEmpty) {
         showDialog(
           context: context,
@@ -155,7 +154,7 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wheelchair Access'),
+        title: const Text('Wheelify'),
       ),
       body: GoogleMap(
         onMapCreated: _onMapCreated,
@@ -223,41 +222,46 @@ class _WheelchairRequestSectionState extends State<WheelchairRequestSection> {
     return Column(
       children: [
         if (!sent)
-          MyButton(
-            text: "Request Wheelchair",
-            enabled: true,
-            onTap: () {
-              DateTime d = DateTime.now();
-
-              // Calculate the last date by adding 1 month
-              DateTime lastDate = DateTime(
-                d.year,
-                d.month + 1,
-                d.day,
-              );
-
-              // Adjust for day overflow (e.g., February might have fewer days)
-              if (lastDate.month > (d.month + 1) % 12) {
-                lastDate = DateTime(lastDate.year, lastDate.month,
-                    0); // Last day of the previous month
-              }
-
-              showDatePicker(
-                context: context,
-                initialDate: d,
-                firstDate: d, // Start from tomorrow
-                lastDate: lastDate,
-              ).then(
-                (value) {
-                  // Do something with that date
-                  setState(() => sent = true);
-                },
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ElevatedButton(
+              onPressed: () {
+                DateTime d = DateTime.now();
+            
+                // Calculate the last date by adding 1 month
+                DateTime lastDate = DateTime(
+                  d.year,
+                  d.month + 1,
+                  d.day,
+                );
+            
+                // Adjust for day overflow (e.g., February might have fewer days)
+                if (lastDate.month > (d.month + 1) % 12) {
+                  lastDate = DateTime(lastDate.year, lastDate.month,
+                      0); // Last day of the previous month
+                }
+            
+                showDatePicker(
+                  context: context,
+                  initialDate: d,
+                  firstDate: d, // Start from tomorrow
+                  lastDate: lastDate,
+                ).then(
+                  (value) {
+                    // Do something with that date
+                    setState(() => sent = true);
+                  },
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellow.shade700,
+              ),
+              child: const Text("Request Wheelchair"),
+            ),
           ),
         if (sent)
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(20.0),
             child: Card(
               color: Theme.of(context).colorScheme.secondary,
               child: Padding(

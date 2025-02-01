@@ -158,7 +158,7 @@ class MyDrawer extends StatelessWidget {
                       Icons.accessible,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
-                    title: Text('W H E E L C H A I R'),
+                    title: Text('W H E E L I F Y'),
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/wheelchair_map');

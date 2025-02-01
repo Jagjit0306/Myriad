@@ -27,6 +27,7 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
 
   final List<dynamic> audios = [
     {'Angelic': true},
+    {'Rain': false},
     {'Chirping': false},
     {'Bells': false},
     {'Bowls': false},
