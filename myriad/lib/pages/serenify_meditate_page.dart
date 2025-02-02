@@ -37,6 +37,27 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
   late AudioPlayer _audioPlayer;
   bool _isPlaying = false;
 
+  @override
+  void initState() {
+    super.initState();
+    initializeShapes();
+    _audioPlayer = AudioPlayer();
+
+    // Listen for audio completion
+    _audioPlayer.onPlayerComplete.listen((event) {
+      if (isMeditating) {
+        _restartAudio();
+      }
+    });
+  }
+
+  void _restartAudio() async {
+    await _audioPlayer.stop(); // Stop any previous playback
+    await _audioPlayer.setSource(AssetSource('${getAudio()}.mp3'));
+    await _audioPlayer.setVolume(1.0);
+    await _audioPlayer.resume();
+  }
+
   String getAudio() {
     for (int i = 0; i < audios.length; i++) {
       if (audios[i].values.first) {
@@ -53,21 +74,11 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
         _isPlaying = false;
       });
     } else {
-      await _audioPlayer.stop(); // Stop any previous playback to avoid conflicts
-      await _audioPlayer.setSource(AssetSource('${getAudio()}.mp3'));
-      await _audioPlayer.setVolume(1.0);
-      await _audioPlayer.resume();
+      _restartAudio();
       setState(() {
         _isPlaying = true;
       });
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initializeShapes();
-    _audioPlayer = AudioPlayer();
   }
 
   /// Generates a random path with one of several curve types.
