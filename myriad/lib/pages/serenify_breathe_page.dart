@@ -19,27 +19,40 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
   Timer? timer;
   late AudioPlayer _audioPlayer;
   bool _isPlaying = false;
+  bool isBreathing = false;
 
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
+
+    // Listen for audio completion
+    _audioPlayer.onPlayerComplete.listen((event) {
+      if (isBreathing) {
+        _restartAudio();
+      }
+    });
   }
 
-  void _toggleChirpingSound() async {
+  void _restartAudio() async {
+    await _audioPlayer.stop(); 
+    await _audioPlayer.setSource(AssetSource('chirping.mp3'));
+    await _audioPlayer.setVolume(1.0);
+    await _audioPlayer.resume();
+  }
+
+  void _toggleBreathing() async {
     if (_isPlaying) {
       await _audioPlayer.pause();
       setState(() {
         _isPlaying = false;
+        isBreathing = false;
       });
     } else {
-      await _audioPlayer
-          .stop(); // Stop any previous playback to avoid conflicts
-      await _audioPlayer.setSource(AssetSource('chirping.mp3'));
-      await _audioPlayer.setVolume(1.0);
-      await _audioPlayer.resume();
+      _restartAudio();
       setState(() {
         _isPlaying = true;
+        isBreathing = true;
       });
     }
   }
@@ -47,9 +60,9 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
   void startMeditation() {
     setState(() {
       isMeditating = true;
-      countdown = duration * 1000; // Convert duration to milliseconds
+      countdown = duration * 1000;
     });
-    _toggleChirpingSound();
+    _toggleBreathing();
     timer = Timer.periodic(Duration(milliseconds: 20), (timer) {
       setState(() {
         millisecondsSince += 20;
@@ -63,7 +76,7 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
   }
 
   void stopMeditation() {
-    _toggleChirpingSound();
+    _toggleBreathing();
     timer?.cancel();
     setState(() {
       isMeditating = false;
