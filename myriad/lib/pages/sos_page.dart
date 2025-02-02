@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SosPage extends StatelessWidget {
   const SosPage({super.key});
@@ -149,8 +150,17 @@ class SosPage extends StatelessWidget {
   Widget _buildEmergencyOption(
       BuildContext context, String title, IconData icon) {
     return GestureDetector(
-      onTap: () {
-        if (title == "SOS") {
+      onTap: () async {
+        if (title == "Guardian") {
+          String? guardianNumber = await _fetchGuardianNumber();
+          if (guardianNumber != null) {
+            _launchDialer(guardianNumber);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Guardian number not found.')),
+            );
+          }
+        } else if (title == "SOS") {
           _launchDialer("112");
         }
       },
@@ -182,6 +192,11 @@ class SosPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<String?> _fetchGuardianNumber() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('guardianPhone'); 
   }
 
   void _launchDialer(String number) async {
