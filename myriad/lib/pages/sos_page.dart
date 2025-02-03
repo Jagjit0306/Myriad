@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +15,27 @@ class SosPage extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(width: 20),
+            Builder(
+              builder: (context) {
+                final isDarkMode =
+                    Theme.of(context).brightness == Brightness.dark;
+                final assetPath = isDarkMode
+                    ? 'assets/logo_dark.svg'
+                    : 'assets/logo_light.svg';
+                return SvgPicture.asset(
+                  assetPath,
+                  height: 50,
+                  placeholderBuilder: (BuildContext context) => Container(
+                    height: 50,
+                    width: 50,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                  semanticsLabel: 'Logo',
+                );
+              },
+            ),
             const SizedBox(width: 10),
             Text(
               "x",
@@ -177,14 +198,14 @@ class SosPage extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.surface,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Icon(
                 icon,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.surface,
                 size: 40,
               ),
             ],
@@ -196,7 +217,7 @@ class SosPage extends StatelessWidget {
 
   Future<String?> _fetchGuardianNumber() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('guardianPhone'); 
+    return prefs.getString('guardianPhone');
   }
 
   void _launchDialer(String number) async {
@@ -240,14 +261,14 @@ class _ScreamButtonState extends State<_ScreamButton> {
               Text(
                 "Scream",
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.surface,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Icon(
                 Icons.campaign,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.surface,
                 size: 40,
               ),
             ],

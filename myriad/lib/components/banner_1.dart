@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class Banner1 extends StatelessWidget {
   final IconData bannerIcon;
@@ -30,13 +31,26 @@ class Banner1 extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'M',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: 60,
-                fontWeight: FontWeight.bold,
-              ),
+            Builder(
+              builder: (context) {
+                final isDarkMode =
+                    Theme.of(context).brightness == Brightness.dark;
+                final assetPath = isDarkMode
+                    ? 'assets/logo_dark.svg'
+                    : 'assets/logo_light.svg';
+                return SvgPicture.asset(
+                  assetPath,
+                  height: 90,
+                  placeholderBuilder: (BuildContext context) => Container(
+                    height: 90,
+                    width: 90,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                  semanticsLabel: 'Logo',
+                );
+              },
             ),
             SizedBox(width: 10),
             Text(

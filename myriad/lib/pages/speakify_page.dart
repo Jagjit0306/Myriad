@@ -4,6 +4,7 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:myriad/components/banner_1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:myriad/themes/light_mode.dart'; // Import your theme file
 
@@ -107,7 +108,7 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
       ),
       body: Column(
         children: [
-          if (messages.isEmpty) SpeakifyIntro(),
+          if (messages.isEmpty) Banner1(bannerIcon: Icons.record_voice_over,),
           Expanded(
             child: DashChat(
               currentUser: currentUser,
@@ -156,60 +157,6 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class SpeakifyIntro extends StatelessWidget {
-  const SpeakifyIntro({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(height: 80),
-        const Text(
-          'Featuring',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.w400,
-            decorationThickness: 2,
-          ),
-        ),
-        const SizedBox(height: 40),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              'M',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 60,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(width: 10),
-            Text(
-              'x',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 40,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            SizedBox(width: 10),
-            Icon(
-              Icons.record_voice_over,
-              color: Colors.white,
-              size: 60,
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

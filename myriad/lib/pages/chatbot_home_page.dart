@@ -4,6 +4,7 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:myriad/components/banner_1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatbotHomePage extends StatefulWidget {
@@ -188,7 +189,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (messages.isEmpty) ChatBotIntro(),
+          if (messages.isEmpty) Banner1(bannerIcon: Icons.auto_awesome),
           Expanded(
             child: DashChat(
               messages: messages,
@@ -241,60 +242,6 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class ChatBotIntro extends StatelessWidget {
-  const ChatBotIntro({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(height: 80),
-        const Text(
-          'Featuring',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.w400,
-            decorationThickness: 2,
-          ),
-        ),
-        const SizedBox(height: 40),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              'M',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 60,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(width: 10),
-            Text(
-              'x',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 40,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            SizedBox(width: 10),
-            Icon(
-              Icons.auto_awesome,
-              color: Colors.white,
-              size: 60,
-            ),
-          ],
-        ),
-      ],
     );
   }
 }
