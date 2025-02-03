@@ -50,6 +50,7 @@ class CommunityComment extends StatelessWidget {
                               likeState
                                   ? Icons.thumb_up_off_alt_rounded
                                   : Icons.thumb_up_off_alt_outlined,
+                              size: 25,
                               color: likeState
                                   ? const Color(0xFF4267B2)
                                   : Theme.of(context).colorScheme.primary,

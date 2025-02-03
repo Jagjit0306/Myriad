@@ -9,24 +9,34 @@ import 'package:myriad/pages/community_thread.dart';
 class CommunityPost extends StatelessWidget {
   final String postId;
   final dynamic data;
-  CommunityPost({super.key, required this.postId, required this.data});
+  final bool disableClick;
+  CommunityPost({
+    super.key,
+    required this.postId,
+    required this.data,
+    this.disableClick = false,
+  });
 
   final CommunityDatabase communityDatabase = CommunityDatabase();
 
   @override
   Widget build(BuildContext context) {
+    final bool isLiked = (data['likers'] is List &&
+        data['likers'].contains(FirebaseAuth.instance.currentUser?.email));
     return GestureDetector(
       onTap: () {
-        Feedback.forTap(context);
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            return CommunityThread(
-              title: data['title'],
-              postId: postId,
-              op: data['op'],
-            );
-          },
-        ));
+        if (!disableClick) {
+          Feedback.forTap(context);
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              return CommunityThread(
+                title: data['title'],
+                postId: postId,
+                op: data['op'],
+              );
+            },
+          ));
+        }
       },
       child: Card(
         color: Theme.of(context).colorScheme.secondary,
@@ -46,37 +56,6 @@ class CommunityPost extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (data['categories'] != null && (data['categories'] as List).isNotEmpty)
-                      Container(
-                        height: 30,
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: (data['categories'] as List).length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.only(right: 8),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                              decoration: BoxDecoration(
-                                // color: Theme.of(context).colorScheme.primary,
-                                border: Border.all(
-                                  color: Theme.of(context).colorScheme.inversePrimary,
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                data['categories'][index].toString(),
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.inversePrimary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 1.0),
                       child: Text(
@@ -87,12 +66,13 @@ class CommunityPost extends StatelessWidget {
                     ),
                     Text(data['content'],
                         style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            // color: Theme.of(context).colorScheme.bodyColor
-                            )),
+                          fontWeight: FontWeight.w500,
+                          // color: Theme.of(context).colorScheme.bodyColor
+                        )),
                     SizedBox(
                       height: 10,
                     ),
+                    CommunityPostTags(data: data),
                     Row(
                       // mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -102,12 +82,11 @@ class CommunityPost extends StatelessWidget {
                             communityDatabase.likeCommunityPost(postId);
                           },
                           child: Icon(
-                            Icons.favorite,
-                            size: 35,
-                            color: (data['likers'] is List &&
-                                    data['likers'].contains(FirebaseAuth
-                                        .instance.currentUser?.email))
-                                // ? Theme.of(context).colorScheme.inversePrimary
+                            isLiked
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_outline_rounded,
+                            size: 25,
+                            color: isLiked
                                 ? Colors.red
                                 : Theme.of(context).colorScheme.primary,
                           ),
@@ -191,7 +170,8 @@ class _PosterDataState extends State<PosterData> {
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
           child: Text(timeSince(widget.timestamp),
-              style: TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
         ),
       ],
     );
@@ -200,5 +180,48 @@ class _PosterDataState extends State<PosterData> {
   @override
   void dispose() {
     super.dispose();
+  }
+}
+
+class CommunityPostTags extends StatelessWidget {
+  final dynamic data;
+  const CommunityPostTags({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    if (data['categories'] != null && (data['categories'] as List).isNotEmpty) {
+      return Container(
+        height: 28,
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: (data['categories'] as List).length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                // color: Theme.of(context).colorScheme.primary,
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                data['categories'][index].toString(),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }

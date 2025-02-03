@@ -31,7 +31,7 @@ class _CommunityPageState extends State<CommunityPage> {
     List<dynamic> temp =
         (jsonDecode(localPrefs.getString('prefs') ?? "") as List)
             .where((map) => map.values.first == true)
-            .map((map) => {map.keys.first: false})
+            .map((map) => {map.keys.first: true})
             .toList();
     setState(() {
       categories.insertAll(1, temp);

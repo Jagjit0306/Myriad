@@ -68,7 +68,11 @@ class CommunityThread extends StatelessWidget {
                 } else if (snapshot.hasData && snapshot.data != null) {
                   DocumentSnapshot postData = snapshot.data!;
                   if (postData.exists) {
-                    return CommunityPost(postId: postId, data: postData);
+                    return CommunityPost(
+                      postId: postId,
+                      data: postData,
+                      disableClick: true,
+                    );
                   } else {
                     return Text("Post not found");
                   }

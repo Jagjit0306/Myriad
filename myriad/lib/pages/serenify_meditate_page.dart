@@ -257,6 +257,10 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF1A237E),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: Stack(
         children: [
           Container(
