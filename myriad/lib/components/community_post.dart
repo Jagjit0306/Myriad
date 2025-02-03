@@ -107,8 +107,9 @@ class CommunityPost extends StatelessWidget {
                             color: (data['likers'] is List &&
                                     data['likers'].contains(FirebaseAuth
                                         .instance.currentUser?.email))
-                                ? Theme.of(context).colorScheme.inversePrimary
-                                : Theme.of(context).colorScheme.secondary,
+                                // ? Theme.of(context).colorScheme.inversePrimary
+                                ? Colors.red
+                                : Theme.of(context).colorScheme.primary,
                           ),
                         ),
                         SizedBox(

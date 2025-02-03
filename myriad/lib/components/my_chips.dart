@@ -29,7 +29,7 @@ class MyChips extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: currCat.values.first
-                        ? Theme.of(context).colorScheme.primary
+                        ? Theme.of(context).colorScheme.surface
                         : Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),

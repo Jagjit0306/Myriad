@@ -23,6 +23,9 @@ class MyTextfield extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         hintText: hintText,
+        hintStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSecondary,
+        ),
       ),
       obscureText: obscureText,
     );

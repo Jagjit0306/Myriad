@@ -15,6 +15,8 @@ class CommunityComment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool likeState =
+        (data['likers'].contains(FirebaseAuth.instance.currentUser!.email));
     return Card(
       // color: Theme.of(context).colorScheme.primary,
       margin: EdgeInsets.all(10),
@@ -44,12 +46,18 @@ class CommunityComment extends StatelessWidget {
                             onTap: () {
                               communityDatabase.likeCommunityComment(commentId);
                             },
-                            child: Icon((data['likers'].contains(
-                                    FirebaseAuth.instance.currentUser!.email))
-                                ? Icons.thumb_up_off_alt_rounded
-                                : Icons.thumb_up_off_alt_outlined),
+                            child: Icon(
+                              likeState
+                                  ? Icons.thumb_up_off_alt_rounded
+                                  : Icons.thumb_up_off_alt_outlined,
+                              color: likeState
+                                  ? const Color(0xFF4267B2)
+                                  : Theme.of(context).colorScheme.primary,
+                            ),
                           ),
-                          SizedBox(width: 10,),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Text("${data['likes']}"),
                         ],
                       ),
