@@ -79,12 +79,12 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
               });
             },
           ),
-          Expanded(
-              child: MyTextfield(
-                  hintText: 'Post content',
-                  obscureText: false,
-                  onChanged: (xyz) {},
-                  controller: contentController)),
+          MyTextfield(
+              hintText: 'Post content',
+              obscureText: false,
+              inputType: TextInputType.multiline,
+              onChanged: (xyz) {},
+              controller: contentController),
           SizedBox(
             height: 10,
           ),

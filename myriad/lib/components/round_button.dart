@@ -35,7 +35,7 @@ class RoundButton extends StatelessWidget {
         child: Center(
           child: Icon(
             icon,
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.inversePrimary,
             size: size * 0.5, // Icon size relative to the button size
           ),
         ),

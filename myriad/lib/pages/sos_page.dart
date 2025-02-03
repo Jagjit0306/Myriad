@@ -53,12 +53,6 @@ class SosPage extends StatelessWidget {
             const SizedBox(width: 70),
           ],
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

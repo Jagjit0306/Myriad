@@ -104,10 +104,10 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Relax - Serenify',
-          style: TextStyle(color: Colors.black),
-        ),
+        // title: const Text(
+        //   'Relax - Serenify',
+        //   style: TextStyle(color: Colors.black),
+        // ),
         backgroundColor:
             Color.fromRGBO(255, 255, 255, getOpac(countdown.toDouble())),
         iconTheme: const IconThemeData(color: Colors.black),

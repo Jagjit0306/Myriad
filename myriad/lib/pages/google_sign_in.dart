@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:myriad/components/logo_component.dart';
 import 'package:myriad/database/user.dart';
 
 class GoogleSignInScreen extends StatefulWidget {
@@ -43,27 +44,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Builder(
-              builder: (context) {
-                final isDarkMode =
-                    Theme.of(context).brightness == Brightness.dark;
-                final assetPath = isDarkMode
-                    ? 'assets/logo_dark.svg'
-                    : 'assets/logo_light.svg';
-                return SvgPicture.asset(
-                  assetPath,
-                  height: 200,
-                  placeholderBuilder: (BuildContext context) => Container(
-                    height: 120,
-                    width: 120,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                  semanticsLabel: 'Logo',
-                );
-              },
-            ),
+            LogoComponent(),
             const SizedBox(height: 48),
             const Text(
               'Overcoming challenges together, with AI',

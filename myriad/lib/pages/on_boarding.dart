@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myriad/components/logo_component.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_textfield.dart';
 
@@ -41,8 +42,8 @@ class _OnBoardingState extends State<OnBoarding> {
         .where('username', isEqualTo: username)
         .get();
     setState(() {
-      isUsernameUnique = result.docs.isEmpty &&
-          usernameController.text.isNotEmpty;
+      isUsernameUnique =
+          result.docs.isEmpty && usernameController.text.isNotEmpty;
     });
   }
 
@@ -66,32 +67,28 @@ class _OnBoardingState extends State<OnBoarding> {
       appBar: AppBar(
         title: Text('On Boarding'),
       ),
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Welcome to Myriad"),
-
+            Center(
+              child: LogoComponent(
+                size: 120,
+              ),
+            ),
+            Text(
+              "Welcome to Myriad",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+            ),
             const SizedBox(
               height: 25,
             ),
-
-            // app name
-            // Text(
-            //   "U S E R N A M E",
-            //   style: TextStyle(fontSize: 20),
-            // ),
-
-            const SizedBox(
-              height: 25,
-            ),
-
             MyTextfield(
               hintText: 'Username',
+              inputType: TextInputType.name,
               obscureText: false,
               controller: usernameController,
               onChanged: (value) {
@@ -100,38 +97,56 @@ class _OnBoardingState extends State<OnBoarding> {
             ),
             if (!isUsernameUnique && usernameController.text.isNotEmpty)
               const Text("THIS USERNAME IS TAKEN/INVALID"),
-
             const SizedBox(
               height: 25,
             ),
-
             MyTextfield(
               hintText: 'Guardian Phone',
+              inputType: TextInputType.phone,
               obscureText: false,
               controller: guardianPhoneController,
-              onChanged: (value) {
-                
-              },
+              onChanged: (value) {},
             ),
-
             const SizedBox(
               height: 25,
             ),
-
-            Expanded(
-              child: ListView.builder(
-                itemCount: prefs.length,
-                itemBuilder: (context, index) {
-                  return CheckboxListTile(
-                    title: Text(prefs[index].keys.first),
-                    value: prefs[index].values.first,
-                    onChanged: (bool? newValue) {
-                      setState(() {
-                        prefs[index] = {prefs[index].keys.first: newValue!};
-                      });
-                    },
-                  );
-                },
+            Text(
+              "Select your preferences",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Card(
+                color: Theme.of(context).colorScheme.secondary,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: prefs.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        CheckboxListTile(
+                          title: Text(prefs[index].keys.first),
+                          value: prefs[index].values.first,
+                          onChanged: (bool? newValue) {
+                            setState(() {
+                              prefs[index] = {
+                                prefs[index].keys.first: newValue!
+                              };
+                            });
+                          },
+                        ),
+                        if (index < prefs.length - 1)
+                          Divider(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            thickness: 2,
+                            indent: MediaQuery.of(context).size.width * 0.2,
+                            endIndent: MediaQuery.of(context).size.width * 0.2,
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
             Padding(
