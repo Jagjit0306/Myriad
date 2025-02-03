@@ -41,6 +41,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logo.svg
+    - assets/logo_white.png
+    - assets/logo_black.png
     - assets/login_asset.png
     - assets/community_asset.png
     - assets/google_icon.png
