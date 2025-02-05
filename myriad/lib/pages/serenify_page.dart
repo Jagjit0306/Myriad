@@ -28,6 +28,7 @@ class _SerenifyPageState extends State<SerenifyPage> {
       data: ThemeData.dark(),
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: const Text(
             'Serenify',
             style: TextStyle(color: Colors.black),

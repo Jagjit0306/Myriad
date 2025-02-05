@@ -34,6 +34,7 @@ class _VoicifyPageState extends State<VoicifyPage> {
   final ChatUser _botUser = ChatUser(
     id: '1',
     firstName: 'Partner',
+    profileImage: "https://cdn.pixabay.com/photo/2012/04/18/00/07/silhouette-of-a-man-36181_640.png",
   );
 
   @override
@@ -173,6 +174,7 @@ class _VoicifyPageState extends State<VoicifyPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Voicify'),
+        centerTitle: true,
         actions: [
           PopupMenuButton(
             color: Theme.of(context).colorScheme.onSecondaryContainer,

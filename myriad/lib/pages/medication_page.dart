@@ -259,6 +259,7 @@ class _MedicationPageState extends State<MedicationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Medication Schedule'),
       ),
       body: Padding(

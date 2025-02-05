@@ -17,13 +17,13 @@ class _OnBoardingState extends State<OnBoarding> {
   final TextEditingController guardianPhoneController = TextEditingController();
 
   List<Map<String, bool>> prefs = [
-    {'Visual Impairment': false},
-    {'Hearing Impairment': false},
-    {'Speech Impairment': false},
-    {'Dexterity Impairment': false},
-    {'Wheelchair Bound': false},
-    {'Limb Differences': false},
-    {'Paralysis': false},
+    {'Vision Support': false},
+    {'Hearing Support': false},
+    {'Speech Assistance': false},
+    {'Dexterity Support': false},
+    {'Wheelchair Support': false},
+    {'Limb Diversity Support': false},
+    {'Paralysis Support': false},
   ];
 
   bool isUsernameUnique = false;
@@ -73,7 +73,9 @@ class _OnBoardingState extends State<OnBoarding> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 70,),
+              SizedBox(
+                height: 70,
+              ),
               Center(
                 child: LogoComponent(
                   size: 120,
@@ -141,7 +143,8 @@ class _OnBoardingState extends State<OnBoarding> {
                               color: Theme.of(context).colorScheme.onSecondary,
                               thickness: 2,
                               indent: MediaQuery.of(context).size.width * 0.2,
-                              endIndent: MediaQuery.of(context).size.width * 0.2,
+                              endIndent:
+                                  MediaQuery.of(context).size.width * 0.2,
                             ),
                         ],
                       );

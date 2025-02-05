@@ -140,6 +140,7 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Colorify'),
       ),
       body: LayoutBuilder(

@@ -160,6 +160,7 @@ class _VibraillifyPageState extends State<VibraillifyPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vibraillify'),
+        centerTitle: true,
         actions: [
           PopupMenuButton(
             color: Theme.of(context).colorScheme.onSecondaryContainer,

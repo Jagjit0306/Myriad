@@ -32,6 +32,7 @@ class _HearifyPageState extends State<HearifyPage> {
   final ChatUser _botUser = ChatUser(
     id: '1',
     firstName: 'Partner',
+    profileImage: "https://cdn.pixabay.com/photo/2012/04/18/00/07/silhouette-of-a-man-36181_640.png",
   );
 
   @override
@@ -149,6 +150,7 @@ class _HearifyPageState extends State<HearifyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Hearify'),
         actions: [
           PopupMenuButton(

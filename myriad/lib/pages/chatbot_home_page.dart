@@ -163,6 +163,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text("My AI - Eva"),
         actions: [
           PopupMenuButton(

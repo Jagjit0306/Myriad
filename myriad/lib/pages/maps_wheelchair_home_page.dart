@@ -156,6 +156,7 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Wheelify'),
       ),
       body: GoogleMap(

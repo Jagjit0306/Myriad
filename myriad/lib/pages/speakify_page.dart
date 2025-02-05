@@ -85,6 +85,7 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Speakify'),
+        centerTitle: true,
         actions: [
           PopupMenuButton(
             color: Theme.of(context).colorScheme.onSecondaryContainer,

@@ -62,6 +62,7 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('New Thread'),
       ),
       body: SingleChildScrollView(

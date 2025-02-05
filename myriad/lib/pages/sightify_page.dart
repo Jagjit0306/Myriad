@@ -142,6 +142,7 @@ class _SightifyPageState extends State<SightifyPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sightify"),
+        centerTitle: true,
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,

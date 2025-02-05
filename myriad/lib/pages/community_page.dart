@@ -43,6 +43,7 @@ class _CommunityPageState extends State<CommunityPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Community"),
+        centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
