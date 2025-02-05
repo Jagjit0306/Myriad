@@ -79,6 +79,12 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
     _speak(newMessage.text);
     _saveChats();
   }
+  
+  @override
+  void dispose() {
+    _flutterTts.stop();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
