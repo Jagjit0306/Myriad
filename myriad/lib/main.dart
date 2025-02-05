@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:myriad/auth/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,10 +25,13 @@ import 'package:myriad/pages/sos_page.dart';
 import 'package:myriad/pages/colorify_page.dart';
 import 'package:myriad/pages/medication_page.dart';
 import 'package:timezone/data/latest.dart' as tz;
-// import 'package:myriad/helper/helper_functions.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
+  );
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
