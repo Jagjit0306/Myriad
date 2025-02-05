@@ -23,6 +23,7 @@ class _VoicifyPageState extends State<VoicifyPage> {
   bool _isListening = false;
   bool _speechEnabled = false;
   String _lastWords = '';
+  bool hasText = false;
   final TextEditingController _textController = TextEditingController();
 
   final ChatUser _currentUser = ChatUser(
@@ -221,9 +222,19 @@ class _VoicifyPageState extends State<VoicifyPage> {
                     }
                   }),
               inputOptions: InputOptions(
+                onTextChange: (v) {
+                  setState(() {
+                    if (v.isNotEmpty && !hasText) {
+                      hasText = true;
+                    } else if (v.isEmpty && hasText) {
+                      hasText = false;
+                    }
+                  });
+                },
                 cursorStyle: CursorStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
+                alwaysShowSend: true,
                 inputDecoration: InputDecoration(
                   filled: true,
                   fillColor: Theme.of(context).colorScheme.surface,
@@ -233,29 +244,50 @@ class _VoicifyPageState extends State<VoicifyPage> {
                   ),
                 ),
                 sendButtonBuilder: (void Function() onSend) {
-                  return GestureDetector(
-                    onTap: onSend,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
-                      child: Icon(
-                        Icons.record_voice_over,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        size: 35, // Icon color
-                      ),
-                    ),
+                  return Row(
+                    children: [
+                      if (hasText)
+                        GestureDetector(
+                          onTap: onSend,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
+                            child: Icon(
+                              Icons.record_voice_over,
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                              size: 35, // Icon color
+                            ),
+                          ),
+                        ),
+                      if (!hasText)
+                        // Padding(
+                        //   padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        //   child: FloatingActionButton(
+                        //     onPressed: _startListening,
+                        //     backgroundColor:
+                        //         _isListening ? Colors.red : Colors.white,
+                        //     child: Icon(
+                        //       _isListening ? Icons.mic : Icons.mic_none,
+                        //       color: _isListening ? Colors.white : Colors.black,
+                        //     ),
+                        //   ),
+                        // ),
+                        GestureDetector(
+                          onTap: _startListening,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
+                            child: Icon(
+                              !_isListening ? Icons.mic : Icons.mic_none,
+                              color: !_isListening
+                                  ? Theme.of(context).colorScheme.inversePrimary
+                                  : Colors.red,
+                              size: 35, // Icon color
+                            ),
+                          ),
+                        ),
+                    ],
                   );
                 },
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FloatingActionButton(
-              onPressed: _startListening,
-              backgroundColor: _isListening ? Colors.red : Colors.white,
-              child: Icon(
-                _isListening ? Icons.mic : Icons.mic_none,
-                color: _isListening ? Colors.white : Colors.black,
               ),
             ),
           ),

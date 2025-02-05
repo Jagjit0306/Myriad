@@ -197,6 +197,7 @@ class _SightifyPageState extends State<SightifyPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 RoundButton(
+                  iconColor: Theme.of(context).colorScheme.inversePrimary,
                   icon: Icons.camera_alt,
                   onPressed: (_isTakingPicture) ? () {} : _takeInstantPicture,
                 ),

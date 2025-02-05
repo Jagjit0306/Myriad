@@ -20,18 +20,44 @@ class MyButton extends StatelessWidget {
           onTap!();
         }
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        padding: const EdgeInsets.all(25),
-        child: Center(
-          child: Text(
-            enabled ? text : "action pending",
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Card(
+          elevation: 4,
+          color: Theme.of(context).colorScheme.inversePrimary,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  " ",
+                  style: TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+                Text(
+                  text,
+                  style: TextStyle(
+                    color: enabled
+                        ? Theme.of(context).colorScheme.surface
+                        : Theme.of(context).colorScheme.onSecondary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  enabled ? " " : "[actions are pending]",
+                  style: TextStyle(
+                    color: Colors.redAccent,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

@@ -4,7 +4,7 @@ class RoundButton extends StatelessWidget {
   final IconData icon;
   final double size;
   // final Color backgroundColor;
-  // final Color iconColor;
+  final Color iconColor;
   final VoidCallback onPressed;
 
   const RoundButton({
@@ -12,7 +12,7 @@ class RoundButton extends StatelessWidget {
     required this.icon,
     this.size = 100.0,
     // this.backgroundColor;,
-    // this.iconColor = Colors.white,
+    required this.iconColor,
     required this.onPressed,
   }) : super(key: key);
 
@@ -35,7 +35,7 @@ class RoundButton extends StatelessWidget {
         child: Center(
           child: Icon(
             icon,
-            color: Theme.of(context).colorScheme.inversePrimary,
+            color: iconColor,
             size: size * 0.5, // Icon size relative to the button size
           ),
         ),

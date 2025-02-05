@@ -9,7 +9,7 @@ class MyChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 20.0),
+      margin: EdgeInsets.symmetric(vertical: 10.0),
       height: 50,
       child: ListView.builder(
         physics: BouncingScrollPhysics(),

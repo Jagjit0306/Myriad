@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:myriad/components/banner_1.dart';
+import 'package:myriad/components/round_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart'; // Add this import
@@ -181,7 +182,8 @@ class _HearifyPageState extends State<HearifyPage> {
               messageOptions: MessageOptions(
                 currentUserContainerColor:
                     Theme.of(context).colorScheme.inversePrimary,
-                containerColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                containerColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
                 textColor: Theme.of(context).colorScheme.inversePrimary,
                 currentUserTextColor: Theme.of(context).colorScheme.surface,
                 showCurrentUserAvatar: true,
@@ -191,13 +193,10 @@ class _HearifyPageState extends State<HearifyPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: FloatingActionButton(
+            child: RoundButton(
+              iconColor: _isListening ? Colors.red : Theme.of(context).colorScheme.inversePrimary,
+              icon: _isListening? Icons.mic : Icons.mic_none,
               onPressed: _startListening,
-              backgroundColor: _isListening ? Colors.red : Colors.white,
-              child: Icon(
-                _isListening ? Icons.mic : Icons.mic_none,
-                color: _isListening ? Colors.white : Colors.black,
-              ),
             ),
           ),
         ],

@@ -69,7 +69,10 @@ class _CommunityPageState extends State<CommunityPage> {
               physics: const BouncingScrollPhysics(), // Enable bouncing physics
               slivers: [
                 SliverToBoxAdapter(
-                  child: Image.asset('assets/community_asset.png'),
+                  child: Image.asset(
+                    'assets/community_asset.png',
+                    height: 300,
+                  ),
                 ),
                 // Add Community Posts
                 StreamBuilder(

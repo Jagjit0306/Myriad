@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class MyTextfield extends StatelessWidget {
   final String hintText;
   final bool obscureText;
+  final int minLines;
   final TextInputType inputType;
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
@@ -11,9 +12,11 @@ class MyTextfield extends StatelessWidget {
       {super.key,
       required this.hintText,
       this.inputType = TextInputType.text,
+      this.minLines = 1,
       required this.obscureText,
       required this.controller,
       required this.onChanged});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,6 +44,8 @@ class MyTextfield extends StatelessWidget {
           ),
         ),
         obscureText: obscureText,
+        minLines: minLines,
+        maxLines: inputType == TextInputType.multiline ? null : 1,
       ),
     );
   }

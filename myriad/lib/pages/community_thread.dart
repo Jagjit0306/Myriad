@@ -120,6 +120,7 @@ class _CommunityThreadDeleteOptionState
   Widget build(BuildContext context) {
     return isOP
         ? PopupMenuButton(
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
             onSelected: (value) {
               switch (value) {
                 case "dltpst":
