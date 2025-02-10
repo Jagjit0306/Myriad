@@ -256,6 +256,24 @@ class _MedicationPageState extends State<MedicationPage> {
     _showSuccess('Medication deleted successfully');
   }
 
+  Future<void> _selectTime(BuildContext context, int index) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      String formattedTime = picked.hour.toString().padLeft(2, '0') + ':' + picked.minute.toString().padLeft(2, '0');
+      _timeControllers[index].text = formattedTime;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -356,19 +374,27 @@ class _MedicationPageState extends State<MedicationPage> {
                 ...List.generate(_timeControllers.length, (index) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.outline,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        _selectTime(context, index);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
                         ),
-                      ),
-                      child: TextField(
-                        controller: _timeControllers[index],
-                        decoration: InputDecoration(
-                          labelText: 'Time ${index + 1} (HH:MM)',
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.all(8),
+                        child: TextField(
+                          controller: _timeControllers[index],
+                          readOnly: true,
+                          enabled: false,
+                          decoration: InputDecoration(
+                            labelText: 'Time ${index + 1} (HH:MM)',
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.all(8),
+                          ),
                         ),
                       ),
                     ),
