@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import '../components/logo_component.dart';
 
 class MedicationSchedule {
   final String medicineName;
@@ -260,61 +261,93 @@ class _MedicationPageState extends State<MedicationPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Medication Schedule'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const LogoComponent(size: 60),
+            const SizedBox(width: 8),
+            Text(
+              'X',
+              style: TextStyle(
+                fontSize: 36,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Icon(
+              Icons.medication,
+              size: 60,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            const SizedBox(width: 28),
+          ],
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextField(
-                controller: _medicineNameController,
-                decoration: InputDecoration(
-                  labelText: 'Medicine Name',
-                  labelStyle:
-                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.inversePrimary),
+              const SizedBox(height: 50),
+              // Medicine name input
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.inversePrimary),
+                ),
+                child: TextField(
+                  controller: _medicineNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Medicine Name',
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(8),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
+              // Times per day row
               Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      controller: _timesPerDayController,
-                      decoration: InputDecoration(
-                        labelText: 'Times Per Day',
-                        labelStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.primary),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.outline,
                         ),
                       ),
-                      keyboardType: TextInputType.number,
+                      child: TextField(
+                        controller: _timesPerDayController,
+                        decoration: const InputDecoration(
+                          labelText: 'Times Per Day',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: _createTimeInputs,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Theme.of(context).colorScheme.inversePrimary,
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    child: const Text('Set Times'),
+                    child: const Text(
+                      'Set Times',
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
                 ],
               ),
@@ -323,16 +356,21 @@ class _MedicationPageState extends State<MedicationPage> {
                 ...List.generate(_timeControllers.length, (index) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    child: TextField(
-                      controller: _timeControllers[index],
-                      decoration: InputDecoration(
-                        labelText: 'Time ${index + 1} (HH:mm)',
-                        hintText: 'Example: 14:30',
-                        labelStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface),
-                        border: const OutlineInputBorder(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
                       ),
-                      // keyboardType: TextInputType.datetime,
+                      child: TextField(
+                        controller: _timeControllers[index],
+                        decoration: InputDecoration(
+                          labelText: 'Time ${index + 1} (HH:MM)',
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.all(8),
+                        ),
+                      ),
                     ),
                   );
                 }),
@@ -340,17 +378,28 @@ class _MedicationPageState extends State<MedicationPage> {
                 ElevatedButton(
                   onPressed: _saveMedication,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.inversePrimary,
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    minimumSize: const Size(double.infinity, 50),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 16,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
-                  child: const Text('Save Medication'),
+                  child: const Text(
+                    'Save Medication',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               ],
               const SizedBox(height: 24),
               Text(
                 'Saved Medications:',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
@@ -362,14 +411,21 @@ class _MedicationPageState extends State<MedicationPage> {
                 itemBuilder: (context, index) {
                   final medication = _medications[index];
                   return Card(
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
                     child: ListTile(
-                      title: Text(medication.medicineName,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface)),
+                      title: Text(
+                        medication.medicineName,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 17,
+                        ),
+                      ),
                       subtitle: Text(
                         'Times: ${medication.times.join(", ")}',
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface),
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 15,
+                        ),
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
