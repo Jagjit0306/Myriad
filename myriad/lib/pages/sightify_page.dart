@@ -18,13 +18,39 @@ class SightifyPage extends StatefulWidget {
   State<SightifyPage> createState() => _SightifyPageState();
 }
 
-class _SightifyPageState extends State<SightifyPage> {
+class _SightifyPageState extends State<SightifyPage> with WidgetsBindingObserver {
   final FlutterTts _flutterTts = FlutterTts();
   File? _imageFile;
   CameraController? _controller;
   bool _isTakingPicture = false;
   final Gemini gemini = Gemini.instance;
   final GlobalKey _key = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _controller?.dispose();
+    _flutterTts.stop();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      _stopAudioPlayback();
+    }
+  }
+
+  void _stopAudioPlayback() async {
+    await _flutterTts.stop();
+    print("Audio playback stopped.");
+  }
 
   Future<void> _speak(String text) async {
     await _flutterTts.setLanguage("en-US");
@@ -208,13 +234,6 @@ class _SightifyPageState extends State<SightifyPage> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controller?.dispose();
-    _flutterTts.stop();
-    super.dispose();
   }
 }
 
