@@ -197,7 +197,7 @@ class MyDrawer extends StatelessWidget {
                       Icons.medical_services,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
-                    title: Text('M E D I C A T I O N'),
+                    title: Text('M E D I F Y'),
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/medication');
