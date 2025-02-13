@@ -7,20 +7,17 @@ import '../components/logo_component.dart';
 
 class MedicationSchedule {
   final String medicineName;
-  final int timesPerDay;
   final List<String> times;
   final int id;
 
   MedicationSchedule({
     required this.medicineName,
-    required this.timesPerDay,
     required this.times,
     required this.id,
   });
 
   Map<String, dynamic> toJson() => {
         'medicineName': medicineName,
-        'timesPerDay': timesPerDay,
         'times': times,
         'id': id,
       };
@@ -28,7 +25,6 @@ class MedicationSchedule {
   factory MedicationSchedule.fromJson(Map<String, dynamic> json) {
     return MedicationSchedule(
       medicineName: json['medicineName'],
-      timesPerDay: json['timesPerDay'],
       times: List<String>.from(json['times']),
       id: json['id'],
     );
@@ -44,13 +40,14 @@ class MedicationPage extends StatefulWidget {
 
 class _MedicationPageState extends State<MedicationPage> {
   final TextEditingController _medicineNameController = TextEditingController();
-  final TextEditingController _timesPerDayController = TextEditingController();
-  final List<TextEditingController> _timeControllers = [];
+  final List<TextEditingController> _timeControllers = List.generate(
+    6, // Maximum number of time slots
+    (index) => TextEditingController(),
+  );
   List<MedicationSchedule> _medications = [];
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   int _nextId = 0;
-  bool _showTimeInputs = false;
 
   @override
   void initState() {
@@ -84,28 +81,28 @@ class _MedicationPageState extends State<MedicationPage> {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  void _createTimeInputs() {
-    final timesPerDay = int.tryParse(_timesPerDayController.text) ?? 0;
-    if (timesPerDay <= 0) {
-      _showError('Please enter a valid number of times per day');
-      return;
-    }
+  // void _createTimeInputs() {
+  //   final timesPerDay = int.tryParse(_timesPerDayController.text) ?? 0;
+  //   if (timesPerDay <= 0) {
+  //     _showError('Please enter a valid number of times per day');
+  //     return;
+  //   }
 
-    // Clear existing controllers
-    for (var controller in _timeControllers) {
-      controller.dispose();
-    }
-    _timeControllers.clear();
+  //   // Clear existing controllers
+  //   for (var controller in _timeControllers) {
+  //     controller.dispose();
+  //   }
+  //   _timeControllers.clear();
 
-    // Create new controllers
-    for (int i = 0; i < timesPerDay; i++) {
-      _timeControllers.add(TextEditingController());
-    }
+  //   // Create new controllers
+  //   for (int i = 0; i < timesPerDay; i++) {
+  //     _timeControllers.add(TextEditingController());
+  //   }
 
-    setState(() {
-      _showTimeInputs = true;
-    });
-  }
+  //   setState(() {
+  //     _showTimeInputs = true;
+  //   });
+  // }
 
   Future<void> _loadMedications() async {
     final prefs = await SharedPreferences.getInstance();
@@ -197,26 +194,32 @@ class _MedicationPageState extends State<MedicationPage> {
   }
 
   Future<void> _saveMedication() async {
-    if (_medicineNameController.text.isEmpty ||
-        _timesPerDayController.text.isEmpty) {
-      _showError('Please fill in all fields');
+    if (_medicineNameController.text.isEmpty) {
+      _showError('Please enter a medicine name');
       return;
     }
 
     final timeRegex = RegExp(r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$');
     final times = <String>[];
 
+    // Only collect non-empty time inputs
     for (var controller in _timeControllers) {
-      if (!timeRegex.hasMatch(controller.text)) {
-        _showError('Please enter valid times in 24-hour format (HH:mm)');
-        return;
+      if (controller.text.isNotEmpty) {
+        if (!timeRegex.hasMatch(controller.text)) {
+          _showError('Please enter valid times in 24-hour format (HH:mm)');
+          return;
+        }
+        times.add(controller.text);
       }
-      times.add(controller.text);
+    }
+
+    if (times.isEmpty) {
+      _showError('Please enter at least one time');
+      return;
     }
 
     final medication = MedicationSchedule(
       medicineName: _medicineNameController.text,
-      timesPerDay: times.length,
       times: times,
       id: _nextId,
     );
@@ -225,18 +228,15 @@ class _MedicationPageState extends State<MedicationPage> {
 
     setState(() {
       _medications.add(medication);
-      _showTimeInputs = false;
     });
 
     await _scheduleNotifications(medication);
     await _saveMedications();
 
     _medicineNameController.clear();
-    _timesPerDayController.clear();
     for (var controller in _timeControllers) {
       controller.clear();
     }
-    _timeControllers.clear();
 
     _showSuccess('Medication added successfully');
   }
@@ -244,7 +244,7 @@ class _MedicationPageState extends State<MedicationPage> {
   Future<void> _deleteMedication(int index) async {
     final medication = _medications[index];
     // Cancel all notifications for this medication
-    for (int i = 0; i < medication.timesPerDay; i++) {
+    for (int i = 0; i < medication.times.length; i++) {
       await flutterLocalNotificationsPlugin.cancel(medication.id + i);
     }
 
@@ -269,7 +269,9 @@ class _MedicationPageState extends State<MedicationPage> {
     );
 
     if (picked != null) {
-      String formattedTime = picked.hour.toString().padLeft(2, '0') + ':' + picked.minute.toString().padLeft(2, '0');
+      String formattedTime = picked.hour.toString().padLeft(2, '0') +
+          ':' +
+          picked.minute.toString().padLeft(2, '0');
       _timeControllers[index].text = formattedTime;
     }
   }
@@ -308,7 +310,6 @@ class _MedicationPageState extends State<MedicationPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 50),
-              // Medicine name input
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
@@ -326,101 +327,55 @@ class _MedicationPageState extends State<MedicationPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Times per day row
-              Row(
-                children: [
-                  Expanded(
+              ...List.generate(_timeControllers.length, (index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      _selectTime(context, index);
+                    },
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: Theme.of(context).colorScheme.outline,
                         ),
                       ),
                       child: TextField(
-                        controller: _timesPerDayController,
-                        decoration: const InputDecoration(
-                          labelText: 'Times Per Day',
+                        controller: _timeControllers[index],
+                        readOnly: true,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          labelText: 'Time ${index + 1} (optional)',
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(8),
-                        ),
-                        keyboardType: TextInputType.number,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: _createTimeInputs,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 16,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Set Times',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                ],
-              ),
-              if (_showTimeInputs) ...[
-                const SizedBox(height: 16),
-                ...List.generate(_timeControllers.length, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        _selectTime(context, index);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                        ),
-                        child: TextField(
-                          controller: _timeControllers[index],
-                          readOnly: true,
-                          enabled: false,
-                          decoration: InputDecoration(
-                            labelText: 'Time ${index + 1} (HH:MM)',
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(8),
-                          ),
+                          contentPadding: const EdgeInsets.all(8),
                         ),
                       ),
                     ),
-                  );
-                }),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _saveMedication,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    minimumSize: const Size(double.infinity, 50),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 16,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
                   ),
-                  child: const Text(
-                    'Save Medication',
-                    style: TextStyle(fontSize: 18),
+                );
+              }),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _saveMedication,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  minimumSize: const Size(double.infinity, 50),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 16,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-              ],
+                child: const Text(
+                  'Save Medication',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
               const SizedBox(height: 24),
               Text(
                 'Saved Medications:',
@@ -471,7 +426,6 @@ class _MedicationPageState extends State<MedicationPage> {
   @override
   void dispose() {
     _medicineNameController.dispose();
-    _timesPerDayController.dispose();
     for (var controller in _timeControllers) {
       controller.dispose();
     }
