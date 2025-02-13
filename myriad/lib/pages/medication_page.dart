@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:myriad/components/my_button.dart';
+import 'package:myriad/components/my_textfield.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -54,6 +57,20 @@ class _MedicationPageState extends State<MedicationPage> {
     super.initState();
     _initializeNotifications();
     _loadMedications();
+
+    // Add listeners to all time controllers to trigger UI updates
+    for (var controller in _timeControllers) {
+      controller.addListener(() {
+        setState(() {}); // Rebuild UI when any time input changes
+      });
+    }
+  }
+
+  bool _shouldShowTimeField(int index) {
+    if (index == 0) return true; // Always show first time field
+
+    // Show this field only if the previous field is filled
+    return _timeControllers[index - 1].text.isNotEmpty;
   }
 
   Future<void> _initializeNotifications() async {
@@ -195,7 +212,7 @@ class _MedicationPageState extends State<MedicationPage> {
 
   Future<void> _saveMedication() async {
     if (_medicineNameController.text.isEmpty) {
-      _showError('Please enter a medicine name');
+      _showError('Please enter a prescription name');
       return;
     }
 
@@ -310,111 +327,139 @@ class _MedicationPageState extends State<MedicationPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 50),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-                child: TextField(
-                  controller: _medicineNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Medicine Name',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(8),
-                  ),
-                ),
+              MyTextfield(
+                hintText: "Prescription Name",
+                controller: _medicineNameController,
+                onChanged: (v) {},
               ),
               const SizedBox(height: 16),
               ...List.generate(_timeControllers.length, (index) {
+                // Only show this time field if all previous ones are filled
+                if (!_shouldShowTimeField(index)) {
+                  return const SizedBox.shrink(); // Hidden field
+                }
+
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
+                      print("time field tapped HELLOOOOOOOOOOOOOO");
                       _selectTime(context, index);
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                      child: TextField(
-                        controller: _timeControllers[index],
-                        readOnly: true,
-                        enabled: false,
-                        decoration: InputDecoration(
-                          labelText: 'Time ${index + 1} (optional)',
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.all(8),
-                        ),
-                      ),
+                    child: MyTextfield(
+                      hintText:
+                          "Dosage ${index + 1}${index == 0 ? '' : ' (optional)'}",
+                      controller: _timeControllers[index],
+                      onChanged: (v) {},
+                      readOnly: true,
+                      enabled: false,
                     ),
                   ),
                 );
               }),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _saveMedication,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                  minimumSize: const Size(double.infinity, 50),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 16,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: const Text(
-                  'Save Medication',
-                  style: TextStyle(fontSize: 18),
-                ),
+              // ElevatedButton(
+              //   onPressed: _saveMedication,
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: Colors.white,
+              //     foregroundColor: Colors.black,
+              //     minimumSize: const Size(double.infinity, 50),
+              //     padding: const EdgeInsets.symmetric(
+              //       horizontal: 30,
+              //       vertical: 16,
+              //     ),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(16),
+              //     ),
+              //   ),
+              //   child: const Text(
+              //     'Add to Schedule',
+              //     style: TextStyle(fontSize: 18),
+              //   ),
+              // ),
+              MyButton(
+                text: "Add to Schedule",
+                enabled: true,
+                onTap: _saveMedication,
+                fontSize: 18,
               ),
               const SizedBox(height: 24),
               Text(
-                'Saved Medications:',
+                'Schedule',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _medications.length,
-                itemBuilder: (context, index) {
-                  final medication = _medications[index];
-                  return Card(
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    child: ListTile(
-                      title: Text(
-                        medication.medicineName,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: 17,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _medications.length,
+                  itemBuilder: (context, index) {
+                    final medication = _medications[index];
+                    return Card(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          title: Text(
+                            medication.medicineName,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                height:
+                                    40, // Fixed height for the scrolling area
+                                child: ListView.separated(
+                                  physics: BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(width: 8),
+                                  itemCount: medication.times.length,
+                                  itemBuilder: (context, index) => Chip(
+                                    label: Text(
+                                      medication.times[index],
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                              size: 30,
+                              color: Color.fromARGB(255, 255, 130, 121),
+                            ),
+                            onPressed: () => _deleteMedication(index),
+                          ),
                         ),
                       ),
-                      subtitle: Text(
-                        'Times: ${medication.times.join(", ")}',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: 15,
-                        ),
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => _deleteMedication(index),
-                      ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ],
           ),

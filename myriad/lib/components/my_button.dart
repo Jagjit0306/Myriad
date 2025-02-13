@@ -4,9 +4,11 @@ class MyButton extends StatelessWidget {
   final String text;
   final bool enabled;
   final void Function()? onTap;
+  final double fontSize;
 
   const MyButton(
       {super.key,
+      this.fontSize = 16,
       required this.text,
       required this.enabled,
       required this.onTap});
@@ -46,7 +48,7 @@ class MyButton extends StatelessWidget {
                         ? Theme.of(context).colorScheme.surface
                         : Theme.of(context).colorScheme.onSecondary,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: fontSize,
                   ),
                 ),
                 Text(
