@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
-import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_image.dart';
 import 'package:myriad/passwords.dart';
 import 'package:http/http.dart' as http;

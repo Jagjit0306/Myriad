@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myriad/database/community.dart';
 import 'package:myriad/components/community_post.dart';
 import 'package:myriad/components/my_chips.dart';
@@ -52,7 +53,8 @@ class _CommunityPageState extends State<CommunityPage> {
           color: Theme.of(context).colorScheme.surface,
         ),
         onPressed: () {
-          Navigator.pushNamed(context, '/new_thread');
+          // Navigator.pushNamed(context, '/new_thread');
+          context.push('/community/new_thread');
         },
       ),
       body: Column(

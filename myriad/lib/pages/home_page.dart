@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myriad/components/my_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatelessWidget {
@@ -76,7 +75,7 @@ class HomePage extends StatelessWidget {
           }
         },
       ),
-      drawer: MyDrawer(),
+      // drawer: MyDrawer(),
     );
   }
 }

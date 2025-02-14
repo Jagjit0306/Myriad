@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myriad/components/logo_component.dart';
 import 'package:myriad/database/user.dart';
 
@@ -165,17 +165,19 @@ class _ManageLoginState extends State<ManageLogin> {
       userDatabase.UserCosmeticSync();
       // Navigate to home or onboarding
       if (onboarding) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/on_boarding',
-          (router) => false,
-        );
+        context.push('/onboarding');
+        // Navigator.pushNamedAndRemoveUntil(
+        //   context,
+        //   '/on_boarding',
+        //   (router) => false,
+        // );
       } else {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/home_page',
-          (router) => false,
-        );
+        // Navigator.pushNamedAndRemoveUntil(
+        //   context,
+        //   '/home_page',
+        //   (router) => false,
+        // );
+        context.push('/home');
       }
     } else {
       bool accountState = await saveUser(widget.email);
