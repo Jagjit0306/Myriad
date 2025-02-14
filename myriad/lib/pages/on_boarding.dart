@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myriad/components/logo_component.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_textfield.dart';
@@ -158,11 +159,12 @@ class _OnBoardingState extends State<OnBoarding> {
                   text: 'Lets get started',
                   onTap: () {
                     setPrefs();
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/home_page',
-                      (route) => false,
-                    );
+                    // Navigator.pushNamedAndRemoveUntil(
+                    //   context,
+                    //   '/home_page',
+                    //   (route) => false,
+                    // );
+                    context.push('/home');
                   },
                   enabled: isUsernameUnique && anyPrefSelected(),
                 ),
