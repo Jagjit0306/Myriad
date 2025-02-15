@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myriad/components/my_app_bar.dart';
 import 'package:myriad/models/destination.dart';
 
 class LayoutScaffold extends StatelessWidget {

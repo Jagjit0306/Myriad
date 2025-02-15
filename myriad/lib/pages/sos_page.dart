@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:myriad/components/my_app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -128,7 +129,8 @@ class _SosPageState extends State<SosPage> {
       if (mounted) {
         setState(() {
           if (hospitalsResponse.results.isNotEmpty) {
-            _getPlaceDetails(hospitalsResponse.results.first.placeId, 'Hospital');
+            _getPlaceDetails(
+                hospitalsResponse.results.first.placeId, 'Hospital');
             distances['Hospital'] = _calculateDistance(
               _currentPosition!.latitude,
               _currentPosition!.longitude,
@@ -138,7 +140,8 @@ class _SosPageState extends State<SosPage> {
           }
 
           if (fireStationsResponse.results.isNotEmpty) {
-            _getPlaceDetails(fireStationsResponse.results.first.placeId, 'Fire Station');
+            _getPlaceDetails(
+                fireStationsResponse.results.first.placeId, 'Fire Station');
             distances['Fire Station'] = _calculateDistance(
               _currentPosition!.latitude,
               _currentPosition!.longitude,
@@ -148,7 +151,8 @@ class _SosPageState extends State<SosPage> {
           }
 
           if (policeStationsResponse.results.isNotEmpty) {
-            _getPlaceDetails(policeStationsResponse.results.first.placeId, 'Police Station');
+            _getPlaceDetails(
+                policeStationsResponse.results.first.placeId, 'Police Station');
             distances['Police Station'] = _calculateDistance(
               _currentPosition!.latitude,
               _currentPosition!.longitude,
@@ -183,7 +187,8 @@ class _SosPageState extends State<SosPage> {
   Future<void> _openMapsWithDestination(String serviceType) async {
     if (_currentPosition == null || emergencyServices[serviceType] == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Location information not available yet.')),
+        const SnackBar(
+            content: Text('Location information not available yet.')),
       );
       return;
     }
@@ -258,12 +263,13 @@ class _SosPageState extends State<SosPage> {
     }
   }
 
-  double _calculateDistance(double startLat, double startLng, double endLat, double endLng) {
+  double _calculateDistance(
+      double startLat, double startLng, double endLat, double endLng) {
     return Geolocator.distanceBetween(startLat, startLng, endLat, endLng);
   }
 
   String _formatDistance(double distance) {
-    if (distance == double.infinity) return "Calculating...";
+    if (distance == double.infinity) return "...";
     if (distance < 1000) {
       return "${distance.round()}m";
     } else {
@@ -275,48 +281,7 @@ class _SosPageState extends State<SosPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Builder(
-              builder: (context) {
-                final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-                final assetPath = isDarkMode
-                    ? 'assets/logo_dark.svg'
-                    : 'assets/logo_light.svg';
-                return SvgPicture.asset(
-                  assetPath,
-                  height: 50,
-                  placeholderBuilder: (BuildContext context) => Container(
-                    height: 50,
-                    width: 50,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                  semanticsLabel: 'Logo',
-                );
-              },
-            ),
-            const SizedBox(width: 10),
-            Text(
-              "x",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: 28,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Icon(
-              Icons.notification_important,
-              color: Theme.of(context).colorScheme.inversePrimary,
-              size: 50,
-            ),
-            const SizedBox(width: 70),
-          ],
-        ),
-      ),
+      appBar: MyAppBar(title: 'SOS'),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -394,7 +359,7 @@ class _SosPageState extends State<SosPage> {
   Widget _buildDistanceCard(
       BuildContext context, String title, IconData icon, String distance) {
     String serviceType = title.replaceAll('\n', ' ').trim();
-    
+
     return GestureDetector(
       onTap: () => _openMapsWithDestination(serviceType),
       child: Container(

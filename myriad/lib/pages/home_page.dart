@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myriad/components/my_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatelessWidget {
@@ -25,10 +26,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Myriad"),
-      ),
+      appBar: MyAppBar(title: 'Myriad'),
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: getUser(),
         builder: (context, snapshot) {

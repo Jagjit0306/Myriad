@@ -15,7 +15,7 @@ class LogoComponent extends StatelessWidget {
         return SvgPicture.asset(
           assetPath,
           height: size,
-          placeholderBuilder: (BuildContext context) => Container(
+          placeholderBuilder: (BuildContext context) => SizedBox(
             height: size,
             width: size,
             child: const Center(

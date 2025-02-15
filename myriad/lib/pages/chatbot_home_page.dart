@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:myriad/components/banner_1.dart';
+import 'package:myriad/components/my_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatbotHomePage extends StatefulWidget {
@@ -162,9 +163,8 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("My AI - Eva"),
+      appBar: MyAppBar(
+        title: "My AI - Eva",
         actions: [
           PopupMenuButton(
             color: Theme.of(context).colorScheme.onSecondaryContainer, // Set the background color to red

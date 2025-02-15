@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:myriad/components/logo_component.dart';
 
 class Banner1 extends StatelessWidget {

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SerenifyPage extends StatefulWidget {
   const SerenifyPage({super.key});
@@ -111,7 +112,7 @@ class SerenifySubWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(context, link),
+        onTap: () => context.push(link),
         child: Container(
           width: double.infinity,
           height: double.infinity,
@@ -123,7 +124,6 @@ class SerenifySubWidget extends StatelessWidget {
             border: Border.all(color: Colors.black, width: 1),
             borderRadius: BorderRadius.circular(20),
           ),
-          // child: const Text('heyy'),
         ),
       ),
     );

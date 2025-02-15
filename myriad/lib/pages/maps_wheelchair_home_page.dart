@@ -19,7 +19,7 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
   late GoogleMapController mapController;
   LatLng _center = const LatLng(45.521563, -122.677433); // Default location
   final GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: MAPS_API_KEY);
-  Set<Marker> _markers = {}; // Dynamic marker set
+  // Set<Marker> _markers = {}; // Dynamic marker set
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
     mapController = controller;
   }
 
-  void BottomModal(BuildContext context, PlacesSearchResult place) {
+  void bottomModal(BuildContext context, PlacesSearchResult place) {
     showModalBottomSheet(
       context: context,
       barrierColor: const Color.fromARGB(134, 0, 0, 0),
@@ -136,7 +136,7 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
                   return ListTile(
                     onTap: () {
                       Navigator.pop(context);
-                      BottomModal(context, eachPlace);
+                      bottomModal(context, eachPlace);
                     },
                     title: Text(eachPlace.name),
                   );
@@ -160,7 +160,7 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
       ),
       body: GoogleMap(
         onMapCreated: _onMapCreated,
-        markers: _markers,
+        // markers: _markers,
         initialCameraPosition: CameraPosition(target: _center, zoom: 11),
         onTap: _onTap,
       ),
@@ -196,7 +196,7 @@ class _WheelchairRequestSectionState extends State<WheelchairRequestSection> {
   Future<void> _fetchPlaceData() async {
     try {
       final response = await fetchRequestGET(
-          "https://maps.googleapis.com/maps/api/place/details/json?place_id=${widget.placeId}&fields=name%2Crating%2Cwheelchair_accessible_entrance&key=${MAPS_API_KEY}");
+          "https://maps.googleapis.com/maps/api/place/details/json?place_id=${widget.placeId}&fields=name%2Crating%2Cwheelchair_accessible_entrance&key=$MAPS_API_KEY");
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
         final Map<String, dynamic> responseBody =
@@ -219,7 +219,7 @@ class _WheelchairRequestSectionState extends State<WheelchairRequestSection> {
     }
   }
 
-  @override
+  // @override
   Widget _build(BuildContext context) {
     return Column(
       children: [

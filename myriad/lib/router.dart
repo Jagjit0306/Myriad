@@ -13,6 +13,8 @@ import 'package:myriad/pages/home_page.dart';
 import 'package:myriad/pages/maps_wheelchair_home_page.dart';
 import 'package:myriad/pages/medication_page.dart';
 import 'package:myriad/pages/on_boarding.dart';
+import 'package:myriad/pages/serenify_breathe_page.dart';
+import 'package:myriad/pages/serenify_meditate_page.dart';
 import 'package:myriad/pages/serenify_page.dart';
 import 'package:myriad/pages/sightify_page.dart';
 import 'package:myriad/pages/sos_page.dart';
@@ -37,6 +39,14 @@ final router = GoRouter(
     GoRoute(
       path: '/onboarding',
       builder: (context, state) => const OnBoarding(),
+    ),
+    GoRoute(
+      path: '/serenify_meditate',
+      builder: (context, state) => const SerenifyMeditatePage(),
+    ),
+    GoRoute(
+      path: '/serenify_breathe',
+      builder: (context, state) => const SerenifyBreathePage(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => LayoutScaffold(

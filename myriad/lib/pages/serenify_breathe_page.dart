@@ -8,7 +8,7 @@ class SerenifyBreathePage extends StatefulWidget {
   const SerenifyBreathePage({super.key});
 
   @override
-  _SerenifyBreathePageState createState() => _SerenifyBreathePageState();
+  State<SerenifyBreathePage> createState() => _SerenifyBreathePageState();
 }
 
 class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
@@ -226,9 +226,9 @@ class _SerenifyBreathePageState extends State<SerenifyBreathePage> {
 }
 
 class SerenifyRoundButton extends StatelessWidget {
-  Widget child;
-  VoidCallback onPressed;
-  SerenifyRoundButton(
+  final Widget child;
+  final VoidCallback onPressed;
+  const SerenifyRoundButton(
       {super.key, required this.child, required this.onPressed});
 
   @override

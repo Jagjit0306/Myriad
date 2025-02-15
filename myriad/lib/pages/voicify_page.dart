@@ -123,7 +123,7 @@ class _VoicifyPageState extends State<VoicifyPage> {
 
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
-      _lastWords = "${_lastWords}${result.recognizedWords} ";
+      _lastWords = "$_lastWords${result.recognizedWords} ";
       _textController.text = _lastWords;
 
       if (result.recognizedWords.isNotEmpty) {

@@ -72,7 +72,7 @@ class Extras extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => context.push('/extras/Voicify'),
+                  onTap: () => context.push('/extras/voicify'),
                   child: const Card(
                     child: Text("Voicify"),
                   ),
