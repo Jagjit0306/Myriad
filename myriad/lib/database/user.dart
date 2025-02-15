@@ -5,7 +5,7 @@ class UserDatabase {
   final CollectionReference users =
       FirebaseFirestore.instance.collection("Users");
 
-  Future<void> UserCosmeticSync() async {
+  Future<void> userCosmeticSync() async {
     final user = await users
         .where("email", isEqualTo: FirebaseAuth.instance.currentUser?.email)
         .get();
@@ -15,5 +15,15 @@ class UserDatabase {
         "profileLink": FirebaseAuth.instance.currentUser!.photoURL,
       });
     }
+  }
+
+  Future<String?> getGuardianNumber() async {
+    final QuerySnapshot user = await users
+        .where("email", isEqualTo: FirebaseAuth.instance.currentUser?.email)
+        .get();
+    if (user.docs.isNotEmpty) {
+      return user.docs.first['guardianPhone'];
+    }
+    return null;
   }
 }
