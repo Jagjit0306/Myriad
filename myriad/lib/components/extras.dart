@@ -78,6 +78,12 @@ class Extras extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
+                  onTap: () => context.push('/onboarding'),
+                  child: const Card(
+                    child: Text("Onboarding"),
+                  ),
+                ),
+                GestureDetector(
                   onTap: () {
                     signOutFromGoogle();
                     context.push("/auth");

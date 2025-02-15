@@ -37,30 +37,5 @@ class MainApp extends StatelessWidget {
       theme: lightMode,
       darkTheme: darkMode,
     );
-    // return MaterialApp(
-    //   title: 'Myriad',
-    //   theme: lightMode,
-    //   darkTheme: darkMode,
-    //   home: AuthPage(),
-    //   routes: {
-    //     '/home_page': (context) => HomePage(),
-    //     '/on_boarding': (context) => OnBoarding(),
-    //     '/community_page': (context) => CommunityPage(),
-    //     '/new_thread': (context) => CommunityNewPost(),
-    //     '/gemini_chat': (context) => ChatbotHomePage(),
-    //     '/wheelchair_map': (context) => MapsWheelchairHomePage(),
-    //     '/sos_page': (context) => SosPage(),
-    //     '/hearify': (context) => HearifyPage(),
-    //     '/speakify': (context) => SpeakifyPage(),
-    //     '/voicify': (context) => VoicifyPage(),
-    //     '/sightify': (context) => SightifyPage(),
-    //     '/vibraillify': (context) => const VibraillifyPage(),
-    //     '/serenify': (context) => const SerenifyPage(),
-    //     '/serenify_meditate': (context) => const SerenifyMeditatePage(),
-    //     '/serenify_breathe': (context) => const SerenifyBreathePage(),
-    //     '/colorify': (context) => const ColorifyPage(),
-    //     '/medication': (context) => const MedicationPage(),
-    //   },
-    // );
   }
 }

@@ -7,12 +7,14 @@ import 'package:myriad/database/community.dart';
 import 'package:myriad/components/community_comment.dart';
 
 class CommunityThread extends StatelessWidget {
-  final String title;
   final String postId;
   final String op;
 
-  CommunityThread(
-      {super.key, required this.title, required this.postId, required this.op});
+  CommunityThread({
+    super.key,
+    required this.postId,
+    required this.op,
+  });
 
   final CommunityDatabase communityDatabase = CommunityDatabase();
 
@@ -38,7 +40,8 @@ class CommunityThread extends StatelessWidget {
                 stream: communityDatabase.getCommunityCommentsStream(postId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const Center(
+                        child: CircularProgressIndicator.adaptive());
                   } else if (snapshot.hasData) {
                     List allCommunityPostComments = snapshot.data!.docs;
                     return ListView.builder(

@@ -30,7 +30,6 @@ class CommunityPost extends StatelessWidget {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
               return CommunityThread(
-                title: data['title'],
                 postId: postId,
                 op: data['op'],
               );
