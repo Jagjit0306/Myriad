@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:myriad/passwords.dart';
+import 'package:map_launcher/map_launcher.dart';
 
 class SosPage extends StatefulWidget {
   const SosPage({super.key});
@@ -17,6 +18,11 @@ class SosPage extends StatefulWidget {
 class _SosPageState extends State<SosPage> {
   Position? _currentPosition;
   final GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: MAPS_API_KEY);
+  Map<String, PlaceDetails?> emergencyServices = {
+    'Hospital': null,
+    'Fire Station': null,
+    'Police Station': null,
+  };
   Map<String, double> distances = {
     'Hospital': double.infinity,
     'Fire Station': double.infinity,
@@ -122,6 +128,7 @@ class _SosPageState extends State<SosPage> {
       if (mounted) {
         setState(() {
           if (hospitalsResponse.results.isNotEmpty) {
+            _getPlaceDetails(hospitalsResponse.results.first.placeId, 'Hospital');
             distances['Hospital'] = _calculateDistance(
               _currentPosition!.latitude,
               _currentPosition!.longitude,
@@ -131,6 +138,7 @@ class _SosPageState extends State<SosPage> {
           }
 
           if (fireStationsResponse.results.isNotEmpty) {
+            _getPlaceDetails(fireStationsResponse.results.first.placeId, 'Fire Station');
             distances['Fire Station'] = _calculateDistance(
               _currentPosition!.latitude,
               _currentPosition!.longitude,
@@ -140,6 +148,7 @@ class _SosPageState extends State<SosPage> {
           }
 
           if (policeStationsResponse.results.isNotEmpty) {
+            _getPlaceDetails(policeStationsResponse.results.first.placeId, 'Police Station');
             distances['Police Station'] = _calculateDistance(
               _currentPosition!.latitude,
               _currentPosition!.longitude,
@@ -155,6 +164,97 @@ class _SosPageState extends State<SosPage> {
           SnackBar(content: Text('Error finding emergency services: $e')),
         );
       }
+    }
+  }
+
+  Future<void> _getPlaceDetails(String placeId, String serviceType) async {
+    try {
+      final response = await _places.getDetailsByPlaceId(placeId);
+      if (mounted && response.status == "OK") {
+        setState(() {
+          emergencyServices[serviceType] = response.result;
+        });
+      }
+    } catch (e) {
+      print('Error getting place details: $e');
+    }
+  }
+
+  Future<void> _openMapsWithDestination(String serviceType) async {
+    if (_currentPosition == null || emergencyServices[serviceType] == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Location information not available yet.')),
+      );
+      return;
+    }
+
+    final place = emergencyServices[serviceType]!;
+    final availableMaps = await MapLauncher.installedMaps;
+
+    if (availableMaps.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No map apps found on device.')),
+      );
+      return;
+    }
+
+    if (availableMaps.length == 1) {
+      await availableMaps.first.showDirections(
+        destination: Coords(
+          place.geometry!.location.lat,
+          place.geometry!.location.lng,
+        ),
+        destinationTitle: place.name,
+        origin: Coords(
+          _currentPosition!.latitude,
+          _currentPosition!.longitude,
+        ),
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      'Open with:',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  ...availableMaps.map(
+                    (map) => ListTile(
+                      onTap: () {
+                        map.showDirections(
+                          destination: Coords(
+                            place.geometry!.location.lat,
+                            place.geometry!.location.lng,
+                          ),
+                          destinationTitle: place.name,
+                          origin: Coords(
+                            _currentPosition!.latitude,
+                            _currentPosition!.longitude,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      },
+                      title: Text(map.mapName),
+                      leading: Image(
+                        image: NetworkImage(map.icon),
+                        width: 32,
+                        height: 32,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
     }
   }
 
@@ -277,10 +377,6 @@ class _SosPageState extends State<SosPage> {
                   children: [
                     _buildEmergencyOption(
                         context, "Ambulance", Icons.medical_services),
-                    _buildEmergencyOption(
-                        context, "Fire Station", Icons.local_fire_department),
-                    _buildEmergencyOption(
-                        context, "Access Wheels", Icons.location_on),
                     _buildEmergencyOption(context, "Guardian", Icons.phone),
                     _buildEmergencyOption(
                         context, "SOS", Icons.notification_important),
@@ -297,42 +393,47 @@ class _SosPageState extends State<SosPage> {
 
   Widget _buildDistanceCard(
       BuildContext context, String title, IconData icon, String distance) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.inversePrimary,
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
+    String serviceType = title.replaceAll('\n', ' ').trim();
+    
+    return GestureDetector(
+      onTap: () => _openMapsWithDestination(serviceType),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border.all(
             color: Theme.of(context).colorScheme.inversePrimary,
-            size: 30,
+            width: 1,
           ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
               color: Theme.of(context).colorScheme.inversePrimary,
-              fontSize: 16,
+              size: 30,
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            distance,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.inversePrimary,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
+            const SizedBox(height: 8),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontSize: 16,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(
+              distance,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
