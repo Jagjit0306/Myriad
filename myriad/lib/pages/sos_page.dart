@@ -3,9 +3,173 @@ import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:myriad/passwords.dart';
 
-class SosPage extends StatelessWidget {
+class SosPage extends StatefulWidget {
   const SosPage({super.key});
+
+  @override
+  State<SosPage> createState() => _SosPageState();
+}
+
+class _SosPageState extends State<SosPage> {
+  Position? _currentPosition;
+  final GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: MAPS_API_KEY);
+  Map<String, double> distances = {
+    'Hospital': double.infinity,
+    'Fire Station': double.infinity,
+    'Police Station': double.infinity,
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Location services are disabled.')),
+        );
+      }
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied.')),
+          );
+        }
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Location permissions are permanently denied.'),
+          ),
+        );
+      }
+      return;
+    }
+
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      if (mounted) {
+        setState(() {
+          _currentPosition = position;
+        });
+        _findNearbyEmergencyServices();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error getting location: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _findNearbyEmergencyServices() async {
+    if (_currentPosition == null) return;
+
+    final location = Location(
+      lat: _currentPosition!.latitude,
+      lng: _currentPosition!.longitude,
+    );
+
+    try {
+      // Search for hospitals
+      final hospitalsResponse = await _places.searchNearbyWithRankBy(
+        location,
+        "distance",
+        type: "hospital",
+        keyword: "hospital",
+      );
+
+      // Search for fire stations
+      final fireStationsResponse = await _places.searchNearbyWithRankBy(
+        location,
+        "distance",
+        type: "fire_station",
+        keyword: "fire station",
+      );
+
+      // Search for police stations
+      final policeStationsResponse = await _places.searchNearbyWithRankBy(
+        location,
+        "distance",
+        type: "police",
+        keyword: "police station",
+      );
+
+      if (mounted) {
+        setState(() {
+          if (hospitalsResponse.results.isNotEmpty) {
+            distances['Hospital'] = _calculateDistance(
+              _currentPosition!.latitude,
+              _currentPosition!.longitude,
+              hospitalsResponse.results.first.geometry!.location.lat,
+              hospitalsResponse.results.first.geometry!.location.lng,
+            );
+          }
+
+          if (fireStationsResponse.results.isNotEmpty) {
+            distances['Fire Station'] = _calculateDistance(
+              _currentPosition!.latitude,
+              _currentPosition!.longitude,
+              fireStationsResponse.results.first.geometry!.location.lat,
+              fireStationsResponse.results.first.geometry!.location.lng,
+            );
+          }
+
+          if (policeStationsResponse.results.isNotEmpty) {
+            distances['Police Station'] = _calculateDistance(
+              _currentPosition!.latitude,
+              _currentPosition!.longitude,
+              policeStationsResponse.results.first.geometry!.location.lat,
+              policeStationsResponse.results.first.geometry!.location.lng,
+            );
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error finding emergency services: $e')),
+        );
+      }
+    }
+  }
+
+  double _calculateDistance(double startLat, double startLng, double endLat, double endLng) {
+    return Geolocator.distanceBetween(startLat, startLng, endLat, endLng);
+  }
+
+  String _formatDistance(double distance) {
+    if (distance == double.infinity) return "Calculating...";
+    if (distance < 1000) {
+      return "${distance.round()}m";
+    } else {
+      return "${(distance / 1000).toStringAsFixed(1)}km";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +181,7 @@ class SosPage extends StatelessWidget {
           children: [
             Builder(
               builder: (context) {
-                final isDarkMode =
-                    Theme.of(context).brightness == Brightness.dark;
+                final isDarkMode = Theme.of(context).brightness == Brightness.dark;
                 final assetPath = isDarkMode
                     ? 'assets/logo_dark.svg'
                     : 'assets/logo_light.svg';
@@ -70,23 +233,35 @@ class SosPage extends StatelessWidget {
                         height: 130,
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: _buildDistanceCard(
-                            context, "Hospital", Icons.local_hospital, "26m"),
+                          context,
+                          "Hospital",
+                          Icons.local_hospital,
+                          _formatDistance(distances['Hospital']!),
+                        ),
                       ),
                     ),
                     Expanded(
                       child: Container(
                         height: 130,
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: _buildDistanceCard(context, "Fire\nStation",
-                            Icons.local_fire_department, "26m"),
+                        child: _buildDistanceCard(
+                          context,
+                          "Fire\nStation",
+                          Icons.local_fire_department,
+                          _formatDistance(distances['Fire Station']!),
+                        ),
                       ),
                     ),
                     Expanded(
                       child: Container(
                         height: 130,
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: _buildDistanceCard(context, "Police\nStation",
-                            Icons.local_police, "26m"),
+                        child: _buildDistanceCard(
+                          context,
+                          "Police\nStation",
+                          Icons.local_police,
+                          _formatDistance(distances['Police Station']!),
+                        ),
                       ),
                     ),
                   ],
@@ -279,8 +454,7 @@ class _ScreamButtonState extends State<_ScreamButton> {
         _isPlaying = false;
       });
     } else {
-      await _audioPlayer
-          .stop(); // Stop any previous playback to avoid conflicts
+      await _audioPlayer.stop();
       await _audioPlayer.setSource(AssetSource('scream.mp3'));
       await _audioPlayer.setVolume(1.0);
       await _audioPlayer.resume();
