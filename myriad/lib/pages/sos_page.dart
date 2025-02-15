@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myriad/components/my_app_bar.dart';
+import 'package:myriad/database/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,9 @@ class SosPage extends StatefulWidget {
 }
 
 class _SosPageState extends State<SosPage> {
+  final UserDatabase userDatabase = UserDatabase();
+
+  String guardianNumber = "";
   Position? _currentPosition;
   final GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: MAPS_API_KEY);
   Map<String, PlaceDetails?> emergencyServices = {
@@ -34,6 +38,16 @@ class _SosPageState extends State<SosPage> {
   void initState() {
     super.initState();
     _getCurrentLocation();
+    _getGuardianNumber();
+  }
+
+  Future<void> _getGuardianNumber() async {
+    String? temp = await userDatabase.getGuardianNumber();
+    if (temp!.isNotEmpty) {
+      setState(() {
+        guardianNumber = temp;
+      });
+    }
   }
 
   Future<void> _getCurrentLocation() async {
@@ -408,8 +422,7 @@ class _SosPageState extends State<SosPage> {
     return GestureDetector(
       onTap: () async {
         if (title == "Guardian") {
-          String? guardianNumber = await _fetchGuardianNumber();
-          if (guardianNumber != null) {
+          if (guardianNumber.isNotEmpty) {
             _launchDialer(guardianNumber);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -448,11 +461,6 @@ class _SosPageState extends State<SosPage> {
         ),
       ),
     );
-  }
-
-  Future<String?> _fetchGuardianNumber() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('guardianPhone');
   }
 
   void _launchDialer(String number) async {

@@ -162,7 +162,7 @@ class _ManageLoginState extends State<ManageLogin> {
 
   Future<void> managePage(BuildContext context) async {
     if (completed) {
-      userDatabase.UserCosmeticSync();
+      userDatabase.userCosmeticSync();
       // Navigate to home or onboarding
       if (onboarding) {
         context.push('/onboarding');
