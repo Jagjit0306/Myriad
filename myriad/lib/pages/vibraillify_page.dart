@@ -200,6 +200,46 @@ class _VibraillifyPageState extends State<VibraillifyPage> {
               currentUser: _currentUser,
               messages: messages,
               onSend: (ChatMessage message) {},
+              scrollToBottomOptions: ScrollToBottomOptions(
+                scrollToBottomBuilder: (scrollController) {
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .inversePrimary, // White bubble
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 4,
+                              offset: Offset(2, 2), // Shadow effect
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_downward, // Change the icon if needed
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surface, // Black icon
+                          ),
+                          onPressed: () {
+                            scrollController.animateTo(
+                              scrollController.position.minScrollExtent,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeOut,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
               messageOptions: MessageOptions(
                 onPressMessage: (m) => activateVibraille(m.text),
                 currentUserContainerColor:
