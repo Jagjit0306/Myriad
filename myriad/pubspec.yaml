@@ -35,6 +35,7 @@ dependencies:
   flutter_native_splash: ^2.4.4
   go_router: ^14.8.0
   map_launcher: ^3.5.0
+  syncfusion_flutter_charts: ^28.2.5+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
