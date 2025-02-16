@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:myriad/components/banner_1.dart';
+import 'package:myriad/helper/isolate_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:myriad/themes/light_mode.dart'; // Import your theme file
 
 class SpeakifyPage extends StatefulWidget {
   const SpeakifyPage({super.key});
@@ -31,11 +32,6 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
     await _flutterTts.speak(text);
   }
 
-//   Future<void> _checkAvailableLanguages() async {
-//     var languages = await _flutterTts.getLanguages;
-//     print("Available languages: $languages");
-//   }
-
   @override
   void initState() {
     super.initState();
@@ -43,26 +39,33 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
   }
 
   Future<void> _getChats() async {
-    SharedPreferences localPrefs = await SharedPreferences.getInstance();
-    String dataString = localPrefs.getString("speakify_chats") ?? "";
-    if (dataString.isNotEmpty) {
-      final decodedJson = jsonDecode(dataString) as List;
-      final castedList = decodedJson.cast<Map<String, dynamic>>();
-      List<ChatMessage> chatData =
-          castedList.map((e) => ChatMessage.fromJson(e)).toList();
-      // final listSize = chatData.length;
-      if (chatData.length > 50) {
-        chatData = chatData.sublist(0, 50); //only 50 recent chats are saved
+    try {
+      SharedPreferences localPrefs = await SharedPreferences.getInstance();
+      String dataString = localPrefs.getString("speakify_chats") ?? "";
+
+      // Process data in isolate
+      final List<ChatMessage> chatData = await compute(
+        processChatMessages,
+        ChatData(dataString),
+      );
+
+      if (mounted) {
+        setState(() {
+          messages = chatData;
+        });
       }
-      setState(() {
-        messages = chatData;
-      });
+    } catch (e) {
+      print('Error loading chats: $e');
     }
   }
 
   Future<void> _saveChats() async {
-    SharedPreferences localPrefs = await SharedPreferences.getInstance();
-    localPrefs.setString('speakify_chats', jsonEncode(messages));
+    try {
+      SharedPreferences localPrefs = await SharedPreferences.getInstance();
+      await localPrefs.setString('speakify_chats', jsonEncode(messages));
+    } catch (e) {
+      print('Error saving chats: $e');
+    }
   }
 
   Future<void> _clearChats() async {
@@ -79,7 +82,7 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
     _speak(newMessage.text);
     _saveChats();
   }
-  
+
   @override
   void dispose() {
     _flutterTts.stop();
@@ -115,7 +118,10 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
       ),
       body: Column(
         children: [
-          if (messages.isEmpty) Banner1(bannerIcon: Icons.record_voice_over,),
+          if (messages.isEmpty)
+            Banner1(
+              bannerIcon: Icons.record_voice_over,
+            ),
           Expanded(
             child: DashChat(
               currentUser: currentUser,
@@ -124,7 +130,8 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
               messageOptions: MessageOptions(
                 currentUserContainerColor:
                     Theme.of(context).colorScheme.inversePrimary,
-                containerColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                containerColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
                 textColor: Theme.of(context).colorScheme.inversePrimary,
                 currentUserTextColor: Theme.of(context).colorScheme.surface,
                 onPressMessage: (p0) {

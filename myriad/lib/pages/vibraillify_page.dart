@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:myriad/components/banner_1.dart';
+import 'package:myriad/helper/isolate_functions.dart';
 import 'package:myriad/helper/vibraille_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -126,25 +128,33 @@ class _VibraillifyPageState extends State<VibraillifyPage> {
   }
 
   Future<void> _getChats() async {
-    SharedPreferences localPrefs = await SharedPreferences.getInstance();
-    String dataString = localPrefs.getString("vibraillify_chats") ?? "";
-    if (dataString.isNotEmpty) {
-      final decodedJson = jsonDecode(dataString) as List;
-      final castedList = decodedJson.cast<Map<String, dynamic>>();
-      List<ChatMessage> chatData =
-          castedList.map((e) => ChatMessage.fromJson(e)).toList();
-      if (chatData.length > 50) {
-        chatData = chatData.sublist(0, 50); //only 50 recent chats are saved
+    try {
+      SharedPreferences localPrefs = await SharedPreferences.getInstance();
+      String dataString = localPrefs.getString("vibraillify_chats") ?? "";
+
+      // Process data in isolate
+      final List<ChatMessage> chatData = await compute(
+        processChatMessages,
+        ChatData(dataString),
+      );
+
+      if (mounted) {
+        setState(() {
+          messages = chatData;
+        });
       }
-      setState(() {
-        messages = chatData;
-      });
+    } catch (e) {
+      print('Error loading chats: $e');
     }
   }
 
   Future<void> _saveChats() async {
-    SharedPreferences localPrefs = await SharedPreferences.getInstance();
-    localPrefs.setString('vibraillify_chats', jsonEncode(messages));
+    try {
+      SharedPreferences localPrefs = await SharedPreferences.getInstance();
+      await localPrefs.setString('vibraillify_chats', jsonEncode(messages));
+    } catch (e) {
+      print('Error saving chats: $e');
+    }
   }
 
   Future<void> _clearChats() async {
@@ -194,7 +204,8 @@ class _VibraillifyPageState extends State<VibraillifyPage> {
                 onPressMessage: (m) => activateVibraille(m.text),
                 currentUserContainerColor:
                     Theme.of(context).colorScheme.inversePrimary,
-                containerColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                containerColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
                 textColor: Theme.of(context).colorScheme.inversePrimary,
                 currentUserTextColor: Theme.of(context).colorScheme.surface,
                 showCurrentUserAvatar: true,
