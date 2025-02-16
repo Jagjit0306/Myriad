@@ -16,7 +16,7 @@ class LayoutScaffold extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
         onDestinationSelected: navigationShell.goBranch,
-        indicatorColor: Colors.blue[300],
+        indicatorColor: Theme.of(context).colorScheme.primary,
         animationDuration: Duration(seconds: 1),
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         destinations: destinations
