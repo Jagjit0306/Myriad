@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:myriad/components/my_app_bar.dart';
 import 'package:myriad/database/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:myriad/passwords.dart';
@@ -428,7 +426,7 @@ class _SosPageState extends State<SosPage> {
           _launchDialer("112");
         } else if (title == "Ambulance") {
           _launchDialer("102");
-        } 
+        }
       },
       child: Container(
         decoration: BoxDecoration(
@@ -528,6 +526,7 @@ class _ScreamButtonState extends State<_ScreamButton> {
       await _audioPlayer.stop();
       await _audioPlayer.setSource(AssetSource('scream.mp3'));
       await _audioPlayer.setVolume(1.0);
+      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
       await _audioPlayer.resume();
       setState(() {
         _isPlaying = true;
