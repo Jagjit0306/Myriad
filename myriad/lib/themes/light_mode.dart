@@ -7,7 +7,7 @@ ThemeData lightMode = ThemeData(
     surface: Colors.grey.shade300,
     primary: Colors.grey.shade500,
     secondary: Colors.grey.shade200,
-    onSecondary: Colors.grey.shade500,
+    onSecondary: Colors.grey.shade600,
     onSecondaryContainer: const Color.fromARGB(255, 207, 207, 207),
     inversePrimary: Colors.black,
   ),

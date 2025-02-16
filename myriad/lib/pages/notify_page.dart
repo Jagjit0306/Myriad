@@ -44,27 +44,27 @@ class _NotifyPageState extends State<NotifyPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notify'),
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).colorScheme.surface,
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Medicine Consistency',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.inversePrimary,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Text(
+              Text(
                 '5 Days',
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: Theme.of(context).colorScheme.onSecondary,
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
                 ),
@@ -97,7 +97,7 @@ class _NotifyPageState extends State<NotifyPage> {
                       dataSource: chartData,
                       xValueMapper: (MedicineData data, _) => data.day,
                       yValueMapper: (MedicineData data, _) => data.value,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                       width: 2,
                     ),
                   ],
@@ -105,66 +105,64 @@ class _NotifyPageState extends State<NotifyPage> {
               ),
               const SizedBox(height: 20),
               Center(
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.grey.withOpacity(0.2)),
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Mental Health',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                child: Card(
+                  color: Theme.of(context).colorScheme.secondary,
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Text(
+                          'Mental Health',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            height: 150,
-                            width: 150,
-                            child: CircularProgressIndicator(
-                              value: _mentalHealthScore / 100,
-                              strokeWidth: 12,
-                              backgroundColor: Colors.grey.withOpacity(0.2),
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                  Colors.white),
+                        const SizedBox(height: 10),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              height: 150,
+                              width: 150,
+                              child: CircularProgressIndicator(
+                                value: _mentalHealthScore / 100,
+                                strokeWidth: 12,
+                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Theme.of(context).colorScheme.inversePrimary),
+                              ),
                             ),
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                mentalHealthIsLoading
-                                    ? "- -"
-                                    : _mentalHealthScore.toString(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
+                            Column(
+                              children: [
+                                Text(
+                                  mentalHealthIsLoading
+                                      ? "- -"
+                                      : _mentalHealthScore.toString(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.inversePrimary,
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                mentalHealthIsLoading
-                                    ? "analysing"
-                                    : _getMentalHealthStatus(
-                                        _mentalHealthScore),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
+                                Text(
+                                  mentalHealthIsLoading
+                                      ? "analysing"
+                                      : _getMentalHealthStatus(
+                                          _mentalHealthScore),
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.inversePrimary,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
