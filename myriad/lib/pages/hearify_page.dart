@@ -34,7 +34,8 @@ class _HearifyPageState extends State<HearifyPage> {
   final ChatUser _botUser = ChatUser(
     id: '1',
     firstName: 'Partner',
-    profileImage: "https://cdn.pixabay.com/photo/2012/04/18/00/07/silhouette-of-a-man-36181_640.png",
+    profileImage:
+        "https://cdn.pixabay.com/photo/2012/04/18/00/07/silhouette-of-a-man-36181_640.png",
   );
 
   @override
@@ -191,6 +192,46 @@ class _HearifyPageState extends State<HearifyPage> {
               currentUser: _currentUser,
               messages: messages,
               onSend: (ChatMessage message) {},
+              scrollToBottomOptions: ScrollToBottomOptions(
+                scrollToBottomBuilder: (scrollController) {
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .inversePrimary, // White bubble
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 4,
+                              offset: Offset(2, 2), // Shadow effect
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_downward, // Change the icon if needed
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surface, // Black icon
+                          ),
+                          onPressed: () {
+                            scrollController.animateTo(
+                              scrollController.position.minScrollExtent,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeOut,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
               messageOptions: MessageOptions(
                 currentUserContainerColor:
                     Theme.of(context).colorScheme.inversePrimary,
@@ -206,8 +247,10 @@ class _HearifyPageState extends State<HearifyPage> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: RoundButton(
-              iconColor: _isListening ? Colors.red : Theme.of(context).colorScheme.inversePrimary,
-              icon: _isListening? Icons.mic : Icons.mic_none,
+              iconColor: _isListening
+                  ? Colors.red
+                  : Theme.of(context).colorScheme.inversePrimary,
+              icon: _isListening ? Icons.mic : Icons.mic_none,
               onPressed: _startListening,
             ),
           ),
