@@ -289,75 +289,88 @@ class _SosPageState extends State<SosPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: MyAppBar(title: 'SOS'),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 130,
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: _buildDistanceCard(
-                          context,
-                          "Hospital",
-                          Icons.local_hospital,
-                          _formatDistance(distances['Hospital']!),
-                        ),
-                      ),
+                Expanded(
+                  child: Container(
+                    height: 130,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: _buildDistanceCard(
+                      context,
+                      "Hospital",
+                      Icons.local_hospital,
+                      _formatDistance(distances['Hospital']!),
                     ),
-                    Expanded(
-                      child: Container(
-                        height: 130,
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: _buildDistanceCard(
-                          context,
-                          "Fire\nStation",
-                          Icons.local_fire_department,
-                          _formatDistance(distances['Fire Station']!),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 130,
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: _buildDistanceCard(
-                          context,
-                          "Police\nStation",
-                          Icons.local_police,
-                          _formatDistance(distances['Police Station']!),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                const SizedBox(height: 40),
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 1.5,
-                  children: [
-                    _buildEmergencyOption(
-                        context, "Ambulance", Icons.medical_services),
-                    _buildEmergencyOption(context, "Guardian", Icons.phone),
-                    _buildEmergencyOption(
-                        context, "SOS", Icons.notification_important),
-                    _ScreamButton(),
-                  ],
+                Expanded(
+                  child: Container(
+                    height: 130,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: _buildDistanceCard(
+                      context,
+                      "Fire\nStation",
+                      Icons.local_fire_department,
+                      _formatDistance(distances['Fire Station']!),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: 130,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: _buildDistanceCard(
+                      context,
+                      "Police\nStation",
+                      Icons.local_police,
+                      _formatDistance(distances['Police Station']!),
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
+            const SizedBox(height: 40),
+            Expanded(
+              child: Center(
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 1.5,
+                    children: [
+                      _buildEmergencyOption(
+                        context,
+                        "Ambulance",
+                        Icons.medical_services,
+                      ),
+                      _buildEmergencyOption(
+                        context,
+                        "Guardian",
+                        Icons.phone,
+                      ),
+                      _buildEmergencyOption(
+                        context,
+                        "SOS",
+                        Icons.notification_important,
+                      ),
+                      _ScreamButton(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -373,17 +386,17 @@ class _SosPageState extends State<SosPage> {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Theme.of(context).colorScheme.inversePrimary,
+            color: Theme.of(context).colorScheme.primary,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Icon(
               icon,
-              color: Theme.of(context).colorScheme.inversePrimary,
+              color: Theme.of(context).colorScheme.onSecondary,
               size: 30,
             ),
             const SizedBox(height: 8),
@@ -441,7 +454,7 @@ class _SosPageState extends State<SosPage> {
               Text(
                 title,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.surface,
+                  color: Theme.of(context).colorScheme.primary,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -499,7 +512,7 @@ class _ScreamButtonState extends State<_ScreamButton> {
               Text(
                 "Scream",
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.surface,
+                  color: Theme.of(context).colorScheme.primary,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
