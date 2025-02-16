@@ -49,6 +49,10 @@ final router = GoRouter(
       path: '/serenify_breathe',
       builder: (context, state) => const SerenifyBreathePage(),
     ),
+    GoRoute(
+      path: '/notify',
+      builder: (context, state) => const NotifyPage(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => LayoutScaffold(
         navigationShell: navigationShell,
@@ -90,10 +94,6 @@ final router = GoRouter(
                 GoRoute(
                   path: 'serenify',
                   builder: (context, state) => const SerenifyPage(),
-                ),
-                GoRoute(
-                  path: 'notify',
-                  builder: (context, state) => const NotifyPage(),
                 ),
                 GoRoute(
                   path: 'sightify',
