@@ -12,6 +12,7 @@ class NotifyPage extends StatefulWidget {
 class _NotifyPageState extends State<NotifyPage> {
   final MentalHealthAnalyzer _analyzer = MentalHealthAnalyzer();
   int _mentalHealthScore = 0;
+  bool mentalHealthIsLoading = true;
 
   @override
   void initState() {
@@ -23,8 +24,8 @@ class _NotifyPageState extends State<NotifyPage> {
     final score = await _analyzer.analyzeMentalHealth();
     setState(() {
       _mentalHealthScore = score;
+      mentalHealthIsLoading = false;
     });
-    print(_mentalHealthScore);
   }
 
   @override
@@ -77,7 +78,8 @@ class _NotifyPageState extends State<NotifyPage> {
                     minimum: 10,
                     maximum: 16,
                     interval: 1,
-                    majorGridLines: const MajorGridLines(width: 1, color: Colors.grey),
+                    majorGridLines:
+                        const MajorGridLines(width: 1, color: Colors.grey),
                     axisLine: const AxisLine(width: 0),
                     labelStyle: const TextStyle(color: Colors.grey),
                   ),
@@ -86,7 +88,8 @@ class _NotifyPageState extends State<NotifyPage> {
                     maximum: 5000,
                     interval: 500,
                     axisLine: const AxisLine(width: 0),
-                    majorGridLines: const MajorGridLines(width: 1, color: Colors.grey),
+                    majorGridLines:
+                        const MajorGridLines(width: 1, color: Colors.grey),
                     labelStyle: const TextStyle(color: Colors.grey),
                   ),
                   series: <CartesianSeries>[
@@ -131,13 +134,16 @@ class _NotifyPageState extends State<NotifyPage> {
                               value: _mentalHealthScore / 100,
                               strokeWidth: 12,
                               backgroundColor: Colors.grey.withOpacity(0.2),
-                              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Colors.white),
                             ),
                           ),
                           Column(
                             children: [
                               Text(
-                                _mentalHealthScore.toString(),
+                                mentalHealthIsLoading
+                                    ? "- -"
+                                    : _mentalHealthScore.toString(),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 36,
@@ -145,7 +151,10 @@ class _NotifyPageState extends State<NotifyPage> {
                                 ),
                               ),
                               Text(
-                                _getMentalHealthStatus(_mentalHealthScore),
+                                mentalHealthIsLoading
+                                    ? "analysing"
+                                    : _getMentalHealthStatus(
+                                        _mentalHealthScore),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
