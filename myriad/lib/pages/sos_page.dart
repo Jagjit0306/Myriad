@@ -261,11 +261,6 @@ class _SosPageState extends State<SosPage> {
                         Navigator.pop(context);
                       },
                       title: Text(map.mapName),
-                      leading: Image(
-                        image: NetworkImage(map.icon),
-                        width: 32,
-                        height: 32,
-                      ),
                     ),
                   ),
                 ],
