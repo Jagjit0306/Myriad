@@ -16,14 +16,16 @@ class LayoutScaffold extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
         onDestinationSelected: navigationShell.goBranch,
-        indicatorColor: Colors.pinkAccent,
+        indicatorColor: Colors.blue[300],
+        animationDuration: Duration(seconds: 1),
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         destinations: destinations
             .map(
               (destination) => NavigationDestination(
                 icon: Icon(destination.icon),
                 label: destination.label,
                 selectedIcon: Icon(
-                  destination.icon,
+                  destination.icon2,
                   color: Colors.white,
                 ),
               ),
