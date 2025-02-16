@@ -159,12 +159,7 @@ class _OnBoardingState extends State<OnBoarding> {
                   text: 'Lets get started',
                   onTap: () {
                     setPrefs();
-                    // Navigator.pushNamedAndRemoveUntil(
-                    //   context,
-                    //   '/home_page',
-                    //   (route) => false,
-                    // );
-                    context.push('/home');
+                    context.go('/home');
                   },
                   enabled: isUsernameUnique && anyPrefSelected(),
                 ),
