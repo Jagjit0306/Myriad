@@ -426,7 +426,9 @@ class _SosPageState extends State<SosPage> {
           }
         } else if (title == "SOS") {
           _launchDialer("112");
-        }
+        } else if (title == "Ambulance") {
+          _launchDialer("102");
+        } 
       },
       child: Container(
         decoration: BoxDecoration(

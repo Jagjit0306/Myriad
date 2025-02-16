@@ -12,6 +12,7 @@ import 'package:myriad/pages/hearify_page.dart';
 import 'package:myriad/pages/home_page.dart';
 import 'package:myriad/pages/maps_wheelchair_home_page.dart';
 import 'package:myriad/pages/medication_page.dart';
+import 'package:myriad/pages/notify_page.dart';
 import 'package:myriad/pages/on_boarding.dart';
 import 'package:myriad/pages/serenify_breathe_page.dart';
 import 'package:myriad/pages/serenify_meditate_page.dart';
@@ -89,6 +90,10 @@ final router = GoRouter(
                 GoRoute(
                   path: 'serenify',
                   builder: (context, state) => const SerenifyPage(),
+                ),
+                GoRoute(
+                  path: 'notify',
+                  builder: (context, state) => const NotifyPage(),
                 ),
                 GoRoute(
                   path: 'sightify',
