@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/components/round_button.dart';
+import 'package:myriad/helper/isolate_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart'; // Add this import
@@ -118,25 +120,33 @@ class _HearifyPageState extends State<HearifyPage> {
   }
 
   Future<void> _getChats() async {
-    SharedPreferences localPrefs = await SharedPreferences.getInstance();
-    String dataString = localPrefs.getString("hearify_chats") ?? "";
-    if (dataString.isNotEmpty) {
-      final decodedJson = jsonDecode(dataString) as List;
-      final castedList = decodedJson.cast<Map<String, dynamic>>();
-      List<ChatMessage> chatData =
-          castedList.map((e) => ChatMessage.fromJson(e)).toList();
-      if (chatData.length > 50) {
-        chatData = chatData.sublist(0, 50); //only 50 recent chats are saved
+    try {
+      SharedPreferences localPrefs = await SharedPreferences.getInstance();
+      String dataString = localPrefs.getString("hearify_chats") ?? "";
+
+      // Process data in isolate
+      final List<ChatMessage> chatData = await compute(
+        processChatMessages,
+        ChatData(dataString),
+      );
+
+      if (mounted) {
+        setState(() {
+          messages = chatData;
+        });
       }
-      setState(() {
-        messages = chatData;
-      });
+    } catch (e) {
+      print('Error loading chats: $e');
     }
   }
 
   Future<void> _saveChats() async {
-    SharedPreferences localPrefs = await SharedPreferences.getInstance();
-    localPrefs.setString('hearify_chats', jsonEncode(messages));
+    try {
+      SharedPreferences localPrefs = await SharedPreferences.getInstance();
+      await localPrefs.setString('hearify_chats', jsonEncode(messages));
+    } catch (e) {
+      print('Error saving chats: $e');
+    }
   }
 
   Future<void> _clearChats() async {

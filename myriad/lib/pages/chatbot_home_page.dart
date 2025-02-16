@@ -1,11 +1,12 @@
 import 'dart:convert';
-
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/components/my_app_bar.dart';
+import 'package:myriad/helper/isolate_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatbotHomePage extends StatefulWidget {
@@ -17,9 +18,7 @@ class ChatbotHomePage extends StatefulWidget {
 
 class _ChatbotHomePageState extends State<ChatbotHomePage> {
   final Gemini gemini = Gemini.instance;
-
   List<ChatMessage> messages = [];
-
   String prefs = "";
 
   ChatUser currentUser = ChatUser(
@@ -30,14 +29,12 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
   ChatUser geminiUser = ChatUser(
     firstName: "Eva",
     id: '1',
-    profileImage:
-        "https://i.ibb.co/KxXJNzQM/myriad-AI.png",
+    profileImage: "https://i.ibb.co/KxXJNzQM/myriad-AI.png",
   );
 
   @override
   void initState() {
     super.initState();
-
     _getPrefs();
     _getChats();
   }
@@ -50,26 +47,33 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
   }
 
   Future<void> _getChats() async {
-    SharedPreferences localPrefs = await SharedPreferences.getInstance();
-    String dataString = localPrefs.getString("chats") ?? "";
-    if (dataString.isNotEmpty) {
-      final decodedJson = jsonDecode(dataString) as List;
-      final castedList = decodedJson.cast<Map<String, dynamic>>();
-      List<ChatMessage> chatData =
-          castedList.map((e) => ChatMessage.fromJson(e)).toList();
-      // final listSize = chatData.length;
-      if (chatData.length > 50) {
-        chatData = chatData.sublist(0, 50); //only 50 recent chats are saved
+    try {
+      SharedPreferences localPrefs = await SharedPreferences.getInstance();
+      String dataString = localPrefs.getString("chats") ?? "";
+
+      // Process data in isolate
+      final List<ChatMessage> chatData = await compute(
+        processChatMessages,
+        ChatData(dataString),
+      );
+
+      if (mounted) {
+        setState(() {
+          messages = chatData;
+        });
       }
-      setState(() {
-        messages = chatData;
-      });
+    } catch (e) {
+      print('Error loading chats: $e');
     }
   }
 
   Future<void> _saveChats() async {
-    SharedPreferences localPrefs = await SharedPreferences.getInstance();
-    localPrefs.setString('chats', jsonEncode(messages));
+    try {
+      SharedPreferences localPrefs = await SharedPreferences.getInstance();
+      await localPrefs.setString('chats', jsonEncode(messages));
+    } catch (e) {
+      print('Error saving chats: $e');
+    }
   }
 
   Future<void> _clearChats() async {
@@ -93,7 +97,6 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
       'You are of female gender',
       'You love giving therapy to people and have special interest in helping people with special needs',
       'The user is combating these conditions -> $prefs',
-      // 'Dont mention their condition unnecessarily',   // model denies of any condition when asked.
       "The user's name is ${FirebaseAuth.instance.currentUser?.displayName}",
       "Dont tell the user that this information was provided to you, act natural",
       "Your name is Eva",
@@ -167,7 +170,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
         title: "My AI - Eva",
         actions: [
           PopupMenuButton(
-            color: Theme.of(context).colorScheme.onSecondaryContainer, // Set the background color to red
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
             onSelected: (value) {
               switch (value) {
                 case 'clrcht':
@@ -210,13 +213,10 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
                 ),
                 inputDecoration: InputDecoration(
                   filled: true,
-                  fillColor: Theme.of(context)
-                      .colorScheme
-                      .surface, // Background color of the typing field
+                  fillColor: Theme.of(context).colorScheme.surface,
                   hintText: "Chat with Eva...",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    // borderSide: BorderSide.none,
                   ),
                 ),
                 sendButtonBuilder: (void Function() onSend) {
@@ -229,15 +229,12 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
                         child: Icon(
                           Icons.send_rounded,
                           color: Theme.of(context).colorScheme.inversePrimary,
-                          size: 35, // Icon color
+                          size: 35,
                         ),
                       ),
                     ),
                   );
                 },
-                // inputTextStyle: TextStyle(
-
-                // )
               ),
             ),
           ),
