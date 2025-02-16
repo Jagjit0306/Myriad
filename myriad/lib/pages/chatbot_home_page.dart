@@ -31,7 +31,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
     firstName: "Eva",
     id: '1',
     profileImage:
-        "https://res.cloudinary.com/deysmiqsk/image/upload/v1737875387/Frame_1000002608_b6ulwd.png",
+        "https://i.ibb.co/KxXJNzQM/myriad-AI.png",
   );
 
   @override
