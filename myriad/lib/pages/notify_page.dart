@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:myriad/helper/mental_health.dart';
+import 'package:myriad/helper/medication_response_helper.dart';
+import 'package:myriad/models/medicine_data.dart';
 
 class NotifyPage extends StatefulWidget {
   const NotifyPage({Key? key}) : super(key: key);
@@ -9,15 +11,40 @@ class NotifyPage extends StatefulWidget {
   State<NotifyPage> createState() => _NotifyPageState();
 }
 
-class _NotifyPageState extends State<NotifyPage> {
+class _NotifyPageState extends State<NotifyPage> with WidgetsBindingObserver {
   final MentalHealthAnalyzer _analyzer = MentalHealthAnalyzer();
   int _mentalHealthScore = 0;
   bool mentalHealthIsLoading = true;
+  List<MedicineData> _chartData = [];
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _updateMentalHealthScore();
+    _loadMedicationData();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _loadMedicationData();
+    }
+  }
+
+  Future<void> _loadMedicationData() async {
+    final data = await MedicationResponseHelper.getWeeklyConsistency();
+    setState(() {
+      _chartData = data;
+    });
+    
+    print('Loaded chart data: $_chartData'); // Debugging line
   }
 
   Future<void> _updateMentalHealthScore() async {
@@ -30,17 +57,6 @@ class _NotifyPageState extends State<NotifyPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Sample data for the past 7 days
-    final List<MedicineData> chartData = [
-      MedicineData(10, 4200),
-      MedicineData(11, 4000),
-      MedicineData(12, 4300),
-      MedicineData(13, 4500),
-      MedicineData(14, 4100),
-      MedicineData(15, 4400),
-      MedicineData(16, 4200),
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notify'),
@@ -62,7 +78,7 @@ class _NotifyPageState extends State<NotifyPage> {
                 ),
               ),
               Text(
-                '5 Days',
+                'Last 7 Days',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSecondary,
                   fontSize: 24,
@@ -75,32 +91,38 @@ class _NotifyPageState extends State<NotifyPage> {
                 child: SfCartesianChart(
                   plotAreaBorderWidth: 0,
                   primaryXAxis: NumericAxis(
-                    minimum: 10,
-                    maximum: 16,
+                    minimum: 0,
+                    maximum: 7,
                     interval: 1,
-                    majorGridLines:
-                        const MajorGridLines(width: 1, color: Colors.grey),
-                    axisLine: const AxisLine(width: 0),
+                    majorGridLines: const MajorGridLines(width: 0),
+                    axisLine: const AxisLine(width: 1, color: Colors.grey),
                     labelStyle: const TextStyle(color: Colors.grey),
                   ),
                   primaryYAxis: NumericAxis(
-                    minimum: 3500,
-                    maximum: 5000,
-                    interval: 500,
-                    axisLine: const AxisLine(width: 0),
-                    majorGridLines:
-                        const MajorGridLines(width: 1, color: Colors.grey),
+                    minimum: 0,
+                    maximum: 20,
+                    interval: 2,
+                    axisLine: const AxisLine(width: 1, color: Colors.grey),
+                    majorGridLines: const MajorGridLines(width: 0),
                     labelStyle: const TextStyle(color: Colors.grey),
                   ),
                   series: <CartesianSeries>[
                     SplineSeries<MedicineData, int>(
-                      dataSource: chartData,
+                      dataSource: _chartData,
                       xValueMapper: (MedicineData data, _) => data.day,
                       yValueMapper: (MedicineData data, _) => data.value,
                       color: Theme.of(context).colorScheme.inversePrimary,
                       width: 2,
+                      markerSettings: MarkerSettings(
+                        isVisible: true,
+                        color: Theme.of(context).colorScheme.secondary,
+                        shape: DataMarkerType.circle,
+                        borderColor: Colors.white,
+                        borderWidth: 1,
+                      ),
                     ),
                   ],
+                  tooltipBehavior: TooltipBehavior(enable: true),
                 ),
               ),
               const SizedBox(height: 20),
@@ -149,9 +171,8 @@ class _NotifyPageState extends State<NotifyPage> {
                                 ),
                                 Text(
                                   mentalHealthIsLoading
-                                      ? "analysing"
-                                      : _getMentalHealthStatus(
-                                          _mentalHealthScore),
+                                      ? "Analyzing"
+                                      : _getMentalHealthStatus(_mentalHealthScore),
                                   style: TextStyle(
                                     color: Theme.of(context).colorScheme.inversePrimary,
                                     fontSize: 16,
@@ -180,11 +201,4 @@ class _NotifyPageState extends State<NotifyPage> {
     if (score >= 20) return 'Needs Attention';
     return 'Seek Support';
   }
-}
-
-class MedicineData {
-  final int day;
-  final double value;
-
-  MedicineData(this.day, this.value);
 }

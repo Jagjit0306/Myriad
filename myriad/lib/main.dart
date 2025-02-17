@@ -8,6 +8,10 @@ import 'package:myriad/router.dart';
 import 'package:myriad/themes/dark_mode.dart';
 import 'package:myriad/themes/light_mode.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'dart:convert';
+import 'package:myriad/helper/medication_response_helper.dart';
+import 'package:myriad/models/medication_response.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +25,64 @@ void main() async {
   Gemini.init(
     apiKey: GEMINI_API_KEY,
   );
-  // FallDetectionService();
   tz.initializeTimeZones();
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  // Define the notification actions for iOS
+  final DarwinInitializationSettings darwinSettings = DarwinInitializationSettings(
+  requestAlertPermission: true,
+  requestBadgePermission: true,
+  requestSoundPermission: true,
+  notificationCategories: <DarwinNotificationCategory>[
+    DarwinNotificationCategory(
+      'medicationReminder',
+      actions: <DarwinNotificationAction>[
+        DarwinNotificationAction.plain('yes', 'Taken', options: {
+          DarwinNotificationActionOption.foreground,
+        }),
+        DarwinNotificationAction.plain('no', 'Skipped', options: {
+          DarwinNotificationActionOption.foreground,
+        }),
+      ],
+      options: <DarwinNotificationCategoryOption>{
+        DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
+      },
+    ),
+  ],
+);
+
+  await flutterLocalNotificationsPlugin.initialize(
+    InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      iOS: darwinSettings,
+    ),
+    onDidReceiveNotificationResponse: (NotificationResponse response) async {
+      try {
+        if (response.payload != null) {
+          final payloadData = jsonDecode(response.payload!);
+          final medicationResponse = MedicationResponse(
+            date: DateTime.now(),
+            medicationId: payloadData['medicationId'],
+            medicationName: payloadData['medicationName'],
+            took: response.actionId == 'yes',
+          );
+
+          print('Received notification response: $medicationResponse');
+          print('Notification payload: ${response.payload}');
+
+          await MedicationResponseHelper.storeMedicationResponse(medicationResponse);
+          print('Stored medication response successfully.');
+        } else {
+          print('No payload found in notification response.');
+        }
+      } catch (e) {
+        print('Error handling notification response: $e');
+      }
+    },
+  );
+
   runApp(const MainApp());
 }
 

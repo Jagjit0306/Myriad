@@ -6,6 +6,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../components/logo_component.dart';
+// import '../models/medication_response.dart';
 
 class MedicationSchedule {
   final String medicineName;
@@ -162,18 +163,29 @@ class _MedicationPageState extends State<MedicationPage> {
         scheduledDate = scheduledDate.add(const Duration(days: 1));
       }
 
+      // Create a payload that includes medication information
+      final payload = jsonEncode({
+        'medicationId': medication.id.toString(),
+        'medicationName': medication.medicineName,
+      });
+
       final notificationDetails = NotificationDetails(
-        android: const AndroidNotificationDetails(
+        android: AndroidNotificationDetails(
           'medication_channel',
           'Medication Reminders',
           channelDescription: 'Daily medication reminders',
           importance: Importance.max,
           priority: Priority.high,
+          actions: <AndroidNotificationAction>[
+            AndroidNotificationAction('yes', 'Taken'),
+            AndroidNotificationAction('no', 'Skipped'),
+          ],
         ),
         iOS: const DarwinNotificationDetails(
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
+          categoryIdentifier: 'medicationReminder',
         ),
       );
 
@@ -187,6 +199,7 @@ class _MedicationPageState extends State<MedicationPage> {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time,
+        payload: payload,
       );
     }
   }
@@ -343,7 +356,7 @@ class _MedicationPageState extends State<MedicationPage> {
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      print("time field tapped HELLOOOOOOOOOOOOOO");
+                      // print("time field tapped HELLOOOOOOOOOOOOOO");
                       _selectTime(context, index);
                     },
                     child: MyTextfield(
