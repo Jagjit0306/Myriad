@@ -14,7 +14,7 @@ static Future<void> storeMedicationResponse(MedicationResponse response) async {
     List<String> responses = prefs.getStringList(_storageKey) ?? [];
     
     // Add debug logging
-    print('Current stored responses: $responses');
+    print('Current stored responses before adding: $responses');
     
     String encodedResponse = jsonEncode(response.toJson());
     print('New response to store: $encodedResponse');
@@ -26,7 +26,7 @@ static Future<void> storeMedicationResponse(MedicationResponse response) async {
     
     // Verify storage
     List<String>? verifiedResponses = prefs.getStringList(_storageKey);
-    print('Verified stored responses: $verifiedResponses');
+    print('Verified stored responses after adding: $verifiedResponses');
   } catch (e) {
     print('Error storing medication response: $e');
     throw e; // Rethrow to handle in UI if needed

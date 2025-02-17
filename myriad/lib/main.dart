@@ -59,26 +59,16 @@ void main() async {
       iOS: darwinSettings,
     ),
     onDidReceiveNotificationResponse: (NotificationResponse response) async {
-      try {
-        if (response.payload != null) {
-          final payloadData = jsonDecode(response.payload!);
-          final medicationResponse = MedicationResponse(
-            date: DateTime.now(),
-            medicationId: payloadData['medicationId'],
-            medicationName: payloadData['medicationName'],
-            took: response.actionId == 'yes',
-          );
+      if (response.payload != null) {
+        final payloadData = jsonDecode(response.payload!);
+        final medicationResponse = MedicationResponse(
+          date: DateTime.now(),
+          medicationId: payloadData['medicationId'],
+          medicationName: payloadData['medicationName'],
+          took: response.actionId == 'yes',
+        );
 
-          print('Received notification response: $medicationResponse');
-          print('Notification payload: ${response.payload}');
-
-          await MedicationResponseHelper.storeMedicationResponse(medicationResponse);
-          print('Stored medication response successfully.');
-        } else {
-          print('No payload found in notification response.');
-        }
-      } catch (e) {
-        print('Error handling notification response: $e');
+        await MedicationResponseHelper.storeMedicationResponse(medicationResponse);
       }
     },
   );
