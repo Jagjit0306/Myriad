@@ -73,6 +73,25 @@ class _MedicationPageState extends State<MedicationPage> {
     return _timeControllers[index - 1].text.isNotEmpty;
   }
 
+  void onDidReceiveNotificationResponse(NotificationResponse response) {
+    if (response.payload != null) {
+      print("Notification payload: ${response.payload}");
+    }
+
+    switch (response.actionId) {
+      case 'yes': // User pressed "Taken"
+        print("Medication Taken");
+        // Perform your logic here (e.g., update database, show a message)
+        break;
+      case 'no': // User pressed "Skipped"
+        print("Medication Skipped");
+        // Perform any needed actions
+        break;
+      default:
+        print("Notification dismissed or no action taken");
+    }
+  }
+
   Future<void> _initializeNotifications() async {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
@@ -95,31 +114,11 @@ class _MedicationPageState extends State<MedicationPage> {
       iOS: initializationSettingsIOS,
     );
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+    );
   }
-
-  // void _createTimeInputs() {
-  //   final timesPerDay = int.tryParse(_timesPerDayController.text) ?? 0;
-  //   if (timesPerDay <= 0) {
-  //     _showError('Please enter a valid number of times per day');
-  //     return;
-  //   }
-
-  //   // Clear existing controllers
-  //   for (var controller in _timeControllers) {
-  //     controller.dispose();
-  //   }
-  //   _timeControllers.clear();
-
-  //   // Create new controllers
-  //   for (int i = 0; i < timesPerDay; i++) {
-  //     _timeControllers.add(TextEditingController());
-  //   }
-
-  //   setState(() {
-  //     _showTimeInputs = true;
-  //   });
-  // }
 
   Future<void> _loadMedications() async {
     final prefs = await SharedPreferences.getInstance();
@@ -176,9 +175,18 @@ class _MedicationPageState extends State<MedicationPage> {
           channelDescription: 'Daily medication reminders',
           importance: Importance.max,
           priority: Priority.high,
+          autoCancel: true,
           actions: <AndroidNotificationAction>[
-            AndroidNotificationAction('yes', 'Taken'),
-            AndroidNotificationAction('no', 'Skipped'),
+            AndroidNotificationAction(
+              'yes',
+              'Taken',
+              showsUserInterface: true,
+            ),
+            AndroidNotificationAction(
+              'no',
+              'Skipped',
+              showsUserInterface: true,
+            ),
           ],
         ),
         iOS: const DarwinNotificationDetails(
