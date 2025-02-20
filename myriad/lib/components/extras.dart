@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myriad/auth/google_auth.dart';
+import 'package:myriad/helper/configurator.dart';
 
-class Extras extends StatelessWidget {
+class Extras extends StatefulWidget {
   const Extras({super.key});
+
+  @override
+  State<Extras> createState() => _ExtrasState();
+}
+
+class _ExtrasState extends State<Extras> {
+  @override
+  void initState() {
+    super.initState();
+    configurator();
+  }
 
   @override
   Widget build(BuildContext context) {

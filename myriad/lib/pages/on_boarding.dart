@@ -21,6 +21,7 @@ class _OnBoardingState extends State<OnBoarding> {
     {'Vision Support': false},
     {'Hearing Support': false},
     {'Speech Assistance': false},
+    {'Colorblindness Support': false},
     {'Dexterity Support': false},
     {'Wheelchair Support': false},
     {'Limb Diversity Support': false},
