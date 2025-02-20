@@ -125,14 +125,16 @@ class _ExtrasState extends State<Extras> with SingleTickerProviderStateMixin {
             ),
           ),
         ),
-        Container(
-          width: double.infinity,
-          height: 250,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.black, Colors.transparent],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+        IgnorePointer(
+          child: Container(
+            width: double.infinity,
+            height: 250,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.black, Colors.transparent],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
           ),
         ),
