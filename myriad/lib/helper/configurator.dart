@@ -23,7 +23,7 @@ Future<List<String>> configurator() async {
     "medify",
   ];
 
-  if (false) return features;
+  if (true) return features;
 
   // Put the field either in greenCards or ANYgreenCards, depending on requirement
 
