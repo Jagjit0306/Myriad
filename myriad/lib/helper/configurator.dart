@@ -12,16 +12,18 @@ Future<List<String>> configurator() async {
   List<String> result = [];
 
   List<String> features = [
+    "sightify",
     'colorify',
     "hearify",
     "vibraillify",
-    "wheelify",
-    "medify",
-    "serenify",
-    "sightify",
     "speakify",
     "voicify",
+    "wheelify",
+    "serenify",
+    "medify",
   ];
+
+  if (true) return features;
 
   // Put the field either in greenCards or ANYgreenCards, depending on requirement
 
@@ -34,7 +36,7 @@ Future<List<String>> configurator() async {
     "serenify": ["Vision Support"],
     "sightify": ["Vision Support"],
     "speakify": ["Speech Assistance"],
-    "voicify": ["Speech Assistance"],
+    "voicify": ["Speech Assistance", "Hearing Support"],
   };
 
   // ignore: non_constant_identifier_names
