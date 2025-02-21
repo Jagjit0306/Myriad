@@ -7,7 +7,7 @@ Map<String, IconData> iconMap = {
   "colorify": Icons.color_lens_outlined,
   "hearify": Icons.hearing_outlined,
   "vibraillify": Icons.drag_indicator_outlined,
-  "wheelify": Icons.accessibility_new_outlined,
+  "wheelify": Icons.accessible_outlined,
   "medify": Icons.medical_services_outlined,
   "sightify": Icons.visibility_outlined,
   "serenify": Icons.self_improvement_rounded,
@@ -66,76 +66,96 @@ class _ExtrasState extends State<Extras> with SingleTickerProviderStateMixin {
         Scaffold(
           backgroundColor: Colors.transparent,
           extendBodyBehindAppBar: true,
-          body: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              reverse: true,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 350,
+          body: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            reverse: true,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 350,
+                ),
+                if (enabledFeatures.isNotEmpty)
+                  Column(
+                    children: List.generate(enabledFeatures.length, (index) {
+                      return SmoothButtonEntry(
+                        isVisible: visibleItems[index],
+                        delay: index * 100,
+                        child: ExtraButton(
+                          iconData:
+                              iconMap[enabledFeatures[index]] ?? Icons.api,
+                          name: enabledFeatures[index].toUpperCase(),
+                          path: "/extras/${enabledFeatures[index]}",
+                        ),
+                      );
+                    }),
                   ),
-                  if (enabledFeatures.isNotEmpty)
-                    Column(
-                      children: List.generate(enabledFeatures.length, (index) {
-                        return SmoothButtonEntry(
-                          isVisible: visibleItems[index],
-                          delay: index * 100,
-                          child: ExtraButton(
-                            iconData:
-                                iconMap[enabledFeatures[index]] ?? Icons.api,
-                            name: enabledFeatures[index].replaceAllMapped(
-                                RegExp(r'(^|\s)([a-z])'),
-                                (match) =>
-                                    '${match.group(1)}${match.group(2)!.toUpperCase()}'),
-                            path: "/extras/${enabledFeatures[index]}",
-                          ),
-                        );
-                      }),
-                    ),
-                  SmoothButtonEntry(
-                    isVisible: true,
-                    delay: 400,
-                    child: ExtraButton(
-                      path: "/onboarding",
-                      iconData: Icons.star,
-                      name: "Onboarding",
-                      color: Colors.green,
-                    ),
+                SmoothButtonEntry(
+                  isVisible: true,
+                  delay: 400,
+                  child: ExtraButton(
+                    path: "/onboarding",
+                    iconData: Icons.star,
+                    name: "ONBOARDING",
+                    color: Colors.green,
                   ),
-                  SmoothButtonEntry(
-                    isVisible: true,
-                    delay: 500,
-                    child: ExtraButton(
-                      path: "",
-                      customCallback: () {
-                        signOutFromGoogle();
-                        context.push("/auth");
-                      },
-                      iconData: Icons.logout,
-                      color: Colors.red,
-                      name: "Logout",
-                    ),
+                ),
+                SmoothButtonEntry(
+                  isVisible: true,
+                  delay: 500,
+                  child: ExtraButton(
+                    path: "",
+                    customCallback: () {
+                      signOutFromGoogle();
+                      context.push("/auth");
+                    },
+                    iconData: Icons.logout,
+                    color: Colors.red,
+                    name: "LOGOUT",
                   ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
             ),
           ),
         ),
         IgnorePointer(
-          child: Container(
-            width: double.infinity,
-            height: 250,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.black, Colors.transparent],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                width: double.infinity,
+                height: 300,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.surface,
+                      Theme.of(context).colorScheme.surface.withAlpha(0)
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
               ),
-            ),
+              Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.surface,
+                      Theme.of(context).colorScheme.surface.withAlpha(0)
+                    ],
+                    end: Alignment.topCenter,
+                    begin: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -170,16 +190,19 @@ class ExtraButton extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onSecondaryContainer,
                 width: 0.8,
               ),
-              gradient: LinearGradient(colors: [
-                color ?? Theme.of(context).colorScheme.onSecondaryContainer,
-                (color?.withAlpha(90) ??
-                    Theme.of(context)
-                        .colorScheme
-                        .onSecondaryContainer
-                        .withAlpha(90)),
-                Theme.of(context).colorScheme.surface,
-                Theme.of(context).colorScheme.onSecondaryContainer,
-              ], transform: GradientRotation(3.54)),
+              gradient: LinearGradient(
+                colors: [
+                  color?.withAlpha(200) ??
+                      Theme.of(context)
+                          .colorScheme
+                          .onSecondaryContainer
+                          .withAlpha(200),
+                  Theme.of(context).colorScheme.surface,
+                  Theme.of(context).colorScheme.onSecondaryContainer,
+                ],
+                stops: [0, 0.75, 1.0],
+                transform: GradientRotation(3.54),
+              ),
               borderRadius: BorderRadius.circular(18)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
@@ -190,8 +213,8 @@ class ExtraButton extends StatelessWidget {
                 Text(
                   name,
                   style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w400,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500,
                       letterSpacing: 1.4),
                 ),
               ],
