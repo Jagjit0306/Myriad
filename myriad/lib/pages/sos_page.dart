@@ -288,7 +288,7 @@ class _SosPageState extends State<SosPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: MyAppBar(title: 'SOS'),
+      appBar: MyAppBar(title: 'SOS', hideSos: true,),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
