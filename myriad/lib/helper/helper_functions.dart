@@ -14,6 +14,20 @@ void displayMessageToUser(String message, BuildContext context) {
   );
 }
 
+String getSalutation() {
+  final hour = DateTime.now().hour;
+
+  if (hour >= 5 && hour < 12) {
+    return "Good Morning";
+  } else if (hour >= 12 && hour < 17) {
+    return "Good Afternoon";
+  } else if (hour >= 17 && hour < 21) {
+    return "Good Evening";
+  } else {
+    return "Good Night";
+  }
+}
+
 String timeSince(Timestamp timestamp) {
   final now = DateTime.now();
   final DateTime dateTime = timestamp.toDate(); // Convert Timestamp to DateTime
@@ -58,7 +72,8 @@ String timeSinceInSeconds(int seconds) {
 
   final parts = <String>[];
   if (days > 0) parts.add(days.toString().padLeft(2, '0'));
-  if (hours > 0 || parts.isNotEmpty) parts.add(hours.toString().padLeft(2, '0'));
+  if (hours > 0 || parts.isNotEmpty)
+    parts.add(hours.toString().padLeft(2, '0'));
   parts.add(minutes.toString().padLeft(2, '0'));
   parts.add(secs.toString().padLeft(2, '0'));
 
@@ -66,16 +81,17 @@ String timeSinceInSeconds(int seconds) {
 }
 
 class FallDetectionService {
-  static final FallDetectionService _instance = FallDetectionService._internal();
+  static final FallDetectionService _instance =
+      FallDetectionService._internal();
   factory FallDetectionService() => _instance;
 
   late final AudioPlayer _audioPlayer;
   Timer? _timer;
-  
+
   bool _hasFallen = false;
   bool _isCountDown = true;
   bool _contactAuthorities = false;
-  
+
   static const countdownDuration = Duration(seconds: 30);
   int _seconds = 30;
   Duration _duration = countdownDuration;
@@ -95,9 +111,9 @@ class FallDetectionService {
   void _startListening() {
     accelerometerEventStream().listen((AccelerometerEvent event) {
       double acceleration = _calculateAcceleration(event);
-      
+
       // Threshold can be adjusted based on testing
-      if (acceleration > 15.0 && !_hasFallen) { 
+      if (acceleration > 15.0 && !_hasFallen) {
         fallTrigger();
       }
     });

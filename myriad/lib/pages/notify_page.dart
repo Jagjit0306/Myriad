@@ -41,134 +41,150 @@ class _NotifyPageState extends State<NotifyPage> {
       MedicineData(16, 4200),
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notify'),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-      ),
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Medicine Consistency',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                '5 Days',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondary,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                height: 200,
-                child: SfCartesianChart(
-                  plotAreaBorderWidth: 0,
-                  primaryXAxis: NumericAxis(
-                    minimum: 10,
-                    maximum: 16,
-                    interval: 1,
-                    majorGridLines:
-                        const MajorGridLines(width: 1, color: Colors.grey),
-                    axisLine: const AxisLine(width: 0),
-                    labelStyle: const TextStyle(color: Colors.grey),
-                  ),
-                  primaryYAxis: NumericAxis(
-                    minimum: 3500,
-                    maximum: 5000,
-                    interval: 500,
-                    axisLine: const AxisLine(width: 0),
-                    majorGridLines:
-                        const MajorGridLines(width: 1, color: Colors.grey),
-                    labelStyle: const TextStyle(color: Colors.grey),
-                  ),
-                  series: <CartesianSeries>[
-                    SplineSeries<MedicineData, int>(
-                      dataSource: chartData,
-                      xValueMapper: (MedicineData data, _) => data.day,
-                      yValueMapper: (MedicineData data, _) => data.value,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Here is your overview",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontSize: 24,
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Card(
+            color: Theme.of(context).colorScheme.secondary,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Medicine Consistency',
+                    style: TextStyle(
                       color: Theme.of(context).colorScheme.inversePrimary,
-                      width: 2,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
+                  ),
+                  Text(
+                    '5 Days',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    height: 200,
+                    child: SfCartesianChart(
+                      plotAreaBorderWidth: 0,
+                      primaryXAxis: NumericAxis(
+                        minimum: 10,
+                        maximum: 16,
+                        interval: 1,
+                        majorGridLines:
+                            const MajorGridLines(width: 1, color: Colors.grey),
+                        axisLine: const AxisLine(width: 0),
+                        labelStyle: const TextStyle(color: Colors.grey),
+                      ),
+                      primaryYAxis: NumericAxis(
+                        minimum: 3500,
+                        maximum: 5000,
+                        interval: 500,
+                        axisLine: const AxisLine(width: 0),
+                        majorGridLines:
+                            const MajorGridLines(width: 1, color: Colors.grey),
+                        labelStyle: const TextStyle(color: Colors.grey),
+                      ),
+                      series: <CartesianSeries>[
+                        SplineSeries<MedicineData, int>(
+                          dataSource: chartData,
+                          xValueMapper: (MedicineData data, _) => data.day,
+                          yValueMapper: (MedicineData data, _) => data.value,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          width: 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
-              Center(
-                child: Card(
-                  color: Theme.of(context).colorScheme.secondary,
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    width: double.infinity,
-                    child: Column(
+            ),
+          ),
+          const SizedBox(height: 20),
+          Center(
+            child: Card(
+              color: Theme.of(context).colorScheme.secondary,
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Text(
+                      'Mental Health',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Stack(
+                      alignment: Alignment.center,
                       children: [
-                        Text(
-                          'Mental Health',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                        SizedBox(
+                          height: 150,
+                          width: 150,
+                          child: CircularProgressIndicator(
+                            value: _mentalHealthScore / 100,
+                            strokeWidth: 12,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).colorScheme.inversePrimary),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        Stack(
-                          alignment: Alignment.center,
+                        Column(
                           children: [
-                            SizedBox(
-                              height: 150,
-                              width: 150,
-                              child: CircularProgressIndicator(
-                                value: _mentalHealthScore / 100,
-                                strokeWidth: 12,
-                                backgroundColor: Theme.of(context).colorScheme.primary,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Theme.of(context).colorScheme.inversePrimary),
+                            Text(
+                              mentalHealthIsLoading
+                                  ? "- -"
+                                  : _mentalHealthScore.toString(),
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Column(
-                              children: [
-                                Text(
-                                  mentalHealthIsLoading
-                                      ? "- -"
-                                      : _mentalHealthScore.toString(),
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.inversePrimary,
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  mentalHealthIsLoading
-                                      ? "analysing"
-                                      : _getMentalHealthStatus(
-                                          _mentalHealthScore),
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.inversePrimary,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              mentalHealthIsLoading
+                                  ? "analysing"
+                                  : _getMentalHealthStatus(_mentalHealthScore),
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                                fontSize: 16,
+                              ),
                             ),
                           ],
                         ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
