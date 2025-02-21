@@ -1,0 +1,85 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:myriad/components/circular_image.dart';
+import 'package:myriad/helper/helper_functions.dart';
+
+// Crucial file that syncs prefs with local storage
+
+class WelcomeCard extends StatelessWidget {
+  WelcomeCard({super.key});
+
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUser() async {
+    return await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(currentUser!.email)
+        .get();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            future: getUser(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return Text("Error: ${snapshot.error}");
+              } else if (snapshot.hasData) {
+                if (snapshot.data!.data() != null) {
+                  prefsSaver(snapshot.data!.data()!['prefs']);
+                  return Column(
+                    children: [
+                      CircularImage(
+                        imageUrl: currentUser!.photoURL ?? "",
+                        placeholder: Icon(
+                          Icons.person,
+                          size: 100,
+                        ),
+                        size: 100,
+                      ),
+                    ],
+                  );
+                } else {
+                  return Text("NODATA");
+                }
+              } else {
+                return Text("NODATA");
+              }
+            },
+          ),
+          const SizedBox(width: 15), // Added spacing
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // Align text to start
+              children: [
+                Text(
+                  "${getSalutation()} ${FirebaseAuth.instance.currentUser?.displayName?.split(" ")[0]}!",
+                  style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  softWrap: true, // Allow word wrapping
+                  overflow: TextOverflow.ellipsis, // Prevent overflow
+                  maxLines: 2, // Limit to 2 lines if necessary
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
