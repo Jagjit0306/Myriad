@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myriad/components/my_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +27,15 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(title: 'Myriad'),
+      appBar: MyAppBar(
+        title: 'Myriad',
+        actions: [
+          AppbarIcon(
+            onTouch: () => context.push('/notify'),
+            iconData: Icons.notifications_active_outlined,
+          ),
+        ],
+      ),
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: getUser(),
         builder: (context, snapshot) {

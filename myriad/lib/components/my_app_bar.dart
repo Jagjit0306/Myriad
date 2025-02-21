@@ -34,10 +34,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           onTouch: () => context.go('/sos_page'),
           iconData: Icons.warning_amber_rounded,
         ),
-        AppbarIcon(
-          onTouch: () => context.push('/notify'),
-          iconData: Icons.notifications_active_outlined,
-        ),
         ...actions,
       ],
     );
