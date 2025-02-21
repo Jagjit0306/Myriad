@@ -165,19 +165,9 @@ class _ManageLoginState extends State<ManageLogin> {
       userDatabase.userCosmeticSync();
       // Navigate to home or onboarding
       if (onboarding) {
-        context.push('/onboarding');
-        // Navigator.pushNamedAndRemoveUntil(
-        //   context,
-        //   '/on_boarding',
-        //   (router) => false,
-        // );
+        context.go('/onboarding');
       } else {
-        // Navigator.pushNamedAndRemoveUntil(
-        //   context,
-        //   '/home_page',
-        //   (router) => false,
-        // );
-        context.push('/home');
+        context.go('/home');
       }
     } else {
       bool accountState = await saveUser(widget.email);
