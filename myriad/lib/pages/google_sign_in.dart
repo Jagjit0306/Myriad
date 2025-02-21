@@ -44,9 +44,16 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            LogoComponent(),
-            const SizedBox(height: 48),
+            LogoComponent(size: 150),
             const Text(
+              "Myriad",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 28,
+              ),
+            ),
+            const SizedBox(height: 25),
+            Text(
               'Overcoming challenges together, with AI',
               style: TextStyle(
                 fontSize: 19,
