@@ -23,52 +23,28 @@ class CommunityThread extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Thread"),
-          actions: [
-            CommunityThreadDeleteOption(
-                currUser: op,
-                postId: postId,
-                communityDatabase: communityDatabase)
-          ],
-        ),
-        body: Column(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Thread"),
+        actions: [
+          CommunityThreadDeleteOption(
+            currUser: op,
+            postId: postId,
+            communityDatabase: communityDatabase,
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: StreamBuilder(
-                stream: communityDatabase.getCommunityCommentsStream(postId),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                        child: CircularProgressIndicator.adaptive());
-                  } else if (snapshot.hasData) {
-                    List allCommunityPostComments = snapshot.data!.docs;
-                    return ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      reverse: true,
-                      itemCount: allCommunityPostComments.length,
-                      itemBuilder: (context, index) {
-                        DocumentSnapshot communityPostComment =
-                            allCommunityPostComments[index];
-                        return CommunityComment(
-                            commentId: communityPostComment.id,
-                            data: communityPostComment.data());
-                      },
-                    );
-                  } else {
-                    return const Text("NODATA");
-                  }
-                },
-              ),
-            ),
-            CommentThreadCommentField(
-                postId: postId, communityDatabase: communityDatabase),
+            /// Post Section
             StreamBuilder(
               stream: communityDatabase.getCommunityPostStream(postId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasData && snapshot.data != null) {
                   DocumentSnapshot postData = snapshot.data!;
                   if (postData.exists) {
@@ -77,16 +53,56 @@ class CommunityThread extends StatelessWidget {
                       data: postData,
                       disableClick: true,
                     );
-                  } else {
-                    return Text("Post not found");
                   }
+                }
+                return const Center(child: Text("Post not found"));
+              },
+            ),
+
+            /// Comment Input Field (Fixed Position)
+            CommentThreadCommentField(
+              postId: postId,
+              communityDatabase: communityDatabase,
+            ),
+
+            /// Comments Section (Scrollable inside SingleChildScrollView)
+            StreamBuilder(
+              stream: communityDatabase.getCommunityCommentsStream(postId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                      child: CircularProgressIndicator.adaptive());
+                } else if (snapshot.hasData && snapshot.data != null) {
+                  List allCommunityPostComments = snapshot.data!.docs;
+                  if (allCommunityPostComments.isEmpty) {
+                    return const Center(child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text("No comments yet"),
+                    ));
+                  }
+                  return ListView.builder(
+                    physics:
+                        const NeverScrollableScrollPhysics(), // Disable ListView scrolling
+                    shrinkWrap: true, // Make ListView take only needed space
+                    itemCount: allCommunityPostComments.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot communityPostComment =
+                          allCommunityPostComments[index];
+                      return CommunityComment(
+                        commentId: communityPostComment.id,
+                        data: communityPostComment.data(),
+                      );
+                    },
+                  );
                 } else {
-                  return Text("Post not found");
+                  return const Center(child: Text("No comments found"));
                 }
               },
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
 
