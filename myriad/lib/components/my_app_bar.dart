@@ -5,9 +5,11 @@ import 'package:myriad/components/logo_component.dart';
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget> actions;
+  final bool hideSos;
   const MyAppBar({
     super.key,
     required this.title,
+    this.hideSos = false,
     this.actions = const <Widget>[],
   });
 
@@ -30,6 +32,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
+        if(!hideSos)
         AppbarIcon(
           onTouch: () => context.go('/sos_page'),
           iconData: Icons.warning_amber_rounded,
