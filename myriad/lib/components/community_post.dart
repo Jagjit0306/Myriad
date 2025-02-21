@@ -23,6 +23,7 @@ class CommunityPost extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isLiked = (data['likers'] is List &&
         data['likers'].contains(FirebaseAuth.instance.currentUser?.email));
+    final String postContent = (data['content'] as String).trim();
     return GestureDetector(
       onTap: () {
         if (!disableClick) {
@@ -63,11 +64,18 @@ class CommunityPost extends StatelessWidget {
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
-                    Text(data['content'],
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          // color: Theme.of(context).colorScheme.bodyColor
-                        )),
+                    Text(
+                      disableClick
+                          // full post
+                          ? postContent
+                          // post preview
+                          : (postContent.length < 150
+                              ? postContent.replaceAll(RegExp(r'[\n\r]'), ' ')
+                              : "${postContent.replaceAll(RegExp(r'[\n\r]'), ' ').substring(0, 150)}..."),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     SizedBox(
                       height: 10,
                     ),
