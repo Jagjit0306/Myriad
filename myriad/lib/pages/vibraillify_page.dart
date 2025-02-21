@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:myriad/components/banner_1.dart';
+import 'package:myriad/components/round_button.dart';
 import 'package:myriad/helper/isolate_functions.dart';
 import 'package:myriad/helper/vibraille_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -254,14 +255,11 @@ class _VibraillifyPageState extends State<VibraillifyPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FloatingActionButton(
+            padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+            child: RoundButton(
+              icon: _isListening ? Icons.mic : Icons.mic_none,
+              iconColor: _isListening ? Colors.red : Colors.white,
               onPressed: _startListening,
-              backgroundColor: _isListening ? Colors.red : Colors.white,
-              child: Icon(
-                _isListening ? Icons.mic : Icons.mic_none,
-                color: _isListening ? Colors.white : Colors.black,
-              ),
             ),
           ),
           Padding(
