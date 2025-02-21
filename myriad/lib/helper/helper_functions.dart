@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 void displayMessageToUser(String message, BuildContext context) {
   showDialog(
@@ -12,6 +16,11 @@ void displayMessageToUser(String message, BuildContext context) {
       title: Text(message),
     ),
   );
+}
+
+Future<void> prefsSaver(List<dynamic> prefs) async {
+  SharedPreferences localPrefs = await SharedPreferences.getInstance();
+  localPrefs.setString('prefs', jsonEncode(prefs));
 }
 
 String getSalutation() {

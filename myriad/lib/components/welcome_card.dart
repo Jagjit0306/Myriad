@@ -1,10 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myriad/components/circular_image.dart';
 import 'package:myriad/helper/helper_functions.dart';
 
+// Crucial file that syncs prefs with local storage
+
 class WelcomeCard extends StatelessWidget {
-  const WelcomeCard({super.key});
+  WelcomeCard({super.key});
+
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUser() async {
+    return await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(currentUser!.email)
+        .get();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +26,37 @@ class WelcomeCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          CircularImage(
-            imageUrl: FirebaseAuth.instance.currentUser?.photoURL ?? "",
-            placeholder: Icon(
-              Icons.person,
-              size: 100,
-            ),
-            size: 100,
+          FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            future: getUser(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return Text("Error: ${snapshot.error}");
+              } else if (snapshot.hasData) {
+                if (snapshot.data!.data() != null) {
+                  prefsSaver(snapshot.data!.data()!['prefs']);
+                  return Column(
+                    children: [
+                      CircularImage(
+                        imageUrl: currentUser!.photoURL ?? "",
+                        placeholder: Icon(
+                          Icons.person,
+                          size: 100,
+                        ),
+                        size: 100,
+                      ),
+                    ],
+                  );
+                } else {
+                  return Text("NODATA");
+                }
+              } else {
+                return Text("NODATA");
+              }
+            },
           ),
           const SizedBox(width: 15), // Added spacing
           Expanded(
