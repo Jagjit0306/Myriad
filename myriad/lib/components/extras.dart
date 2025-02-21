@@ -22,19 +22,13 @@ class Extras extends StatefulWidget {
   State<Extras> createState() => _ExtrasState();
 }
 
-class _ExtrasState extends State<Extras> with SingleTickerProviderStateMixin {
+class _ExtrasState extends State<Extras> {
   List<String> enabledFeatures = [];
   List<bool> visibleItems = [];
-  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 800), // Smooth control
-    );
-
     getConfiguration();
   }
 
