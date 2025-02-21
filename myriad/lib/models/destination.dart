@@ -11,7 +11,7 @@ class Destination {
 const destinations = [
   Destination(label: "Home", icon: Icons.home_outlined, icon2: Icons.home),
   Destination(label: "My AI", icon: Icons.auto_awesome_outlined, icon2: Icons.auto_awesome),
-  Destination(label: "Myriad", icon: Icons.add, icon2: Icons.adjust_outlined),
+  Destination(label: "Myriad", icon: Icons.add, icon2: Icons.add),
   Destination(label: "Community", icon: Icons.people_alt_outlined, icon2: Icons.people_alt),
   Destination(label: "SOS", icon: Icons.warning_amber, icon2: Icons.warning),
 ];

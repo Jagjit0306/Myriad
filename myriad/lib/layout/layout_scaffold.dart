@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myriad/components/logo_component.dart';
 import 'package:myriad/models/destination.dart';
 
 class LayoutScaffold extends StatelessWidget {
@@ -16,18 +17,22 @@ class LayoutScaffold extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
         onDestinationSelected: navigationShell.goBranch,
-        indicatorColor: Theme.of(context).colorScheme.primary,
-        animationDuration: Duration(seconds: 1),
+        indicatorColor: Colors.grey[800],
+        animationDuration: Duration(milliseconds: 800),
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         destinations: destinations
             .map(
               (destination) => NavigationDestination(
-                icon: Icon(destination.icon),
+                icon: (destination.icon == Icons.add)
+                    ? LogoComponent(size: 40)
+                    : Icon(destination.icon),
                 label: destination.label,
-                selectedIcon: Icon(
-                  destination.icon2,
-                  color: Colors.white,
-                ),
+                selectedIcon: (destination.icon == Icons.add)
+                    ? LogoComponent(size: 35, alwaysWhite: true,)
+                    : Icon(
+                        destination.icon2,
+                        color: Colors.white,
+                      ),
               ),
             )
             .toList(),
