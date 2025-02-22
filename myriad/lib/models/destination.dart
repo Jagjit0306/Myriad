@@ -13,5 +13,5 @@ const destinations = [
   Destination(label: "My AI", icon: Icons.auto_awesome_outlined, icon2: Icons.auto_awesome),
   Destination(label: "Myriad", icon: Icons.add, icon2: Icons.add),
   Destination(label: "Community", icon: Icons.people_alt_outlined, icon2: Icons.people_alt),
-  Destination(label: "Profile", icon: Icons.account_circle_rounded, icon2: Icons.account_circle),
+  Destination(label: "Profile", icon: Icons.account_circle_outlined, icon2: Icons.account_circle),
 ];
