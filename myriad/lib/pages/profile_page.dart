@@ -51,7 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
         title: 'Profile',
         actions: [
           AppbarIcon(
-            onTouch: () => context.push('/settings'),
+            onTouch: () => context.push('/extras/settings'),
             iconData: Icons.settings,
           ),
         ],
