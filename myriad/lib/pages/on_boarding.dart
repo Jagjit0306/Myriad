@@ -172,7 +172,7 @@ class _OnBoardingState extends State<OnBoarding> {
                   text: 'Lets get started',
                   onTap: () {
                     setPrefs();
-                    context.go('/home');
+                    context.go('/home_configurator');
                   },
                   enabled: isUsernameUnique && anyPrefSelected(),
                 ),
