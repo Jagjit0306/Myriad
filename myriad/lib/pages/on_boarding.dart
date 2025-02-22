@@ -16,6 +16,7 @@ class OnBoarding extends StatefulWidget {
 class _OnBoardingState extends State<OnBoarding> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController guardianPhoneController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
 
   List<Map<String, bool>> prefs = [
     {'Vision Support': false},
@@ -59,6 +60,7 @@ class _OnBoardingState extends State<OnBoarding> {
         "username": usernameController.text,
         "prefs": prefs,
         "guardianPhone": guardianPhoneController.text,
+        "bio": bioController.text,
       });
     }
   }
@@ -109,6 +111,16 @@ class _OnBoardingState extends State<OnBoarding> {
                 inputType: TextInputType.phone,
                 obscureText: false,
                 controller: guardianPhoneController,
+                onChanged: (value) {},
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              MyTextfield(
+                hintText: 'Bio',
+                inputType: TextInputType.multiline,
+                obscureText: false,
+                controller: bioController,
                 onChanged: (value) {},
               ),
               const SizedBox(
