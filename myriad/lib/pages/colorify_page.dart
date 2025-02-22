@@ -45,7 +45,11 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
       final XFile photo = await _controller!.takePicture();
       await _analyzeColor(photo);
     } catch (e) {
-      print('Error taking picture: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error taking picture: $e')),
+        );
+      }
     }
   }
 
@@ -78,7 +82,11 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
         }
       }
     } catch (e) {
-      print('Error analyzing color: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error analyzing color: $e')),
+        );
+      }
     }
   }
 

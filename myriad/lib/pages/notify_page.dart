@@ -3,7 +3,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:myriad/helper/mental_health.dart';
 
 class NotifyPage extends StatefulWidget {
-  const NotifyPage({Key? key}) : super(key: key);
+  const NotifyPage({super.key});
 
   @override
   State<NotifyPage> createState() => _NotifyPageState();

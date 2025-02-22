@@ -28,6 +28,7 @@ class MentalHealthAnalyzer {
         .join('\n');
 
     try {
+      // ignore: deprecated_member_use
       final response = await gemini.text(
         '''Analyze the following chat messages and provide a mental health score from 0 to 100. 
            Consider factors like positivity, engagement, emotional state, and overall well-being.
@@ -45,16 +46,16 @@ class MentalHealthAnalyzer {
             final score = int.parse(match.group(0)!).clamp(0, 100);
             return score;
           } else {
-            print('No valid whole number found in response: "$rawResponse"');
+            // print('No valid whole number found in response: "$rawResponse"');
           }
         } else {
-          print('Expected TextPart but got: ${part.runtimeType}');
+          // print('Expected TextPart but got: ${part.runtimeType}');
         }
       } else {
-        print('No valid content received from Gemini.');
+        // print('No valid content received from Gemini.');
       }
     } catch (e) {
-      print('Error analyzing mental health: $e');
+      // print('Error analyzing mental health: $e');
     }
     return 0; 
   }
@@ -73,7 +74,7 @@ class MentalHealthAnalyzer {
           .map((e) => ChatMessage.fromJson(e as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      print('Error parsing chat messages: $e');
+      // print('Error parsing chat messages: $e');
       return [];
     }
   } 

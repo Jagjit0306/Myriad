@@ -75,7 +75,11 @@ class _HearifyPageState extends State<HearifyPage> {
         });
       }
     } catch (e) {
-      print('Error loading chats: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading chats: $e')),
+        );
+      }
     }
   }
 
@@ -84,7 +88,11 @@ class _HearifyPageState extends State<HearifyPage> {
       SharedPreferences localPrefs = await SharedPreferences.getInstance();
       await localPrefs.setString('hearify_chats', jsonEncode(messages));
     } catch (e) {
-      print('Error saving chats: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error saving chats: $e')),
+        );
+      }
     }
   }
 

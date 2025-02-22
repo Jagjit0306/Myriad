@@ -2,15 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/helper/isolate_functions.dart';
+import 'package:myriad/helper/speech_functions.dart';
 import 'package:myriad/helper/tts_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:speech_to_text/speech_to_text.dart';
-import 'package:speech_to_text/speech_recognition_result.dart'; // Add this import
 import 'package:dash_chat_2/dash_chat_2.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class VoicifyPage extends StatefulWidget {
   const VoicifyPage({super.key});
@@ -20,11 +17,9 @@ class VoicifyPage extends StatefulWidget {
 }
 
 class _VoicifyPageState extends State<VoicifyPage> {
-  final SpeechToText _speech = SpeechToText();
+  final SpeechService _speechService = SpeechService();
   final TTS tts = TTS();
   List<ChatMessage> messages = [];
-  bool _isListening = false;
-  bool _speechEnabled = false;
   String _lastWords = '';
   bool hasText = false;
   final TextEditingController _textController = TextEditingController();
@@ -44,85 +39,45 @@ class _VoicifyPageState extends State<VoicifyPage> {
   @override
   void initState() {
     super.initState();
-    _initializeSpeech();
+    _speechService.initialize(context);
     tts.initTTS();
     _getChats();
   }
 
-  Future<void> _initializeSpeech() async {
-    try {
-      _speechEnabled = await _speech.initialize(
-        onError: (errorNotification) {
-          print('Speech recognition error: $errorNotification');
-          if (mounted) {
-            setState(() => _isListening = false);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(
-                      'Speech recognition error: ${errorNotification.errorMsg}')),
-            );
-          }
-        },
-        onStatus: (status) {
-          print('Speech recognition status: $status');
-          if (status == 'done' && mounted) {
-            setState(() => _isListening = false);
-          }
-        },
-      );
-      setState(() {});
-    } catch (e) {
-      print('Failed to initialize speech recognition: $e');
-      _speechEnabled = false;
-      setState(() {});
-    }
-  }
-
-  void _startListening() async {
-    if (!_speechEnabled) {
-      await _initializeSpeech(); // Try to reinitialize if not enabled
-      if (!_speechEnabled) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Speech recognition not available')),
-        );
-        return;
-      }
-    }
-
-    if (!_isListening) {
-      setState(() => _isListening = true);
-      await _speech.listen(
-        onResult: _onSpeechResult,
-        listenFor: const Duration(seconds: 30),
-        localeId: "en_US",
-        cancelOnError: true,
-        partialResults: false,
-        listenMode: stt.ListenMode.confirmation,
-      );
-    } else {
-      setState(() => _isListening = false);
-      await _speech.stop();
-    }
-    _saveChats();
-  }
-
-  void _onSpeechResult(SpeechRecognitionResult result) {
+  void _handleSpeechResult(String recognizedWords) {
     setState(() {
-      _lastWords = "$_lastWords${result.recognizedWords} ";
+      _lastWords = "$_lastWords$recognizedWords ";
       _textController.text = _lastWords;
 
-      if (result.recognizedWords.isNotEmpty) {
-        messages = [
-          ChatMessage(
-            user: _botUser,
-            text: result.recognizedWords,
-            createdAt: DateTime.now(),
-          ),
-          ...messages,
-        ];
-      }
+      messages = [
+        ChatMessage(
+          user: _botUser,
+          text: recognizedWords,
+          createdAt: DateTime.now(),
+        ),
+        ...messages,
+      ];
+      // _saveChats();
     });
   }
+
+  // void _onSpeechResult(SpeechRecognitionResult result) {
+  //   setState(() {
+  //     _lastWords = "$_lastWords${result.recognizedWords} ";
+  //     _textController.text = _lastWords;
+
+  //     if (result.recognizedWords.isNotEmpty) {
+  //       messages = [
+  //         ChatMessage(
+  //           user: _botUser,
+  //           text: result.recognizedWords,
+  //           createdAt: DateTime.now(),
+  //         ),
+  //         ...messages,
+  //       ];
+  //     }
+  //   });
+  // }
 
   Future<void> _getChats() async {
     try {
@@ -141,7 +96,11 @@ class _VoicifyPageState extends State<VoicifyPage> {
         });
       }
     } catch (e) {
-      print('Error loading chats: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Speech recognition error: $e')),
+        );
+      }
     }
   }
 
@@ -150,7 +109,11 @@ class _VoicifyPageState extends State<VoicifyPage> {
       SharedPreferences localPrefs = await SharedPreferences.getInstance();
       await localPrefs.setString('voicify_chats', jsonEncode(messages));
     } catch (e) {
-      print('Error saving chats: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error saving chats: $e')),
+        );
+      }
     }
   }
 
@@ -293,18 +256,25 @@ class _VoicifyPageState extends State<VoicifyPage> {
                           ),
                         ),
                       if (!hasText)
-                        GestureDetector(
-                          onTap: _startListening,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
-                            child: Icon(
-                              !_isListening ? Icons.mic : Icons.mic_none,
-                              color: !_isListening
-                                  ? Theme.of(context).colorScheme.inversePrimary
-                                  : Colors.red,
-                              size: 35, // Icon color
-                            ),
-                          ),
+                        ListenableBuilder(
+                          listenable: _speechService,
+                          builder: (context, child) {
+                            return IconButton(
+                              icon: Icon(
+                                _speechService.isListening
+                                    ? Icons.mic
+                                    : Icons.mic_none,
+                                size: 35,
+                                color: _speechService.isListening
+                                    ? Colors.red
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary,
+                              ),
+                              onPressed: () => _speechService.toggleListening(
+                                  context, _handleSpeechResult),
+                            );
+                          },
                         ),
                     ],
                   );
@@ -319,7 +289,7 @@ class _VoicifyPageState extends State<VoicifyPage> {
 
   @override
   void dispose() {
-    _speech.stop();
+    _speechService.dispose();
     tts.dispose();
     _textController.dispose();
     super.dispose();

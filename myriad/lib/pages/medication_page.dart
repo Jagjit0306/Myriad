@@ -34,7 +34,7 @@ class MedicationSchedule {
 }
 
 class MedicationPage extends StatefulWidget {
-  const MedicationPage({Key? key}) : super(key: key);
+  const MedicationPage({super.key});
 
   @override
   _MedicationPageState createState() => _MedicationPageState();

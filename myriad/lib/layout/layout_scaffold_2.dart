@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myriad/components/logo_component.dart';
 import 'package:myriad/models/destination.dart';
 
 class LayoutScaffold2 extends StatelessWidget {

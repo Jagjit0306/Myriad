@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:flutter/material.dart';
@@ -17,17 +19,18 @@ class SpeechService extends ChangeNotifier {
     try {
       _speechEnabled = await _speech.initialize(
         onError: (errorNotification) {
-          print('Speech recognition error: $errorNotification');
+          // print('Speech recognition error: $errorNotification');
           _isListening = false;
           notifyListeners();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Speech recognition error: ${errorNotification.errorMsg}'),
+              content: Text(
+                  'Speech recognition error: ${errorNotification.errorMsg}'),
             ),
           );
         },
         onStatus: (status) {
-          print('Speech recognition status: $status');
+          // print('Speech recognition status: $status');
           if (status == 'done') {
             _isListening = false;
             notifyListeners();
@@ -36,22 +39,28 @@ class SpeechService extends ChangeNotifier {
       );
       notifyListeners();
     } catch (e) {
-      print('Failed to initialize speech recognition: $e');
+      // print('Failed to initialize speech recognition: $e');
       _speechEnabled = false;
       notifyListeners();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to initialize speech recognition')),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Failed to initialize speech recognition')),
+        );
+      }
     }
   }
 
-  Future<void> toggleListening(BuildContext context, OnSpeechResultCallback onResult) async {
+  Future<void> toggleListening(
+      BuildContext context, OnSpeechResultCallback onResult) async {
     if (!_speechEnabled) {
       await initialize(context);
       if (!_speechEnabled) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Speech recognition not available')),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Speech recognition not available')),
+          );
+        }
         return;
       }
     }

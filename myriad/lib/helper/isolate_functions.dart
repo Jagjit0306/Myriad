@@ -24,7 +24,7 @@ Future<List<ChatMessage>> processChatMessages(ChatData data) async {
 
     return chatData;
   } catch (e) {
-    print('Error in isolate processing: $e');
+    // print('Error in isolate processing: $e');
     return [];
   }
 }

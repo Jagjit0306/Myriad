@@ -103,9 +103,9 @@ class _SerenifyPageState extends State<SerenifyPage> {
 }
 
 class SerenifySubWidget extends StatelessWidget {
-  String imgPath;
-  String link;
-  SerenifySubWidget({super.key, required this.imgPath, required this.link});
+  final String imgPath;
+  final String link;
+  const SerenifySubWidget({super.key, required this.imgPath, required this.link});
 
   @override
   Widget build(BuildContext context) {

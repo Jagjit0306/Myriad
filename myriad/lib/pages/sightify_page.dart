@@ -78,7 +78,11 @@ class _SightifyPageState extends State<SightifyPage>
         askGemini();
       });
     } catch (e) {
-      print('Error taking picture: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error taking picture: $e')),
+        );
+      }
     } finally {
       // Clean up
       await _controller?.dispose();
@@ -96,16 +100,15 @@ class _SightifyPageState extends State<SightifyPage>
       images: [_imageFile!.readAsBytesSync()],
     ).then(
       (value) {
-        print("Response recieved");
         final dataContent = jsonDecode(jsonEncode(value!.content!.parts![0]))
             as Map<String, dynamic>;
         tts.speak(dataContent['text'] ?? "Error encountered !");
       },
     ).catchError((e) {
-      print("GEMINI ERROR");
-      print(e);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text("We cannot reach our service right now")));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: const Text("We cannot reach our service right now")));
+      }
     });
   }
 
@@ -122,10 +125,10 @@ class _SightifyPageState extends State<SightifyPage>
         tts.speak(dataContent['text'] ?? "Error encountered !");
       },
     ).catchError((e) {
-      print("GEMINI ERROR");
-      print(e);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text("We cannot reach our service right now")));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: const Text("We cannot reach our service right now")));
+      }
     });
   }
 

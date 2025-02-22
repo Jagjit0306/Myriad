@@ -83,7 +83,7 @@ class CommunityDatabase {
         });
       }
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 
@@ -136,7 +136,7 @@ class CommunityDatabase {
         });
       }
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 

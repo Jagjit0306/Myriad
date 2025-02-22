@@ -81,8 +81,9 @@ String timeSinceInSeconds(int seconds) {
 
   final parts = <String>[];
   if (days > 0) parts.add(days.toString().padLeft(2, '0'));
-  if (hours > 0 || parts.isNotEmpty)
+  if (hours > 0 || parts.isNotEmpty) {
     parts.add(hours.toString().padLeft(2, '0'));
+  }
   parts.add(minutes.toString().padLeft(2, '0'));
   parts.add(secs.toString().padLeft(2, '0'));
 
@@ -168,7 +169,7 @@ class FallDetectionService {
 
   void fallTrigger() {
     _hasFallen = true;
-    makeNoise();
+    // makeNoise();
     startTimer();
   }
 
@@ -178,14 +179,18 @@ class FallDetectionService {
     resetTimer();
   }
 
-  Future<void> makeNoise() async {
+  Future<void> makeNoise(context) async {
     try {
       await _audioPlayer.stop();
       await _audioPlayer.setSource(AssetSource('scream.mp3'));
       await _audioPlayer.setVolume(1.0);
       await _audioPlayer.resume();
     } catch (e) {
-      print('Error playing audio: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error playing audio: $e')),
+        );
+      }
     }
   }
 

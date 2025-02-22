@@ -90,7 +90,5 @@ Future<List<String>> configurator() async {
     if (!skip) result.add(x);
   }
 
-  print(savedConfig);
-  print(jsonEncode(result));
   return result;
 }

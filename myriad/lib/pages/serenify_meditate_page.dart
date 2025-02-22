@@ -297,7 +297,7 @@ class _SerenifyMeditatePageState extends State<SerenifyMeditatePage>
                   );
                 },
               );
-            }).toList(),
+            }),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -54,7 +54,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
     if (widget.voiceInput) {
       _speechService.initialize(context);
     }
-    if(widget.voiceOutput) {
+    if (widget.voiceOutput) {
       tts.initTTS();
     }
     _getChats();
@@ -97,7 +97,11 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
         });
       }
     } catch (e) {
-      print('Error loading chats: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading chats: $e')),
+        );
+      }
     }
   }
 
@@ -106,7 +110,11 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
       SharedPreferences localPrefs = await SharedPreferences.getInstance();
       await localPrefs.setString('chats', jsonEncode(messages));
     } catch (e) {
-      print('Error saving chats: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error saving chats: $e')),
+        );
+      }
     }
   }
 
@@ -206,10 +214,10 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (Platform.isAndroid) {
-        SystemNavigator.pop(); // Exits to home screen on Android
-      } else if (Platform.isIOS) {
-        exit(0); // Force quit app on iOS (not recommended for production)
-      }
+          SystemNavigator.pop(); // Exits to home screen on Android
+        } else if (Platform.isIOS) {
+          exit(0); // Force quit app on iOS (not recommended for production)
+        }
       },
       child: Scaffold(
         appBar: MyAppBar(
@@ -341,8 +349,9 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
                       iconColor: _speechService.isListening
                           ? Colors.red
                           : Theme.of(context).colorScheme.inversePrimary,
-                      icon:
-                          _speechService.isListening ? Icons.mic : Icons.mic_none,
+                      icon: _speechService.isListening
+                          ? Icons.mic
+                          : Icons.mic_none,
                       onPressed: () => _speechService.toggleListening(
                           context, _handleSpeechResult),
                     );

@@ -158,12 +158,12 @@ class _ExtrasState extends State<Extras> {
 }
 
 class ExtraButton extends StatelessWidget {
-  String name;
-  String path;
-  IconData iconData;
-  Color? color;
-  VoidCallback? customCallback;
-  ExtraButton({
+  final String name;
+  final String path;
+  final IconData iconData;
+  final Color? color;
+  final VoidCallback? customCallback;
+  const ExtraButton({
     super.key,
     required this.name,
     required this.path,

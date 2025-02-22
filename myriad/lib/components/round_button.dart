@@ -8,13 +8,13 @@ class RoundButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const RoundButton({
-    Key? key,
+    super.key,
     required this.icon,
     this.size = 100.0,
     // this.backgroundColor;,
     required this.iconColor,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
