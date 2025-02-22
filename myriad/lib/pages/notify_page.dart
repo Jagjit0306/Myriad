@@ -196,6 +196,7 @@ class _NotifyPageState extends State<NotifyPage> {
                       icon: Icon(
                         Icons.refresh_rounded,
                         color: Theme.of(context).colorScheme.inversePrimary,
+                        semanticLabel: "Refresh mental health score",
                       ),
                     ),
                   ),
