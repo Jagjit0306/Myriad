@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:myriad/auth/auth.dart';
 import 'package:myriad/components/chat_bot_configurator.dart';
 import 'package:myriad/components/extras.dart';
+import 'package:myriad/components/go_to_home.dart';
 import 'package:myriad/components/home_configurator.dart';
 import 'package:myriad/layout/layout_scaffold.dart';
 import 'package:myriad/layout/layout_scaffold_2.dart';
@@ -42,6 +43,10 @@ final router = GoRouter(
     GoRoute(
       path: '/login',
       builder: (context, state) => const GoogleSignInScreen(),
+    ),
+    GoRoute(
+      path: '/go_to_home',
+      builder: (context, state) => const GoToHome(),
     ),
     GoRoute(
       path: '/home_configurator',
