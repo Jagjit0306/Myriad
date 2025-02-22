@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/helper/isolate_functions.dart';
+import 'package:myriad/helper/tts_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart'; // Add this import
@@ -19,8 +20,8 @@ class VoicifyPage extends StatefulWidget {
 }
 
 class _VoicifyPageState extends State<VoicifyPage> {
-  final FlutterTts _flutterTts = FlutterTts();
   final SpeechToText _speech = SpeechToText();
+  final TTS tts = TTS();
   List<ChatMessage> messages = [];
   bool _isListening = false;
   bool _speechEnabled = false;
@@ -44,14 +45,8 @@ class _VoicifyPageState extends State<VoicifyPage> {
   void initState() {
     super.initState();
     _initializeSpeech();
-    _initializeTts();
+    tts.initTTS();
     _getChats();
-  }
-
-  Future<void> _initializeTts() async {
-    await _flutterTts.setLanguage("en-US");
-    await _flutterTts.setPitch(1.0);
-    await _flutterTts.setVolume(1.0);
   }
 
   Future<void> _initializeSpeech() async {
@@ -80,19 +75,6 @@ class _VoicifyPageState extends State<VoicifyPage> {
       print('Failed to initialize speech recognition: $e');
       _speechEnabled = false;
       setState(() {});
-    }
-  }
-
-  Future<void> _speak(String text) async {
-    try {
-      await _flutterTts.speak(text);
-    } catch (e) {
-      print('TTS Error: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to speak text')),
-        );
-      }
     }
   }
 
@@ -215,10 +197,9 @@ class _VoicifyPageState extends State<VoicifyPage> {
               messages: messages,
               onSend: (ChatMessage message) {
                 setState(() {
-                  // messages.add(message);
                   messages = [message, ...messages];
                 });
-                _speak(message.text);
+                tts.speak(message.text);
                 _saveChats();
               },
               scrollToBottomOptions: ScrollToBottomOptions(
@@ -270,7 +251,7 @@ class _VoicifyPageState extends State<VoicifyPage> {
                   currentUserTextColor: Theme.of(context).colorScheme.surface,
                   onPressMessage: (m) {
                     if (m.user.id == _currentUser.id) {
-                      _speak(m.text);
+                      tts.speak(m.text);
                     }
                   }),
               inputOptions: InputOptions(
@@ -312,18 +293,6 @@ class _VoicifyPageState extends State<VoicifyPage> {
                           ),
                         ),
                       if (!hasText)
-                        // Padding(
-                        //   padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        //   child: FloatingActionButton(
-                        //     onPressed: _startListening,
-                        //     backgroundColor:
-                        //         _isListening ? Colors.red : Colors.white,
-                        //     child: Icon(
-                        //       _isListening ? Icons.mic : Icons.mic_none,
-                        //       color: _isListening ? Colors.white : Colors.black,
-                        //     ),
-                        //   ),
-                        // ),
                         GestureDetector(
                           onTap: _startListening,
                           child: Padding(
@@ -351,7 +320,7 @@ class _VoicifyPageState extends State<VoicifyPage> {
   @override
   void dispose() {
     _speech.stop();
-    _flutterTts.stop();
+    tts.dispose();
     _textController.dispose();
     super.dispose();
   }
