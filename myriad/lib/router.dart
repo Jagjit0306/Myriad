@@ -20,7 +20,6 @@ import 'package:myriad/pages/serenify_meditate_page.dart';
 import 'package:myriad/pages/serenify_page.dart';
 import 'package:myriad/pages/sightify_page.dart';
 import 'package:myriad/pages/sos_page.dart';
-// import 'package:myriad/pages/sos_page.dart';
 import 'package:myriad/pages/speakify_page.dart';
 import 'package:myriad/pages/vibraillify_page.dart';
 import 'package:myriad/pages/voicify_page.dart';
