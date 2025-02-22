@@ -13,6 +13,7 @@ class UserDatabase {
       final docId = user.docs.first.id;
       users.doc(docId).update({
         "profileLink": FirebaseAuth.instance.currentUser!.photoURL,
+        "bio": FirebaseAuth.instance.currentUser!.displayName,
       });
     }
   }
