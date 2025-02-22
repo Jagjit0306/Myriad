@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myriad/auth/auth.dart';
+import 'package:myriad/components/chat_bot_configurator.dart';
 import 'package:myriad/components/extras.dart';
 import 'package:myriad/layout/layout_scaffold.dart';
 import 'package:myriad/pages/chatbot_home_page.dart';
@@ -12,13 +13,13 @@ import 'package:myriad/pages/hearify_page.dart';
 import 'package:myriad/pages/home_page.dart';
 import 'package:myriad/pages/maps_wheelchair_home_page.dart';
 import 'package:myriad/pages/medication_page.dart';
-// import 'package:myriad/pages/notify_page.dart';
 import 'package:myriad/pages/on_boarding.dart';
 import 'package:myriad/pages/profile_page.dart';
 import 'package:myriad/pages/serenify_breathe_page.dart';
 import 'package:myriad/pages/serenify_meditate_page.dart';
 import 'package:myriad/pages/serenify_page.dart';
 import 'package:myriad/pages/sightify_page.dart';
+import 'package:myriad/pages/sos_page.dart';
 // import 'package:myriad/pages/sos_page.dart';
 import 'package:myriad/pages/speakify_page.dart';
 import 'package:myriad/pages/vibraillify_page.dart';
@@ -50,10 +51,10 @@ final router = GoRouter(
       path: '/serenify_breathe',
       builder: (context, state) => const SerenifyBreathePage(),
     ),
-    // GoRoute(
-    //   path: '/notify',
-    //   builder: (context, state) => const NotifyPage(),
-    // ),
+    GoRoute(
+      path: '/sos_page',
+      builder: (context, state) => const SosPage(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => LayoutScaffold(
         navigationShell: navigationShell,
@@ -67,9 +68,33 @@ final router = GoRouter(
         ]),
         StatefulShellBranch(routes: [
           GoRoute(
-            path: '/chat_bot',
-            builder: (context, state) => const ChatbotHomePage(),
-          ),
+              path: '/chat_bot',
+              builder: (context, state) => const ChatBotConfigurator(),
+              routes: [
+                GoRoute(
+                  path: '/chat_bot_0',
+                  builder: (context, state) => const ChatbotHomePage(),
+                ),
+                GoRoute(
+                  path: '/chat_bot_1',
+                  builder: (context, state) => const ChatbotHomePage(
+                    voiceInput: true,
+                  ),
+                ),
+                GoRoute(
+                  path: '/chat_bot_2',
+                  builder: (context, state) => const ChatbotHomePage(
+                    voiceOutput: true,
+                  ),
+                ),
+                GoRoute(
+                  path: '/chat_bot_3',
+                  builder: (context, state) => const ChatbotHomePage(
+                    voiceOutput: true,
+                    voiceInput: true,
+                  ),
+                ),
+              ]),
         ]),
         StatefulShellBranch(routes: [
           GoRoute(
