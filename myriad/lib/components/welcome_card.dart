@@ -18,7 +18,6 @@ class WelcomeCard extends StatelessWidget {
         .get();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,7 +30,10 @@ class WelcomeCard extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: Icon(
+                    Icons.person,
+                    size: 100,
+                  ),
                 );
               } else if (snapshot.hasError) {
                 return Text("Error: ${snapshot.error}");
@@ -51,10 +53,16 @@ class WelcomeCard extends StatelessWidget {
                     ],
                   );
                 } else {
-                  return Text("NODATA");
+                  return Icon(
+                    Icons.person,
+                    size: 100,
+                  );
                 }
               } else {
-                return Text("NODATA");
+                return Icon(
+                  Icons.person,
+                  size: 100,
+                );
               }
             },
           ),
