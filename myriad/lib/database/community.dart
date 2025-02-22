@@ -146,4 +146,11 @@ class CommunityDatabase {
       .orderBy('timestamp', descending: true)
       .snapshots();
 }
+
+Stream<QuerySnapshot> getUserPostsStream(String userEmail) {
+  return communityPosts
+      .where('op', isEqualTo: userEmail)
+      .orderBy('timestamp', descending: true)
+      .snapshots();
+}
 }
