@@ -121,66 +121,85 @@ class _NotifyPageState extends State<NotifyPage> {
           Center(
             child: Card(
               color: Theme.of(context).colorScheme.secondary,
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Text(
-                      'Mental Health',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Stack(
-                      alignment: Alignment.center,
+              child: Stack(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    width: double.infinity,
+                    child: Column(
                       children: [
-                        SizedBox(
-                          height: 150,
-                          width: 150,
-                          child: CircularProgressIndicator(
-                            value: _mentalHealthScore / 100,
-                            strokeWidth: 12,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).colorScheme.inversePrimary),
+                        Text(
+                          'Mental Health',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Column(
+                        const SizedBox(height: 10),
+                        Stack(
+                          alignment: Alignment.center,
                           children: [
-                            Text(
-                              mentalHealthIsLoading
-                                  ? "- -"
-                                  : _mentalHealthScore.toString(),
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
+                            SizedBox(
+                              height: 150,
+                              width: 150,
+                              child: CircularProgressIndicator(
+                                value: _mentalHealthScore / 100,
+                                strokeWidth: 12,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary),
                               ),
                             ),
-                            Text(
-                              mentalHealthIsLoading
-                                  ? "analysing"
-                                  : _getMentalHealthStatus(_mentalHealthScore),
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                                fontSize: 16,
-                              ),
+                            Column(
+                              children: [
+                                Text(
+                                  mentalHealthIsLoading
+                                      ? "- -"
+                                      : _mentalHealthScore.toString(),
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary,
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  mentalHealthIsLoading
+                                      ? "analysing"
+                                      : _getMentalHealthStatus(
+                                          _mentalHealthScore),
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {
+                        _updateMentalHealthScore();
+                      },
+                      icon: Icon(
+                        Icons.refresh_rounded,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
