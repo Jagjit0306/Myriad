@@ -4,9 +4,9 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/helper/isolate_functions.dart';
+import 'package:myriad/helper/tts_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SpeakifyPage extends StatefulWidget {
@@ -17,7 +17,7 @@ class SpeakifyPage extends StatefulWidget {
 }
 
 class _SpeakifyPageState extends State<SpeakifyPage> {
-  final FlutterTts _flutterTts = FlutterTts();
+  final TTS tts = TTS();
 
   ChatUser currentUser = ChatUser(
       id: "0",
@@ -26,15 +26,10 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
 
   List<ChatMessage> messages = [];
 
-  Future<void> _speak(String text) async {
-    await _flutterTts.setLanguage("en-US");
-    await _flutterTts.setPitch(1.0);
-    await _flutterTts.speak(text);
-  }
-
   @override
   void initState() {
     super.initState();
+    tts.initTTS();
     _getChats();
   }
 
@@ -79,13 +74,13 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
     setState(() {
       messages = [newMessage, ...messages];
     });
-    _speak(newMessage.text);
+    tts.speak(newMessage.text);
     _saveChats();
   }
 
   @override
   void dispose() {
-    _flutterTts.stop();
+    tts.dispose();
     super.dispose();
   }
 
@@ -175,7 +170,7 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
                 textColor: Theme.of(context).colorScheme.inversePrimary,
                 currentUserTextColor: Theme.of(context).colorScheme.surface,
                 onPressMessage: (p0) {
-                  _speak(p0.text);
+                  tts.speak(p0.text);
                 },
               ),
               inputOptions: InputOptions(

@@ -1,16 +1,27 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/components/my_app_bar.dart';
+import 'package:myriad/components/round_button.dart';
 import 'package:myriad/helper/isolate_functions.dart';
+import 'package:myriad/helper/speech_functions.dart';
+import 'package:myriad/helper/tts_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatbotHomePage extends StatefulWidget {
-  const ChatbotHomePage({super.key});
+  final bool voiceInput;
+  final bool voiceOutput;
+  const ChatbotHomePage({
+    super.key,
+    this.voiceInput = false,
+    this.voiceOutput = false,
+  });
 
   @override
   State<ChatbotHomePage> createState() => _ChatbotHomePageState();
@@ -18,7 +29,11 @@ class ChatbotHomePage extends StatefulWidget {
 
 class _ChatbotHomePageState extends State<ChatbotHomePage> {
   final Gemini gemini = Gemini.instance;
+  final SpeechService _speechService = SpeechService();
+  final TTS tts = TTS();
   List<ChatMessage> messages = [];
+  String _lastWords = '';
+  final TextEditingController _textController = TextEditingController();
   String prefs = "";
 
   ChatUser currentUser = ChatUser(
@@ -36,7 +51,26 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
   void initState() {
     super.initState();
     _getPrefs();
+    if (widget.voiceInput) {
+      _speechService.initialize(context);
+    }
+    if(widget.voiceOutput) {
+      tts.initTTS();
+    }
     _getChats();
+  }
+
+  void _handleSpeechResult(String recognizedWords) {
+    setState(() {
+      _lastWords = "$_lastWords$recognizedWords ";
+      _textController.text = _lastWords;
+
+      _sendMessage(ChatMessage(
+        user: currentUser,
+        text: recognizedWords,
+        createdAt: DateTime.now(),
+      ));
+    });
   }
 
   Future<void> _getPrefs() async {
@@ -136,6 +170,9 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
             createdAt: DateTime.now(),
             text: value?.output ?? "Please try again later.",
           );
+          if (widget.voiceOutput == true) {
+            tts.speak(message.text);
+          }
           setState(() {
             messages = [message, ...messages];
           });
@@ -165,121 +202,163 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MyAppBar(
-        title: "My AI - Eva",
-        actions: [
-          PopupMenuButton(
-            color: Theme.of(context).colorScheme.onSecondaryContainer,
-            onSelected: (value) {
-              switch (value) {
-                case 'clrcht':
-                  _clearChats();
-                  break;
-                default:
-                  break;
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'clrcht',
-                child: Text("Clear Chat"),
-              ),
-            ],
-          )
-        ],
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (messages.isEmpty) Banner1(bannerIcon: Icons.auto_awesome),
-          Expanded(
-            child: DashChat(
-              messages: messages,
-              onSend: _sendMessage,
-              currentUser: currentUser,
-              scrollToBottomOptions: ScrollToBottomOptions(
-                scrollToBottomBuilder: (scrollController) {
-                  return Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .inversePrimary, // White bubble
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 4,
-                              offset: Offset(2, 2), // Shadow effect
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.arrow_downward, // Change the icon if needed
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (Platform.isAndroid) {
+        SystemNavigator.pop(); // Exits to home screen on Android
+      } else if (Platform.isIOS) {
+        exit(0); // Force quit app on iOS (not recommended for production)
+      }
+      },
+      child: Scaffold(
+        appBar: MyAppBar(
+          title: "My AI - Eva",
+          disableBack: true,
+          actions: [
+            PopupMenuButton(
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+              onSelected: (value) {
+                switch (value) {
+                  case 'clrcht':
+                    _clearChats();
+                    break;
+                  default:
+                    break;
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'clrcht',
+                  child: Text("Clear Chat"),
+                ),
+              ],
+            )
+          ],
+        ),
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (messages.isEmpty) Banner1(bannerIcon: Icons.auto_awesome),
+            Expanded(
+              child: DashChat(
+                messages: messages,
+                onSend: _sendMessage,
+                currentUser: currentUser,
+                scrollToBottomOptions: ScrollToBottomOptions(
+                  scrollToBottomBuilder: (scrollController) {
+                    return Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Container(
+                          decoration: BoxDecoration(
                             color: Theme.of(context)
                                 .colorScheme
-                                .surface, // Black icon
+                                .inversePrimary, // White bubble
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 4,
+                                offset: Offset(2, 2), // Shadow effect
+                              ),
+                            ],
                           ),
-                          onPressed: () {
-                            scrollController.animateTo(
-                              scrollController.position.minScrollExtent,
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeOut,
-                            );
-                          },
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.arrow_downward, // Change the icon if needed
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surface, // Black icon
+                            ),
+                            onPressed: () {
+                              scrollController.animateTo(
+                                scrollController.position.minScrollExtent,
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeOut,
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              messageOptions: MessageOptions(
-                currentUserContainerColor:
-                    Theme.of(context).colorScheme.inversePrimary,
-                containerColor:
-                    Theme.of(context).colorScheme.onSecondaryContainer,
-                textColor: Theme.of(context).colorScheme.inversePrimary,
-                currentUserTextColor: Theme.of(context).colorScheme.surface,
-              ),
-              inputOptions: InputOptions(
-                cursorStyle: CursorStyle(
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                    );
+                  },
                 ),
-                inputDecoration: InputDecoration(
-                  filled: true,
-                  fillColor: Theme.of(context).colorScheme.surface,
-                  hintText: "Chat with Eva...",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                messageOptions: MessageOptions(
+                  currentUserContainerColor:
+                      Theme.of(context).colorScheme.inversePrimary,
+                  containerColor:
+                      Theme.of(context).colorScheme.onSecondaryContainer,
+                  textColor: Theme.of(context).colorScheme.inversePrimary,
+                  currentUserTextColor: Theme.of(context).colorScheme.surface,
+                  onPressMessage: (m) {
+                    if (widget.voiceOutput) {
+                      tts.speak("${m.user.getFullName()} said ${m.text}");
+                    }
+                  },
+                ),
+                readOnly: widget.voiceInput,
+                inputOptions: InputOptions(
+                  cursorStyle: CursorStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
                   ),
-                ),
-                sendButtonBuilder: (void Function() onSend) {
-                  return GestureDetector(
-                    onTap: onSend,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
-                      child: Transform.rotate(
-                        angle: -0.42,
-                        child: Icon(
-                          Icons.send_rounded,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          size: 35,
+                  inputDecoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).colorScheme.surface,
+                    hintText: "Chat with Eva...",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  sendButtonBuilder: (void Function() onSend) {
+                    return GestureDetector(
+                      onTap: onSend,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
+                        child: Transform.rotate(
+                          angle: -0.42,
+                          child: Icon(
+                            Icons.send_rounded,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            size: 35,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+            if (widget.voiceInput)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: ListenableBuilder(
+                  listenable: _speechService,
+                  builder: (context, child) {
+                    return RoundButton(
+                      iconColor: _speechService.isListening
+                          ? Colors.red
+                          : Theme.of(context).colorScheme.inversePrimary,
+                      icon:
+                          _speechService.isListening ? Icons.mic : Icons.mic_none,
+                      onPressed: () => _speechService.toggleListening(
+                          context, _handleSpeechResult),
+                    );
+                  },
+                ),
+              ),
+          ],
+        ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _speechService.dispose();
+    tts.dispose();
+    super.dispose();
   }
 }

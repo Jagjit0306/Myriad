@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/components/round_button.dart';
 import 'package:camera/camera.dart';
@@ -10,6 +9,7 @@ import 'package:camera/camera.dart';
 import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
+import 'package:myriad/helper/tts_functions.dart';
 
 class SightifyPage extends StatefulWidget {
   const SightifyPage({super.key});
@@ -18,8 +18,9 @@ class SightifyPage extends StatefulWidget {
   State<SightifyPage> createState() => _SightifyPageState();
 }
 
-class _SightifyPageState extends State<SightifyPage> with WidgetsBindingObserver {
-  final FlutterTts _flutterTts = FlutterTts();
+class _SightifyPageState extends State<SightifyPage>
+    with WidgetsBindingObserver {
+  final TTS tts = TTS();
   File? _imageFile;
   CameraController? _controller;
   bool _isTakingPicture = false;
@@ -29,6 +30,7 @@ class _SightifyPageState extends State<SightifyPage> with WidgetsBindingObserver
   @override
   void initState() {
     super.initState();
+    tts.initTTS();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -36,26 +38,15 @@ class _SightifyPageState extends State<SightifyPage> with WidgetsBindingObserver
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _controller?.dispose();
-    _flutterTts.stop();
+    tts.dispose();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      _stopAudioPlayback();
+      tts.dispose();
     }
-  }
-
-  void _stopAudioPlayback() async {
-    await _flutterTts.stop();
-    print("Audio playback stopped.");
-  }
-
-  Future<void> _speak(String text) async {
-    await _flutterTts.setLanguage("en-US");
-    await _flutterTts.setPitch(1.0);
-    await _flutterTts.speak(text);
   }
 
   Future<void> _takeInstantPicture() async {
@@ -98,7 +89,6 @@ class _SightifyPageState extends State<SightifyPage> with WidgetsBindingObserver
   }
 
   void askGemini() {
-    print("ASKING GEMINI");
     // ignore: deprecated_member_use
     gemini.textAndImage(
       text:
@@ -109,7 +99,7 @@ class _SightifyPageState extends State<SightifyPage> with WidgetsBindingObserver
         print("Response recieved");
         final dataContent = jsonDecode(jsonEncode(value!.content!.parts![0]))
             as Map<String, dynamic>;
-        _speak(dataContent['text'] ?? "Error encountered !");
+        tts.speak(dataContent['text'] ?? "Error encountered !");
       },
     ).catchError((e) {
       print("GEMINI ERROR");
@@ -129,7 +119,7 @@ class _SightifyPageState extends State<SightifyPage> with WidgetsBindingObserver
       (value) {
         final dataContent = jsonDecode(jsonEncode(value!.content!.parts![0]))
             as Map<String, dynamic>;
-        _speak(dataContent['text'] ?? "Error encountered !");
+        tts.speak(dataContent['text'] ?? "Error encountered !");
       },
     ).catchError((e) {
       print("GEMINI ERROR");
@@ -153,6 +143,7 @@ class _SightifyPageState extends State<SightifyPage> with WidgetsBindingObserver
   }
 
   Future<void> cropAndGemini(double x, double y) async {
+    tts.dispose();
     final newImg = await cropImageWithRatios(
       imageFile: _imageFile!,
       xRatio: x,
@@ -201,7 +192,8 @@ class _SightifyPageState extends State<SightifyPage> with WidgetsBindingObserver
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 3,
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                       ),
                       borderRadius: const BorderRadius.all(Radius.circular(30)),
                     ),
