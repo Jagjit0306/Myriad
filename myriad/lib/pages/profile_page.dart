@@ -140,35 +140,66 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  StreamBuilder(
-                    stream: communityDatabase.getUserPostsStream(
-                      userData!['email'] ?? FirebaseAuth.instance.currentUser?.email ?? "",
-                    ),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const SliverFillRemaining(
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                        return const SliverFillRemaining(
-                          child: Center(child: Text('No posts yet')),
-                        );
-                      }
-                      return SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            DocumentSnapshot post = snapshot.data!.docs[index];
-                            return CommunityPost(
-                              postId: post.id,
-                              data: post.data() as Map<String, dynamic>,
-                            );
-                          },
-                          childCount: snapshot.data!.docs.length,
-                        ),
-                      );
-                    },
-                  ),
+                  StreamBuilder<QuerySnapshot>(
+  stream: communityDatabase.getUserPostsStream(
+    userData!['email'] ?? FirebaseAuth.instance.currentUser?.email ?? "",
+  ),
+  builder: (context, snapshot) {
+    // Add detailed error logging
+    if (snapshot.hasError) {
+      print("Stream error: ${snapshot.error}");
+      print("Stream error stack trace: ${snapshot.stackTrace}");
+      return SliverFillRemaining(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Error loading posts'),
+              if (snapshot.error != null)
+                Text(
+                  'Error details: ${snapshot.error}',
+                  style: const TextStyle(fontSize: 12),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // Handle initial loading state
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const SliverFillRemaining(
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    // Get the documents if they exist
+    final docs = snapshot.data?.docs;
+    
+    // Check if we have any documents
+    if (docs == null || docs.isEmpty) {
+      return const SliverFillRemaining(
+        child: Center(child: Text('No posts yet')),
+      );
+    }
+
+    // If we have documents, display them
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          DocumentSnapshot post = docs[index];
+          Map<String, dynamic> postData = post.data() as Map<String, dynamic>;
+          
+          return CommunityPost(
+            postId: post.id,
+            data: postData,
+          );
+        },
+        childCount: docs.length,
+      ),
+    );
+  },
+)
                 ],
               ),
       ),
