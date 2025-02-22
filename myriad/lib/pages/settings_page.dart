@@ -26,16 +26,63 @@ class _SettingsPageState extends State<SettingsPage> {
     {'Paralysis Support': false},
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    bioController.dispose();
+    super.dispose();
+  }
+
   bool anyPrefSelected() {
     return prefs.any((element) => element.values.first);
+  }
+
+  Future<void> loadUserData() async {
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      final userData = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser.email)
+          .get();
+      
+      if (userData.exists) {
+        final data = userData.data();
+        setState(() {
+          nameController.text = data?['username'] ?? '';
+          bioController.text = data?['bio'] ?? '';
+          
+          // Load saved preferences
+          final savedPrefs = data?['accessibility_preferences'] as Map<String, dynamic>?;
+          if (savedPrefs != null) {
+            for (int i = 0; i < prefs.length; i++) {
+              String key = prefs[i].keys.first;
+              prefs[i] = {key: savedPrefs[key] ?? false};
+            }
+          }
+        });
+      }
+    }
   }
 
   Future<void> updateUserInfo() async {
     final User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
+      // Convert prefs list to a map for easier storage
+      Map<String, bool> prefsMap = {};
+      for (var pref in prefs) {
+        prefsMap[pref.keys.first] = pref.values.first;
+      }
+
       await FirebaseFirestore.instance.collection('Users').doc(currentUser.email).update({
         "username": nameController.text,
         "bio": bioController.text,
+        "accessibility_preferences": prefsMap,
       });
     }
   }
@@ -80,13 +127,26 @@ class _SettingsPageState extends State<SettingsPage> {
                         const SizedBox(height: 10),
                         MyButton(
                           text: 'Update Information',
-                          onTap: () {
-                            updateUserInfo();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Information updated successfully'),
-                              ),
-                            );
+                          onTap: () async {
+                            try {
+                              await updateUserInfo();
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Information updated successfully'),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error updating information: $e'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            }
                           },
                           enabled: nameController.text.isNotEmpty,
                         ),
@@ -105,20 +165,22 @@ class _SettingsPageState extends State<SettingsPage> {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
-                      children: prefs.asMap().entries.map((entry) {
-                        int index = entry.key;
-                        String title = entry.value.keys.first;
-                        bool value = entry.value.values.first;
-                        return CheckboxListTile(
-                          title: Text(title),
-                          value: value,
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              prefs[index] = {title: newValue!};
-                            });
-                          },
-                        );
-                      }).toList(),
+                      children: [
+                        ...prefs.map((pref) {
+                          return CheckboxListTile(
+                            title: Text(pref.keys.first),
+                            value: pref.values.first,
+                            onChanged: (bool? newValue) {
+                              setState(() {
+                                prefs[prefs.indexOf(pref)] = {pref.keys.first: newValue!};
+                              });
+                              // Auto-save preferences when changed
+                              updateUserInfo();
+                            },
+                          );
+                        }),
+                        const SizedBox(height: 10),
+                      ],
                     ),
                   ),
                 ],
