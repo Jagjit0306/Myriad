@@ -5,10 +5,12 @@ import 'package:myriad/components/logo_component.dart';
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget> actions;
+  final bool disableBack;
   final bool hideSos;
   const MyAppBar({
     super.key,
     required this.title,
+    this.disableBack = false,
     this.hideSos = false,
     this.actions = const <Widget>[],
   });
@@ -31,12 +33,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
+      automaticallyImplyLeading: !disableBack,
       actions: [
-        if(!hideSos)
-        AppbarIcon(
-          onTouch: () => context.go('/sos_page'),
-          iconData: Icons.warning_amber_rounded,
-        ),
+        if (!hideSos)
+          AppbarIcon(
+            onTouch: () => context.push('/sos_page'),
+            iconData: Icons.warning_amber_rounded,
+          ),
         ...actions,
       ],
     );
