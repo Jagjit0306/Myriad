@@ -18,6 +18,7 @@ import 'package:myriad/pages/profile_page.dart';
 import 'package:myriad/pages/serenify_breathe_page.dart';
 import 'package:myriad/pages/serenify_meditate_page.dart';
 import 'package:myriad/pages/serenify_page.dart';
+import 'package:myriad/pages/settings_page.dart';
 import 'package:myriad/pages/sightify_page.dart';
 import 'package:myriad/pages/sos_page.dart';
 import 'package:myriad/pages/speakify_page.dart';
@@ -136,6 +137,10 @@ final router = GoRouter(
                   path: 'voicify',
                   builder: (context, state) => const VoicifyPage(),
                 ),
+                GoRoute(
+                  path: 'settings',
+                  builder: (context, state) => SettingsPage(),
+                )
               ]),
         ]),
         StatefulShellBranch(routes: [
