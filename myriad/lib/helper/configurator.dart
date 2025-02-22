@@ -47,7 +47,7 @@ Future<List<String>> configurator() async {
 
   Map<String, List<dynamic>> conflicts = {
     // neither
-    "colorify": ["Hearing Support"],
+    "colorify": [],
     "hearify": ["Vision Support", "Speech Assistance"],
     "vibraillify": [],
     "wheelify": ["Vision Support"],
