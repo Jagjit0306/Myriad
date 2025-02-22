@@ -6,11 +6,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/components/my_app_bar.dart';
+import 'package:myriad/components/round_button.dart';
 import 'package:myriad/helper/isolate_functions.dart';
+import 'package:myriad/helper/speech_functions.dart';
+import 'package:myriad/helper/tts_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatbotHomePage extends StatefulWidget {
-  const ChatbotHomePage({super.key});
+  final bool voiceInput;
+  const ChatbotHomePage({
+    super.key,
+    this.voiceInput = false,
+  });
 
   @override
   State<ChatbotHomePage> createState() => _ChatbotHomePageState();
@@ -18,7 +25,11 @@ class ChatbotHomePage extends StatefulWidget {
 
 class _ChatbotHomePageState extends State<ChatbotHomePage> {
   final Gemini gemini = Gemini.instance;
+  final SpeechService _speechService = SpeechService();
+  final TTS tts = TTS();
   List<ChatMessage> messages = [];
+  String _lastWords = '';
+  final TextEditingController _textController = TextEditingController();
   String prefs = "";
 
   ChatUser currentUser = ChatUser(
@@ -36,7 +47,24 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
   void initState() {
     super.initState();
     _getPrefs();
+    if (widget.voiceInput) {
+      _speechService.initialize(context);
+      tts.initTTS();
+    }
     _getChats();
+  }
+
+  void _handleSpeechResult(String recognizedWords) {
+    setState(() {
+      _lastWords = "$_lastWords$recognizedWords ";
+      _textController.text = _lastWords;
+
+      _sendMessage(ChatMessage(
+        user: currentUser,
+        text: recognizedWords,
+        createdAt: DateTime.now(),
+      ));
+    });
   }
 
   Future<void> _getPrefs() async {
@@ -136,6 +164,9 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
             createdAt: DateTime.now(),
             text: value?.output ?? "Please try again later.",
           );
+          if (widget.voiceInput) {
+            tts.speak(message.text);
+          }
           setState(() {
             messages = [message, ...messages];
           });
@@ -246,7 +277,13 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
                     Theme.of(context).colorScheme.onSecondaryContainer,
                 textColor: Theme.of(context).colorScheme.inversePrimary,
                 currentUserTextColor: Theme.of(context).colorScheme.surface,
+                onPressMessage: (m) {
+                  if (widget.voiceInput) {
+                    tts.speak("${m.user.getFullName()} said ${m.text}");
+                  }
+                },
               ),
+              readOnly: widget.voiceInput,
               inputOptions: InputOptions(
                 cursorStyle: CursorStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
@@ -278,8 +315,33 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
               ),
             ),
           ),
+          if (widget.voiceInput)
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: ListenableBuilder(
+                listenable: _speechService,
+                builder: (context, child) {
+                  return RoundButton(
+                    iconColor: _speechService.isListening
+                        ? Colors.red
+                        : Theme.of(context).colorScheme.inversePrimary,
+                    icon:
+                        _speechService.isListening ? Icons.mic : Icons.mic_none,
+                    onPressed: () => _speechService.toggleListening(
+                        context, _handleSpeechResult),
+                  );
+                },
+              ),
+            ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _speechService.dispose();
+    tts.dispose();
+    super.dispose();
   }
 }
