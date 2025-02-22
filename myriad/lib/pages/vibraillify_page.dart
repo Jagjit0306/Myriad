@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myriad/components/banner_1.dart';
+import 'package:myriad/components/my_app_bar.dart';
 import 'package:myriad/components/round_button.dart';
 import 'package:myriad/helper/isolate_functions.dart';
 import 'package:myriad/helper/speech_functions.dart';
@@ -106,10 +108,14 @@ class _VibraillifyPageState extends State<VibraillifyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Vibraillify'),
-        centerTitle: true,
+      appBar: MyAppBar(
+        title: 'Vibraillify',
+        hideSos: true,
         actions: [
+          AppbarIcon(
+            onTouch: () => context.push('/vb_settings'),
+            iconData: Icons.settings,
+          ),
           PopupMenuButton(
             color: Theme.of(context).colorScheme.onSecondaryContainer,
             onSelected: (value) {
@@ -127,7 +133,7 @@ class _VibraillifyPageState extends State<VibraillifyPage> {
                 child: Text("Clear Chat"),
               ),
             ],
-          )
+          ),
         ],
       ),
       body: Column(

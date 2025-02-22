@@ -3,7 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:myriad/auth/auth.dart';
 import 'package:myriad/components/chat_bot_configurator.dart';
 import 'package:myriad/components/extras.dart';
+import 'package:myriad/components/go_to_home.dart';
+import 'package:myriad/components/home_configurator.dart';
 import 'package:myriad/layout/layout_scaffold.dart';
+import 'package:myriad/layout/layout_scaffold_2.dart';
+import 'package:myriad/pages/vb_chat_bot.dart';
 import 'package:myriad/pages/chatbot_home_page.dart';
 import 'package:myriad/pages/colorify_page.dart';
 import 'package:myriad/pages/community_new_post.dart';
@@ -22,6 +26,7 @@ import 'package:myriad/pages/settings_page.dart';
 import 'package:myriad/pages/sightify_page.dart';
 import 'package:myriad/pages/sos_page.dart';
 import 'package:myriad/pages/speakify_page.dart';
+import 'package:myriad/pages/vb_settings_page.dart';
 import 'package:myriad/pages/vibraillify_page.dart';
 import 'package:myriad/pages/voicify_page.dart';
 
@@ -38,6 +43,14 @@ final router = GoRouter(
     GoRoute(
       path: '/login',
       builder: (context, state) => const GoogleSignInScreen(),
+    ),
+    GoRoute(
+      path: '/go_to_home',
+      builder: (context, state) => const GoToHome(),
+    ),
+    GoRoute(
+      path: '/home_configurator',
+      builder: (context, state) => const HomeConfigurator(),
     ),
     GoRoute(
       path: '/onboarding',
@@ -161,6 +174,29 @@ final router = GoRouter(
           ),
         ]),
       ],
-    )
+    ),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) => LayoutScaffold2(
+        navigationShell: navigationShell,
+      ),
+      branches: [
+        StatefulShellBranch(routes: [
+          GoRoute(
+            path: '/vb_chat_bot',
+            builder: (context, state) => const VbChatBot(),
+          ),
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(
+            path: '/vb_vibraillify',
+            builder: (context, state) => const VibraillifyPage(),
+          ),
+        ]),
+      ],
+    ),
+    GoRoute(
+      path: '/vb_settings',
+      builder: (context, state) => const VbSettingsPage(),
+    ),
   ],
 );

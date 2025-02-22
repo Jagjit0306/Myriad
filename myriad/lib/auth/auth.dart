@@ -14,7 +14,7 @@ class AuthPage extends StatelessWidget {
           // Add a small delay to prevent rapid redirects
           Future.delayed(const Duration(milliseconds: 100), () {
             if (snapshot.hasData) {
-              context.go('/home');
+              context.go('/home_configurator');
             } else {
               context.go('/login');
             }

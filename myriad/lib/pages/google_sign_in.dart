@@ -174,7 +174,7 @@ class _ManageLoginState extends State<ManageLogin> {
       if (onboarding) {
         context.go('/onboarding');
       } else {
-        context.go('/home');
+        context.go('/home_configurator');
       }
     } else {
       bool accountState = await saveUser(widget.email);

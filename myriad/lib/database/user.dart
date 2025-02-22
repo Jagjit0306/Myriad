@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -24,6 +26,16 @@ class UserDatabase {
         .get();
     if (user.docs.isNotEmpty) {
       return user.docs.first['guardianPhone'];
+    }
+    return null;
+  }
+
+  Future<List<dynamic>?> getConfig() async {
+    final QuerySnapshot user = await users
+        .where("email", isEqualTo: FirebaseAuth.instance.currentUser?.email)
+        .get();
+    if (user.docs.isNotEmpty) {
+      return user.docs.first['prefs'] as List<dynamic>;
     }
     return null;
   }
