@@ -45,7 +45,7 @@ class _ChatBotConfiguratorState extends State<ChatBotConfigurator> {
     Map<String, List<String>> greenCards = {
       // all
       "chat_bot_0": [],
-      "chat_bot_2": ["Vision Support"],
+      "chat_bot_2": ["Speech Assistance"],
       "chat_bot_3": ["Vision Support"],
     };
 
@@ -97,7 +97,7 @@ class _ChatBotConfiguratorState extends State<ChatBotConfigurator> {
         result = [...result, x];
       }
     }
-    // print("RESULT FOR VOICE MODE IS ${result[0]}");
+    // print("RESULT FOR VOICE MODE IS $result");
     context.go('/chat_bot/${result[0]}');
   }
 
