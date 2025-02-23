@@ -35,11 +35,12 @@ class _ChatBotConfiguratorState extends State<ChatBotConfigurator> {
     // still not sure if to use braille input or voice input for visually impaired
     // TODO: review these later
 
+    // This also acts as a priority order
     List<String> features = [
       "chat_bot_0",
       "chat_bot_1",
-      "chat_bot_2",
       "chat_bot_3",
+      "chat_bot_2",
     ];
 
     Map<String, List<String>> greenCards = {
@@ -59,7 +60,7 @@ class _ChatBotConfiguratorState extends State<ChatBotConfigurator> {
       // neither
       "chat_bot_0": ["Vision Support", "Dexterity Support"],
       "chat_bot_1": ["Vision Support", "Speech Assistance"],
-      "chat_bot_2": ["Hearing Support", "Dexterity Support", "Vision Support"],
+      "chat_bot_2": ["Hearing Support", "Dexterity Support"],
       "chat_bot_3": ["Hearing Support", "Speech Assistance"],
     };
 
