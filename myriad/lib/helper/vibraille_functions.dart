@@ -2,6 +2,7 @@ import 'package:vibration/vibration.dart';
 
 class Vibraille {
   bool stopVibration = false;
+  bool playing = false;
 
   void convertToVibraille(String text, double speed) {
     String vibrailleText = '';
@@ -16,13 +17,17 @@ class Vibraille {
   }
 
   void stopVib() {
-    stopVibration = true;
+    if (playing) {
+      stopVibration = true;
+      playing = false;
+    }
   }
 
   Future<void> vibraillify(String text, double multi) async {
     bool canVibrate = await Vibration.hasVibrator();
     if (!canVibrate) return;
 
+    playing = true;
     for (var element in text.split("")) {
       if (!b2B.containsKey(element)) continue; // Skip invalid characters
 
@@ -45,6 +50,7 @@ class Vibraille {
       // Pause between characters
       await Future.delayed(Duration(milliseconds: (200 / multi).toInt()));
     }
+    playing = false;
   }
 
   Map<String, String> b2B = {
