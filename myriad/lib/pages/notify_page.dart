@@ -3,7 +3,11 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:myriad/helper/mental_health.dart';
 
 class NotifyPage extends StatefulWidget {
-  const NotifyPage({super.key});
+  final bool hideMediGraph;
+  const NotifyPage({
+    super.key,
+    this.hideMediGraph = false,
+  });
 
   @override
   State<NotifyPage> createState() => _NotifyPageState();
@@ -56,6 +60,7 @@ class _NotifyPageState extends State<NotifyPage> {
           SizedBox(
             height: 15,
           ),
+          if(!widget.hideMediGraph)
           Card(
             color: Theme.of(context).colorScheme.secondary,
             child: Padding(
@@ -117,6 +122,7 @@ class _NotifyPageState extends State<NotifyPage> {
               ),
             ),
           ),
+          if(!widget.hideMediGraph)
           const SizedBox(height: 20),
           Center(
             child: Card(

@@ -31,9 +31,10 @@ class _VbChatBotState extends State<VbChatBot> {
   final Vibraille vibraille = Vibraille();
 
   ChatUser currentUser = ChatUser(
-      id: "0",
-      firstName: FirebaseAuth.instance.currentUser!.displayName,
-      profileImage: FirebaseAuth.instance.currentUser!.photoURL);
+    id: "0",
+    firstName: FirebaseAuth.instance.currentUser!.displayName,
+    profileImage: FirebaseAuth.instance.currentUser!.photoURL,
+  );
 
   ChatUser geminiUser = ChatUser(
     firstName: "Eva",

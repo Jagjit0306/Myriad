@@ -39,7 +39,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
   ChatUser currentUser = ChatUser(
       id: "0",
       firstName: FirebaseAuth.instance.currentUser!.displayName,
-      profileImage: FirebaseAuth.instance.currentUser!.photoURL);
+      profileImage: FirebaseAuth.instance.currentUser!.photoURL,);
 
   ChatUser geminiUser = ChatUser(
     firstName: "Eva",
