@@ -61,6 +61,8 @@ class _OnBoardingState extends State<OnBoarding> {
         "prefs": prefs,
         "guardianPhone": guardianPhoneController.text,
         "bio": bioController.text,
+        "following": [],
+        "followers": [],
       });
     }
   }

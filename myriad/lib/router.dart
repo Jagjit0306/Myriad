@@ -29,6 +29,7 @@ import 'package:myriad/pages/speakify_page.dart';
 import 'package:myriad/pages/vb_settings_page.dart';
 import 'package:myriad/pages/vibraillify_page.dart';
 import 'package:myriad/pages/voicify_page.dart';
+import 'package:myriad/pages/user_profile_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
@@ -171,6 +172,12 @@ final router = GoRouter(
           GoRoute(
             path: '/profile',
             builder: (context, state) => const ProfilePage(),
+          ),
+          GoRoute(
+            path: '/profile/:email',
+            builder: (context, state) => UserProfilePage(
+              userEmail: state.pathParameters['email']!,
+            ),
           ),
         ]),
       ],
