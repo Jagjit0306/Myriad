@@ -36,7 +36,6 @@ class MainApp extends StatelessWidget {
       routerConfig: router,
       theme: lightMode,
       darkTheme: darkMode,
-      debugShowCheckedModeBanner: false,
     );
   }
 }
