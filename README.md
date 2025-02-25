@@ -3,45 +3,53 @@
 ![Myriad Logo](path-to-your-logo-image)
 
 ## About Myriad
-**Myriad** is an inclusive platform designed specifically for specially abled individuals. It personalizes user experience based on disabilities and provides essential features to improve accessibility, communication, and well-being. It is inspired by platforms like Reddit while integrating assistive technologies tailored for different needs.
+**Myriad** is an inclusive platform designed specifically for specially abled individuals. It personalizes user experience based on your needs and provides essential features to improve accessibility, communication, and well-being. It is inspired by platforms like Reddit while integrating assistive technologies tailored for different needs.
 
 ---
 
 ## 🌟 Key Features
 
 ### 1. **Personalized Onboarding**
-- Users sign up and specify their disabilities.
-- Based on their input, they receive customized features and accessibility tools.
+- Users can sign up and specify their needs.
+- The app changes dynamically, adapting to the user's need and providing them with accessibility and quality of life features.
 
-### 2. **Community (Reddit-like Social Hub)**
+### 2. **Community**
 - A discussion space where users can post, comment, and interact with others.
-- Categories and topics tailored to various disabilities and interests.
+- Users can group together and have discussions and conversations in threads, based on common interests, needs and struggles.
 - Moderation and reporting features for a safe experience.
 
-### 3. **Hearify (Support for Deaf Users)**
+### 3. **Hearify (Hearing Accessibility)**
 - Converts speech into text in real time.
-- Provides sign language tutorials and resources.
+<!-- - Provides sign language tutorials and resources. -->
 - Live captioning for better communication.
 
-### 4. **Vocify (Support for Voiceless Users)**
+### 4. **Speakify (Speech Accessibility)**
 - Text-to-speech functionality for easy communication.
 - Predefined phrases for quick interaction.
-- Customizable voice tones and accents.
+<!-- - Customizable voice tones and accents. -->
+
+### 5. **Voicify (Speech and Hearing Accessibility)**
+- Multi tool to provide a intuitive Text-Voice and Voice-Text chat-like functionality to make communication seamless.
+- Predefined phrases for quick interaction.
+<!-- - Customizable voice tones and accents. -->
 
 ### 5. **Wheelify (Wheelchair Arrangement Services)**
 - Users can request wheelchair assistance at specific locations.
+- Will help expand wheelchair accessibility at places over time.
 - Maps integrated for accessible route planning.
 - Wheelchair-friendly location suggestions.
 
 ### 6. **Medify (Medication Reminder & Storage)**
 - Stores and tracks medicine schedules.
 - Sends reminders for timely medication intake.
-- Tracks medical history and doctor appointments.
+- Tracks medical history and medicine consistency.
+<!-- - Tracks medical history and doctor appointments. -->
 
-### 7. **Vibrailify (Support for Blind Users)**
-- Converts text to Braille (for compatible devices).
-- Vibration-based alerts and navigation assistance.
-- AI-powered object and text recognition using Vision Pro.
+### 7. **Vibraillify (Visual and Hearing Accessibility)**
+- Converts text to Vibraille.
+- Requires no extra device and uses sequential pattern to translate braille.
+<!-- - Vibration-based alerts and navigation assistance. -->
+<!-- - AI-powered object and text recognition using Vision Pro. -->
 
 ### 8. **Serenify (Mental Wellness Suite)**
 A specialized module offering four essential tools:
@@ -51,7 +59,7 @@ A specialized module offering four essential tools:
 - **Breathe:** Breathing exercises for relaxation.
 
 ### 9. **My AI (Personalized AI Chatbot)**
-- An AI-powered assistant that helps users stay positive.
+- An AI-powered assistant that helps provides both technical and emotional assistance.
 - Provides motivation, mental health tips, and practical advice.
 - Learns user preferences to offer personalized assistance.
 
@@ -69,7 +77,7 @@ A specialized module offering four essential tools:
 - Integration of basic community forum features.
 
 ### **Phase 2: Accessibility & Assistance**
-- Deployment of Hearify, Vocify, and Vibrailify modules.
+- Deployment of Hearify, Speakify, Voicify, and Vibraillify modules.
 - AI-powered speech-to-text and text-to-speech functionalities.
 - Basic version of My AI chatbot with general assistance features.
 
@@ -94,8 +102,8 @@ A specialized module offering four essential tools:
 
 ### **1. Onboarding & Personalization**
 - User installs the Myriad app and registers.
-- Selects disabilities and preferences.
-- Profile is set up with personalized feature access.
+- Selects preferences according to their needs.
+- The app adapts to the user and provides a myriad of helpful features.
 
 ### **2. Engaging with the Community**
 - User joins discussion forums related to their needs.
@@ -103,7 +111,7 @@ A specialized module offering four essential tools:
 - Community moderators ensure a safe and supportive environment.
 
 ### **3. Accessibility & Assistance Tools**
-- Users can enable features such as Hearify, Vocify, and Vibrailify.
+- Users can enable features such as Hearify, Speakify, Voicify, and Vibraillify.
 - AI assists in providing voice, text, and visual support.
 
 ### **4. Health & Wellness**
@@ -137,8 +145,8 @@ A specialized module offering four essential tools:
 ### Steps to Run the Project
 ```bash
 # Clone the repository
-git clone https://github.com/your-repo/myriad.git
-cd myriad
+git clone https://github.com/Jagjit0306/Myriad.git
+cd Myriad/myriad
 
 # Install dependencies
 flutter pub get
@@ -151,19 +159,19 @@ flutter run
 
 ## 📚 Tech Stack
 - **Frontend:** Flutter (Dart)
-- **Backend:** Firebase (Firestore, Firebase Auth)
-- **Authentication:** Firebase Auth
-- **AI & APIs:** Google Gemini, Google Vision Pro
-- **Cloud Storage:** Firebase Storage
+- **Backend:** Firebase.
+- **Authentication:** Firebase Authentication (Google OAuth2).
+- **AI & APIs:** Google Gemini API, Google Maps API, Google Places API.
+- **Cloud Storage:** Firebase Firestore.
 
 ---
 
-## 🚀 Deployment
+<!-- ## 🚀 Deployment
 - Uses Firebase Hosting for web deployment.
 - Cloud Functions for backend processes.
 - Security rules for data protection and user authentication.
 
----
+--- -->
 
 ## 💼 Funding & Support
 We are actively seeking funding to enhance Myriad's capabilities and expand our reach. Your support can help us:
@@ -182,13 +190,12 @@ For funding inquiries, reach out to **jayantjoshi0001@gmail.com**.
 ## 🎯 My Team
 Meet the dedicated minds behind Myriad:
 
-- **Jagjit Singh** - Founder & Lead Developer
-- **Jayant Joshi** - UI/UX Designer & Developer
-- **Gurshaan Singh** - Backend Developer
+- **Jagjit Singh** - Mobile Developer
+- **Jayant Joshi** - UI/UX Designer & Mobile Developer
+- **Gurshaan Singh** - Mobile Developer
 
 Together, we are committed to building an inclusive and empowering experience for specially abled individuals worldwide.
 
 ---
 
 ### ⭐ If you like this project, don't forget to give it a star!
-
