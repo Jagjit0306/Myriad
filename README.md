@@ -1,6 +1,11 @@
 # Myriad - Empowering Specially Abled Individuals
 
-![Myriad Logo](path-to-your-logo-image)
+<div align="center">
+
+### Logo  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488253/daghv8xm2ssfdhlrp5vr.png" width="20%" alt="Hearify Screenshot">
+
+</div>
 
 ## About Myriad
 **Myriad** is an inclusive platform designed specifically for specially abled individuals. It personalizes user experience based on your needs and provides essential features to improve accessibility, communication, and well-being. It is inspired by platforms like Reddit while integrating assistive technologies tailored for different needs.
@@ -126,11 +131,47 @@ A specialized module offering four essential tools:
 
 ---
 
-## 📸 Screenshots & Demo
-(Add images and videos showcasing different features of the app here)
+## 📸 Screenshots & Demo  
 
-![Screenshot 1](path-to-screenshot1)
-![Screenshot 2](path-to-screenshot2)
+<div align="center">
+
+### Hearify  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488254/rz9gamgxa7zbtlzcvdnj.jpg" width="20%" alt="Hearify Screenshot">
+
+### Community  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488254/mvh6yw2g2ajzzjukdu0t.jpg" width="20%" alt="Community Screenshot">
+
+### SOS  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488254/wiopigvpdvq8hjh5rjpt.jpg" width="20%" alt="SOS Screenshot">
+
+### New Thread  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488254/k8mz8ablu4jdzgtwh7yb.jpg" width="20%" alt="New Thread Screenshot">
+
+### Notify  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488254/jgq8gvrc2ggdsmmalmvv.jpg" width="20%" alt="Notify Screenshot">
+
+### Meditation Page  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488253/w6frtge83gmerb5wq9nb.jpg" width="20%" alt="Meditation Page Screenshot">
+
+### Onboarding  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488253/t5skwenphijfhdjnze09.jpg" width="20%" alt="Onboarding Screenshot">
+
+### Serenify  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488252/lgk3cbghfdwm4s9feoio.jpg" width="20%" alt="Serenify Screenshot">
+
+### Medify Timer  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488252/s7bfula9ghiegy969f5w.jpg" width="20%" alt="Medify Timer Screenshot">
+
+### Medify  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488252/jivnjkrasjtcjudkz5bm.jpg" width="20%" alt="Medify Screenshot">
+
+### My AI  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488252/fd8vxaqsrpyochjuixxe.jpg" width="20%" alt="My AI Screenshot">
+
+### Myriad  
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488252/zr8fl8dr90pivpdh3orr.jpg" width="20%" alt="Myriad Screenshot">
+
+</div>
 
 🎥 **Demo Video:** [Insert Link to Video]
 
