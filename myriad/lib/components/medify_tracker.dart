@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:myriad/helper/medify_functions.dart';
 
@@ -27,6 +25,27 @@ class _MedifyTrackerState extends State<MedifyTracker> {
     });
   }
 
+  // Add this method to toggle the timing status
+  void toggleMedicineStatus(int recordIndex, int medicineIndex, int timeIndex) {
+    setState(() {
+      Map<String, dynamic> record = records[recordIndex];
+      Map<String, dynamic> medicine = record["records"][medicineIndex];
+      Map<String, bool> timing = Map<String, bool>.from(medicine['times'][timeIndex]);
+      
+      // Get the key (time) from the timing map
+      String timeKey = timing.keys.first;
+      
+      // Toggle the boolean value
+      timing[timeKey] = !timing.values.first;
+      
+      // Update the timing in the records
+      medicine['times'][timeIndex] = timing;
+      
+      // Save the updated records to persistent storage
+      medifyHistory.updateRecords(records);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -39,7 +58,8 @@ class _MedifyTrackerState extends State<MedifyTracker> {
                 itemBuilder: (context, index) {
                   return _MedifyRecordCard(
                     item: records[index],
-                    onclick: () {},
+                    recordIndex: index,
+                    onToggle: toggleMedicineStatus,
                   );
                 },
               ));
@@ -48,11 +68,14 @@ class _MedifyTrackerState extends State<MedifyTracker> {
 
 class _MedifyRecordCard extends StatelessWidget {
   final Map<String, dynamic> item;
-  final VoidCallback onclick;
+  final int recordIndex;
+  final Function(int, int, int) onToggle;
+  
   const _MedifyRecordCard({
     super.key,
     required this.item,
-    required this.onclick,
+    required this.recordIndex,
+    required this.onToggle,
   });
 
   @override
@@ -79,7 +102,9 @@ class _MedifyRecordCard extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return _MedifyRecordMedicine(
                     med: item["records"][index],
-                    onclick: () {},
+                    recordIndex: recordIndex,
+                    medicineIndex: index,
+                    onToggle: onToggle,
                   );
                 },
               ),
@@ -93,11 +118,16 @@ class _MedifyRecordCard extends StatelessWidget {
 
 class _MedifyRecordMedicine extends StatelessWidget {
   final Map<String, dynamic> med;
-  final VoidCallback onclick;
+  final int recordIndex;
+  final int medicineIndex;
+  final Function(int, int, int) onToggle;
+  
   const _MedifyRecordMedicine({
     super.key,
     required this.med,
-    required this.onclick,
+    required this.recordIndex,
+    required this.medicineIndex,
+    required this.onToggle,
   });
 
   @override
@@ -125,7 +155,7 @@ class _MedifyRecordMedicine extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(right: 4),
                     child: GestureDetector(
-                      onTap: onclick,
+                      onTap: () => onToggle(recordIndex, medicineIndex, index),
                       child: Chip(
                         label: Text(timing.keys.first),
                         backgroundColor:

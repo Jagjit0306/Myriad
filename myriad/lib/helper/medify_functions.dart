@@ -92,6 +92,10 @@ class MedifyHistory {
     return _history;
   }
 
+  void updateRecords(List<dynamic> records) {
+    _prefs.setString('medicationsHistory', jsonEncode(records));
+  }
+
   String _currDate({int offset = 0}) {
     DateTime now = DateTime.now().subtract(Duration(days: offset));
     return DateFormat('yyyy-MM-dd').format(now);
