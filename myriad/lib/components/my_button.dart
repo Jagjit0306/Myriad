@@ -8,7 +8,7 @@ class MyButton extends StatelessWidget {
 
   const MyButton(
       {super.key,
-      this.fontSize = 16,
+      this.fontSize = 18,
       required this.text,
       required this.enabled,
       required this.onTap});
@@ -29,7 +29,7 @@ class MyButton extends StatelessWidget {
           color: Theme.of(context).colorScheme.inversePrimary,
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+            padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
