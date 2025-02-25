@@ -10,7 +10,7 @@ class MedifyHistory {
   late List<dynamic> _medSchedule;
   late List<dynamic> _history;
 
-  void init() async {
+  Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
     final String medicationsJson = _prefs.getString('medications') ?? "";
 
@@ -22,7 +22,7 @@ class MedifyHistory {
       // print(jsonEncode(_medSchedule));
     }
 
-    _prefs.setString('medicationsHistory', "");
+    // _prefs.setString('medicationsHistory', "");
     final String medicationsHistoryJson =
         _prefs.getString('medicationsHistory') ?? "";
 
@@ -42,7 +42,8 @@ class MedifyHistory {
 
         // Add only the last `_saveDays` worth of missing entries
         for (int i = daysToAdd; i > 0; i--) {
-          String missingDate = _currDate(offset: i); // Offset logic remains correct
+          String missingDate =
+              _currDate(offset: i); // Offset logic remains correct
 
           if (!_history.any((entry) => entry["date"] == missingDate)) {
             _history.add({
@@ -85,6 +86,10 @@ class MedifyHistory {
       // log(jsonEncode(_history));
       _prefs.setString('medicationsHistory', jsonEncode(_history));
     }
+  }
+
+  List<dynamic> getRecords() {
+    return _history;
   }
 
   String _currDate({int offset = 0}) {

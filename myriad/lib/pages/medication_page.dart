@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:myriad/components/medify_tracker.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_textfield.dart';
-import 'package:myriad/helper/medify_functions.dart';
+// import 'package:myriad/helper/medify_functions.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -42,7 +43,7 @@ class MedicationPage extends StatefulWidget {
 }
 
 class _MedicationPageState extends State<MedicationPage> {
-  final MedifyHistory medifyHistory = MedifyHistory();
+  // final MedifyHistory medifyHistory = MedifyHistory();
   final TextEditingController _medicineNameController = TextEditingController();
   final List<TextEditingController> _timeControllers = List.generate(
     6, // Maximum number of time slots
@@ -58,7 +59,7 @@ class _MedicationPageState extends State<MedicationPage> {
     super.initState();
     _initializeNotifications();
     _loadMedications();
-    medifyHistory.init();
+    // medifyHistory.init();
 
     // Add listeners to all time controllers to trigger UI updates
     for (var controller in _timeControllers) {
@@ -343,6 +344,7 @@ class _MedicationPageState extends State<MedicationPage> {
                 onTap: _saveMedication,
                 fontSize: 18,
               ),
+              MedifyTracker(),
               const SizedBox(height: 24),
               Text(
                 'Schedule',
