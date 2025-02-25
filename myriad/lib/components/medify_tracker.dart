@@ -30,14 +30,17 @@ class _MedifyTrackerState extends State<MedifyTracker> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 150,
+        height: 200,
         child: records.isEmpty
             ? const Center(child: CircularProgressIndicator())
             : ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: records.length,
                 itemBuilder: (context, index) {
-                  return _MedifyRecordCard(item: records[index]);
+                  return _MedifyRecordCard(
+                    item: records[index],
+                    onclick: () {},
+                  );
                 },
               ));
   }
@@ -45,9 +48,11 @@ class _MedifyTrackerState extends State<MedifyTracker> {
 
 class _MedifyRecordCard extends StatelessWidget {
   final Map<String, dynamic> item;
+  final VoidCallback onclick;
   const _MedifyRecordCard({
     super.key,
     required this.item,
+    required this.onclick,
   });
 
   @override
@@ -72,7 +77,10 @@ class _MedifyRecordCard extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: item["records"].length,
                 itemBuilder: (context, index) {
-                  return _MedifyRecordMedicine(med: item["records"][index]);
+                  return _MedifyRecordMedicine(
+                    med: item["records"][index],
+                    onclick: () {},
+                  );
                 },
               ),
             )
@@ -85,7 +93,12 @@ class _MedifyRecordCard extends StatelessWidget {
 
 class _MedifyRecordMedicine extends StatelessWidget {
   final Map<String, dynamic> med;
-  const _MedifyRecordMedicine({super.key, required this.med});
+  final VoidCallback onclick;
+  const _MedifyRecordMedicine({
+    super.key,
+    required this.med,
+    required this.onclick,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -111,10 +124,13 @@ class _MedifyRecordMedicine extends StatelessWidget {
                       Map<String, bool>.from(med['times'][index]);
                   return Padding(
                     padding: const EdgeInsets.only(right: 4),
-                    child: Chip(
-                      label: Text(timing.keys.first),
-                      backgroundColor:
-                          timing.values.first ? Colors.green : Colors.grey,
+                    child: GestureDetector(
+                      onTap: onclick,
+                      child: Chip(
+                        label: Text(timing.keys.first),
+                        backgroundColor:
+                            timing.values.first ? Colors.green : Colors.grey,
+                      ),
                     ),
                   );
                 },
