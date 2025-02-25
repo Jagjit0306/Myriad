@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myriad/components/my_button.dart';
 import 'package:myriad/helper/medify_functions.dart';
 
 class MedifyTracker extends StatefulWidget {
@@ -30,17 +31,18 @@ class _MedifyTrackerState extends State<MedifyTracker> {
     setState(() {
       Map<String, dynamic> record = records[recordIndex];
       Map<String, dynamic> medicine = record["records"][medicineIndex];
-      Map<String, bool> timing = Map<String, bool>.from(medicine['times'][timeIndex]);
-      
+      Map<String, bool> timing =
+          Map<String, bool>.from(medicine['times'][timeIndex]);
+
       // Get the key (time) from the timing map
       String timeKey = timing.keys.first;
-      
+
       // Toggle the boolean value
       timing[timeKey] = !timing.values.first;
-      
+
       // Update the timing in the records
       medicine['times'][timeIndex] = timing;
-      
+
       // Save the updated records to persistent storage
       medifyHistory.updateRecords(records);
     });
@@ -48,21 +50,31 @@ class _MedifyTrackerState extends State<MedifyTracker> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 200,
-        child: records.isEmpty
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: records.length,
-                itemBuilder: (context, index) {
-                  return _MedifyRecordCard(
-                    item: records[index],
-                    recordIndex: index,
-                    onToggle: toggleMedicineStatus,
-                  );
-                },
-              ));
+    return Column(
+      children: [
+        MyButton(
+          text: "Clear",
+          enabled: true,
+          onTap: medifyHistory.clearData,
+        ),
+        SizedBox(
+          height: 200,
+          child: records.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: records.length,
+                  itemBuilder: (context, index) {
+                    return _MedifyRecordCard(
+                      item: records[index],
+                      recordIndex: index,
+                      onToggle: toggleMedicineStatus,
+                    );
+                  },
+                ),
+        ),
+      ],
+    );
   }
 }
 
@@ -70,9 +82,8 @@ class _MedifyRecordCard extends StatelessWidget {
   final Map<String, dynamic> item;
   final int recordIndex;
   final Function(int, int, int) onToggle;
-  
+
   const _MedifyRecordCard({
-    super.key,
     required this.item,
     required this.recordIndex,
     required this.onToggle,
@@ -121,9 +132,8 @@ class _MedifyRecordMedicine extends StatelessWidget {
   final int recordIndex;
   final int medicineIndex;
   final Function(int, int, int) onToggle;
-  
+
   const _MedifyRecordMedicine({
-    super.key,
     required this.med,
     required this.recordIndex,
     required this.medicineIndex,

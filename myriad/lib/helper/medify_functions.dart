@@ -20,6 +20,8 @@ class MedifyHistory {
           .map((json) => MedicationSchedule.fromJson(json))
           .toList();
       // print(jsonEncode(_medSchedule));
+    } else {
+      _medSchedule = [];
     }
 
     // _prefs.setString('medicationsHistory', "");
@@ -31,46 +33,59 @@ class MedifyHistory {
       // print("HISTORY RESTORED");
       // print(jsonEncode(_history));
 
-      String newestDate = _findNewestDate(_history);
       String currentDate = _currDate();
-
-      int missingDays = _daysBetween(newestDate, currentDate);
-
-      if (missingDays > 0) {
-        int daysToAdd = (missingDays > _saveDays) ? _saveDays : missingDays;
-        // print("Adding missing entries for the last $daysToAdd days.");
-
-        // Add only the last `_saveDays` worth of missing entries
-        for (int i = daysToAdd; i > 0; i--) {
-          String missingDate =
-              _currDate(offset: i); // Offset logic remains correct
-
-          if (!_history.any((entry) => entry["date"] == missingDate)) {
-            _history.add({
-              "date": missingDate,
-              "records": _medSchedule.map((medicine) {
-                return {
-                  "medicineName": medicine.medicineName,
-                  "times": medicine.times.map((time) => {time: false}).toList(),
-                  "id": medicine.id
-                };
-              }).toList()
-            });
+      
+      // Find the newest date in history
+      if (_history.isNotEmpty) {
+        String newestDate = _findNewestDate(_history);
+        int missingDays = _daysBetween(newestDate, currentDate);
+        
+        // Add entries for missing days, but limit to _saveDays if gap is large
+        if (missingDays > 0) {
+          // Limit days to add based on _saveDays
+          int daysToAdd = (missingDays > _saveDays) ? _saveDays : missingDays;
+          
+          for (int i = daysToAdd; i > 0; i--) {
+            String missingDate = _subtractDaysFromToday(i);
+            
+            if (!_history.any((entry) => entry["date"] == missingDate)) {
+              _history.add({
+                "date": missingDate,
+                "records": _medSchedule.map((medicine) {
+                  return {
+                    "medicineName": medicine.medicineName,
+                    "times": medicine.times.map((time) => {time: false}).toList(),
+                    "id": medicine.id
+                  };
+                }).toList()
+              });
+            }
           }
         }
       }
+      
+      // Check if today's entry exists
+      if (!_history.any((entry) => entry["date"] == currentDate)) {
+        // Add today's entry
+        _history.add({
+          "date": currentDate,
+          "records": _medSchedule.map((medicine) {
+            return {
+              "medicineName": medicine.medicineName,
+              "times": medicine.times.map((time) => {time: false}).toList(),
+              "id": medicine.id
+            };
+          }).toList()
+        });
+      }
 
-      // print("MISSING ENTRIES ADDED");
-      // log(jsonEncode(_history));
-
+      // Remove entries older than _saveDays
       _history.removeWhere(
-          (entry) => _daysBetween(entry["date"], _currDate()) > _saveDays);
-
-      // print("STALE ENTRIES REMOVED");
-      // log(jsonEncode(_history));
+          (entry) => _daysBetween(entry["date"], currentDate) > _saveDays);
 
       _prefs.setString('medicationsHistory', jsonEncode(_history));
     } else {
+      // Initialize with today's entry if history is empty
       _history = [];
       _history.add({
         "date": _currDate(),
@@ -82,10 +97,17 @@ class MedifyHistory {
           };
         }).toList()
       });
-      // print("NEW HISTORY IS");
-      // log(jsonEncode(_history));
       _prefs.setString('medicationsHistory', jsonEncode(_history));
     }
+  }
+
+  String _subtractDaysFromToday(int days) {
+    DateTime date = DateTime.now().subtract(Duration(days: days));
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
+  void clearData() {
+    _prefs.setString('medicationsHistory', "");
   }
 
   List<dynamic> getRecords() {
