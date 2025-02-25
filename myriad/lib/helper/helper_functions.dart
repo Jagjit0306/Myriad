@@ -49,7 +49,7 @@ String timeSince(Timestamp timestamp) {
 
   final months = difference.inDays ~/ 30;
   if (months > 0) {
-    return '${months}m';
+    return '${months}mon';
   }
 
   final days = difference.inDays;

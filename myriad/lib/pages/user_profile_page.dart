@@ -3,12 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myriad/components/circular_image.dart';
 import 'package:myriad/components/community_post.dart';
+import 'package:myriad/components/my_button.dart';
 import 'package:myriad/database/community.dart';
-// import 'package:intl/intl.dart';
+import 'package:myriad/database/user.dart';
 
 class UserProfilePage extends StatefulWidget {
   final String userEmail;
-  
+
   const UserProfilePage({
     super.key,
     required this.userEmail,
@@ -20,6 +21,7 @@ class UserProfilePage extends StatefulWidget {
 
 class _UserProfilePageState extends State<UserProfilePage> {
   final CommunityDatabase communityDatabase = CommunityDatabase();
+  final UserDatabase userDatabase = UserDatabase();
   Map<String, dynamic>? userData;
   bool isFollowing = false;
 
@@ -35,7 +37,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         .collection('Users')
         .doc(widget.userEmail)
         .get();
-    
+
     if (mounted && userDoc.exists) {
       setState(() {
         userData = userDoc.data() as Map<String, dynamic>;
@@ -44,7 +46,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   Future<void> _checkFollowingStatus() async {
-    final following = await communityDatabase.isFollowing(widget.userEmail);
+    final following = await userDatabase.isFollowing(widget.userEmail);
     if (mounted) {
       setState(() {
         isFollowing = following;
@@ -57,6 +59,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(userData?['username'] ?? 'Profile'),
+        centerTitle: true,
       ),
       body: userData == null
           ? const Center(child: CircularProgressIndicator())
@@ -98,7 +101,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               height: 24,
                               width: 1,
                               color: Colors.grey,
-                              margin: const EdgeInsets.symmetric(horizontal: 16),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                             ),
                             _buildStatColumn(
                               (userData!['followers'] ?? []).length.toString(),
@@ -107,25 +111,29 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        if (widget.userEmail != FirebaseAuth.instance.currentUser?.email)
-                          ElevatedButton(
-                            onPressed: () async {
+                        if (widget.userEmail !=
+                            FirebaseAuth.instance.currentUser?.email)
+                          MyButton(
+                            onTap: () async {
                               if (isFollowing) {
-                                await communityDatabase.unfollowUser(widget.userEmail);
+                                await userDatabase
+                                    .unfollowUser(widget.userEmail);
                               } else {
-                                await communityDatabase.followUser(widget.userEmail);
+                                await userDatabase.followUser(widget.userEmail);
                               }
                               _checkFollowingStatus();
                               _loadUserData();
                             },
-                            child: Text(isFollowing ? 'Unfollow' : 'Follow'),
+                            text: isFollowing ? 'Unfollow' : 'Follow',
+                            enabled: true,
                           ),
                       ],
                     ),
                   ),
                 ),
                 StreamBuilder<QuerySnapshot>(
-                  stream: communityDatabase.getUserPostsStream(widget.userEmail),
+                  stream:
+                      communityDatabase.getUserPostsStream(widget.userEmail),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return const SliverFillRemaining(
@@ -140,7 +148,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     }
 
                     final posts = snapshot.data?.docs ?? [];
-                    
+
                     if (posts.isEmpty) {
                       return const SliverFillRemaining(
                         child: Center(child: Text('No posts yet')),
@@ -186,4 +194,4 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ],
     );
   }
-} 
+}
