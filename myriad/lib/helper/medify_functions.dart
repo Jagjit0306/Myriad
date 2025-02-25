@@ -1,5 +1,4 @@
 import 'dart:convert';
-// import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:myriad/pages/medication_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,7 +18,6 @@ class MedifyHistory {
       _medSchedule = medicationsList
           .map((json) => MedicationSchedule.fromJson(json))
           .toList();
-      // print(jsonEncode(_medSchedule));
     } else {
       _medSchedule = [];
     }
@@ -34,27 +32,28 @@ class MedifyHistory {
       // print(jsonEncode(_history));
 
       String currentDate = _currDate();
-      
+
       // Find the newest date in history
       if (_history.isNotEmpty) {
         String newestDate = _findNewestDate(_history);
         int missingDays = _daysBetween(newestDate, currentDate);
-        
+
         // Add entries for missing days, but limit to _saveDays if gap is large
         if (missingDays > 0) {
           // Limit days to add based on _saveDays
           int daysToAdd = (missingDays > _saveDays) ? _saveDays : missingDays;
-          
+
           for (int i = daysToAdd; i > 0; i--) {
             String missingDate = _subtractDaysFromToday(i);
-            
+
             if (!_history.any((entry) => entry["date"] == missingDate)) {
               _history.add({
                 "date": missingDate,
                 "records": _medSchedule.map((medicine) {
                   return {
                     "medicineName": medicine.medicineName,
-                    "times": medicine.times.map((time) => {time: false}).toList(),
+                    "times":
+                        medicine.times.map((time) => {time: false}).toList(),
                     "id": medicine.id
                   };
                 }).toList()
@@ -63,7 +62,7 @@ class MedifyHistory {
           }
         }
       }
-      
+
       // Check if today's entry exists
       if (!_history.any((entry) => entry["date"] == currentDate)) {
         // Add today's entry
@@ -83,6 +82,15 @@ class MedifyHistory {
       _history.removeWhere(
           (entry) => _daysBetween(entry["date"], currentDate) > _saveDays);
 
+      //modify today (balance the prescriptions)
+      int index =
+          _history.indexWhere((element) => element["date"] == _currDate());
+      _history[index] = {
+        "date": _currDate(),
+        "records": _updateMedicineData(_history[index]["records"], _medSchedule)
+      };
+
+      // print(jsonEncode(_history));
       _prefs.setString('medicationsHistory', jsonEncode(_history));
     } else {
       // Initialize with today's entry if history is empty
@@ -97,8 +105,65 @@ class MedifyHistory {
           };
         }).toList()
       });
+      print(jsonEncode(_history));
       _prefs.setString('medicationsHistory', jsonEncode(_history));
     }
+  }
+
+  List<Map<String, dynamic>> _updateMedicineData(
+      List<dynamic> A, List<dynamic> B) {
+    Map<int, Map<String, dynamic>> aMap = {
+      for (var item in A)
+        if (item is Map<String, dynamic>) item['id']: item
+    };
+
+    List<Map<String, dynamic>> updatedA = [];
+
+    for (var bItem in B) {
+      int id;
+      String medicineName;
+      List<String> bTimes;
+
+      // Handle MedicationSchedule class instance
+      if (bItem is MedicationSchedule) {
+        id = bItem.id;
+        medicineName = bItem.medicineName;
+        bTimes = List<String>.from(bItem.times);
+      } else if (bItem is Map<String, dynamic>) {
+        id = bItem['id'];
+        medicineName = bItem['medicineName'];
+        bTimes = List<String>.from(bItem['times']);
+      } else {
+        continue; // Skip invalid entries
+      }
+
+      Map<String, bool> timeMap = {};
+
+      if (aMap.containsKey(id)) {
+        Map<String, dynamic> existingItem = aMap[id]!;
+        Map<String, bool> existingTimes = {
+          for (var entry in existingItem['times'])
+            entry.keys.first: entry.values.first
+        };
+
+        for (var time in bTimes) {
+          timeMap[time] =
+              existingTimes.containsKey(time) ? existingTimes[time]! : false;
+        }
+      } else {
+        for (var time in bTimes) {
+          timeMap[time] = false;
+        }
+      }
+
+      updatedA.add({
+        'medicineName': medicineName,
+        'times': timeMap.entries.map((e) => {e.key: e.value}).toList(),
+        'id': id,
+      });
+    }
+
+    return updatedA;
   }
 
   String _subtractDaysFromToday(int days) {
