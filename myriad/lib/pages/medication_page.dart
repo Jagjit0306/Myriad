@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_textfield.dart';
+import 'package:myriad/helper/medify_functions.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -41,6 +42,7 @@ class MedicationPage extends StatefulWidget {
 }
 
 class _MedicationPageState extends State<MedicationPage> {
+  final MedifyHistory medifyHistory = MedifyHistory();
   final TextEditingController _medicineNameController = TextEditingController();
   final List<TextEditingController> _timeControllers = List.generate(
     6, // Maximum number of time slots
@@ -56,6 +58,7 @@ class _MedicationPageState extends State<MedicationPage> {
     super.initState();
     _initializeNotifications();
     _loadMedications();
+    medifyHistory.init();
 
     // Add listeners to all time controllers to trigger UI updates
     for (var controller in _timeControllers) {
@@ -96,29 +99,6 @@ class _MedicationPageState extends State<MedicationPage> {
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
-
-  // void _createTimeInputs() {
-  //   final timesPerDay = int.tryParse(_timesPerDayController.text) ?? 0;
-  //   if (timesPerDay <= 0) {
-  //     _showError('Please enter a valid number of times per day');
-  //     return;
-  //   }
-
-  //   // Clear existing controllers
-  //   for (var controller in _timeControllers) {
-  //     controller.dispose();
-  //   }
-  //   _timeControllers.clear();
-
-  //   // Create new controllers
-  //   for (int i = 0; i < timesPerDay; i++) {
-  //     _timeControllers.add(TextEditingController());
-  //   }
-
-  //   setState(() {
-  //     _showTimeInputs = true;
-  //   });
-  // }
 
   Future<void> _loadMedications() async {
     final prefs = await SharedPreferences.getInstance();
@@ -343,7 +323,6 @@ class _MedicationPageState extends State<MedicationPage> {
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      print("time field tapped HELLOOOOOOOOOOOOOO");
                       _selectTime(context, index);
                     },
                     child: MyTextfield(
@@ -358,25 +337,6 @@ class _MedicationPageState extends State<MedicationPage> {
                 );
               }),
               const SizedBox(height: 16),
-              // ElevatedButton(
-              //   onPressed: _saveMedication,
-              //   style: ElevatedButton.styleFrom(
-              //     backgroundColor: Colors.white,
-              //     foregroundColor: Colors.black,
-              //     minimumSize: const Size(double.infinity, 50),
-              //     padding: const EdgeInsets.symmetric(
-              //       horizontal: 30,
-              //       vertical: 16,
-              //     ),
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(16),
-              //     ),
-              //   ),
-              //   child: const Text(
-              //     'Add to Schedule',
-              //     style: TextStyle(fontSize: 18),
-              //   ),
-              // ),
               MyButton(
                 text: "Add to Schedule",
                 enabled: true,
