@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myriad/components/circular_image.dart';
 import 'package:myriad/helper/helper_functions.dart';
 
 // Crucial file that syncs prefs with local storage
@@ -11,62 +12,38 @@ class WelcomeCard extends StatelessWidget {
 
   final User? currentUser = FirebaseAuth.instance.currentUser;
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getUser() async {
-    return await FirebaseFirestore.instance
-        .collection("Users")
-        .doc(currentUser!.email)
-        .get();
+  Future<void> getUser() async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> currUser =
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(currentUser!.email)
+              .get();
+
+      if (currUser.exists) {
+        List<dynamic>? prefs = currUser.data()?["prefs"] as List<dynamic>?;
+
+        if (prefs != null) {
+          // log("Prefs: $prefs");
+          prefsSaver(prefs);
+        }
+        // else {
+        //   log("No prefs found");
+        // }
+      }
+    } catch (e) {
+      log("Error fetching user: $e");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    getUser();
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-            future: getUser(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: Icon(
-                    Icons.person,
-                    size: 100,
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Text("Error: ${snapshot.error}");
-              } else if (snapshot.hasData) {
-                if (snapshot.data!.data() != null) {
-                  prefsSaver(snapshot.data!.data()!['prefs']);
-                  return Column(
-                    children: [
-                      CircularImage(
-                        imageUrl: currentUser!.photoURL ?? "",
-                        placeholder: Icon(
-                          Icons.person,
-                          size: 100,
-                        ),
-                        size: 100,
-                      ),
-                    ],
-                  );
-                } else {
-                  return Icon(
-                    Icons.person,
-                    size: 100,
-                  );
-                }
-              } else {
-                return Icon(
-                  Icons.person,
-                  size: 100,
-                );
-              }
-            },
-          ),
-          const SizedBox(width: 15), // Added spacing
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
