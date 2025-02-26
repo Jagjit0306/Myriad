@@ -4,9 +4,14 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as img;
+import 'package:myriad/helper/tts_functions.dart';
 
 class ColorifyPage extends StatefulWidget {
-  const ColorifyPage({super.key});
+  final bool talkback;
+  const ColorifyPage({
+    super.key,
+    this.talkback = false,
+  });
 
   @override
   State<ColorifyPage> createState() => _ColorDetectionPageState();
@@ -14,12 +19,16 @@ class ColorifyPage extends StatefulWidget {
 
 class _ColorDetectionPageState extends State<ColorifyPage> {
   CameraController? _controller;
+  TTS tts = TTS();
   List<CameraDescription>? cameras;
   Color selectedColor = Colors.white;
 
   @override
   void initState() {
     super.initState();
+    if (widget.talkback) {
+      tts.initTTS();
+    }
     _initializeCamera();
   }
 
@@ -77,7 +86,11 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
           });
 
           // Show the detected color
-          _showColorDialog(_getColorName(selectedColor));
+          if (widget.talkback) {
+            tts.speak(_getColorName(selectedColor));
+          } else {
+            _showColorDialog(_getColorName(selectedColor));
+          }
         }
       }
     } catch (e) {
@@ -108,11 +121,6 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            // const SizedBox(height: 10),
-            // Text(
-            //   'RGB: (${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b})',
-            //   style: const TextStyle(fontSize: 12),
-            // ),
           ],
         ),
         actions: [
@@ -187,6 +195,9 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
   @override
   void dispose() {
     _controller?.dispose();
+    if(widget.talkback) {
+      tts.dispose();
+    }
     super.dispose();
   }
 
