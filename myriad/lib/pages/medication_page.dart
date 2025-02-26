@@ -3,11 +3,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:myriad/components/medify_tracker.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_textfield.dart';
-// import 'package:myriad/helper/medify_functions.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../components/logo_component.dart';
 
 class MedicationSchedule {
   final String medicineName;
@@ -266,47 +264,39 @@ class _MedicationPageState extends State<MedicationPage> {
     );
 
     if (picked != null) {
-      String formattedTime = picked.hour.toString().padLeft(2, '0') +
-          ':' +
-          picked.minute.toString().padLeft(2, '0');
+      String formattedTime =
+          '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
       _timeControllers[index].text = formattedTime;
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const LogoComponent(size: 60),
-            const SizedBox(width: 8),
-            Text(
-              'X',
-              style: TextStyle(
-                fontSize: 36,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Icon(
-              Icons.medication,
-              size: 60,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-            const SizedBox(width: 28),
-          ],
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: SingleChildScrollView(
+  void showAddMedicationModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 30,
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 50),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  'Add Reminder',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
               MyTextfield(
                 hintText: "Prescription Name",
                 controller: _medicineNameController,
@@ -344,7 +334,33 @@ class _MedicationPageState extends State<MedicationPage> {
                 onTap: _saveMedication,
                 fontSize: 18,
               ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Medify"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 30),
               MedifyTracker(),
+              MyButton(
+                text: "Add a reminder",
+                enabled: true,
+                onTap: () => showAddMedicationModal(context),
+              ),
               const SizedBox(height: 24),
               Text(
                 'Schedule',

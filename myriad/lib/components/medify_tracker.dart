@@ -54,11 +54,6 @@ class _MedifyTrackerState extends State<MedifyTracker> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MyButton(
-          text: "Clear History",
-          enabled: true,
-          onTap: medifyHistory.clearData,
-        ),
         Text(
           'Medication History',
           style: TextStyle(
@@ -68,34 +63,40 @@ class _MedifyTrackerState extends State<MedifyTracker> {
           ),
         ),
         SizedBox(
-            height: 310,
-            child: records.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : PageView.builder(
-                    controller: _pageController,
-                    itemCount: records.length,
-                    itemBuilder: (context, index) {
-                      return AnimatedBuilder(
-                        animation: _pageController,
-                        builder: (context, child) {
-                          double scale = 1.0;
-                          if (_pageController.position.haveDimensions) {
-                            double pageOffset = _pageController.page! - index;
-                            scale =
-                                (1 - (pageOffset.abs() * 0.2)).clamp(0.8, 1.0);
-                          }
-                          return Transform.scale(
-                            scale: scale,
-                            child: _MedifyRecordCard(
-                              item: records[index],
-                              recordIndex: index,
-                              onToggle: toggleMedicineStatus,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  )),
+          height: 310,
+          child: records.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : PageView.builder(
+                  controller: _pageController,
+                  itemCount: records.length,
+                  itemBuilder: (context, index) {
+                    return AnimatedBuilder(
+                      animation: _pageController,
+                      builder: (context, child) {
+                        double scale = 1.0;
+                        if (_pageController.position.haveDimensions) {
+                          double pageOffset = _pageController.page! - index;
+                          scale =
+                              (1 - (pageOffset.abs() * 0.2)).clamp(0.8, 1.0);
+                        }
+                        return Transform.scale(
+                          scale: scale,
+                          child: _MedifyRecordCard(
+                            item: records[index],
+                            recordIndex: index,
+                            onToggle: toggleMedicineStatus,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+        ),
+        MyButton(
+          text: "Clear History",
+          enabled: true,
+          onTap: medifyHistory.clearData,
+        ),
       ],
     );
   }
@@ -204,7 +205,10 @@ class _MedifyRecordMedicine extends StatelessWidget {
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(timing.keys.first, style: TextStyle(fontWeight: FontWeight.w500),),
+                              Text(
+                                timing.keys.first,
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
                               Icon(
                                 timing.values.first
                                     ? Icons.check
@@ -213,8 +217,9 @@ class _MedifyRecordMedicine extends StatelessWidget {
                               )
                             ],
                           ),
-                          backgroundColor:
-                              timing.values.first ? Colors.green : Color.fromARGB(255, 182, 39, 54),
+                          backgroundColor: timing.values.first
+                              ? Colors.green
+                              : Color.fromARGB(255, 182, 39, 54),
                         ),
                       ),
                     );
