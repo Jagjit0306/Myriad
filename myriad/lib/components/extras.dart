@@ -15,6 +15,19 @@ Map<String, IconData> iconMap = {
   "voicify": Icons.loop_outlined,
 };
 
+Map<String, String> nameMap = {
+  "colorify": "COLORIFY",
+  "colorify_talkback": "COLORIFY",
+  "hearify": "HEARIFY",
+  "vibraillify": "VIBRAILLIFY",
+  "wheelify": "WHEELIFY",
+  "medify": "MEDIFY",
+  "sightify": "SIGHTIFY",
+  "serenify": "SERENIFY",
+  "speakify": "SPEAKIFY",
+  "voicify": "VOICIFY",
+};
+
 class Extras extends StatefulWidget {
   const Extras({super.key});
 
@@ -79,7 +92,7 @@ class _ExtrasState extends State<Extras> {
                         child: ExtraButton(
                           iconData:
                               iconMap[enabledFeatures[index]] ?? Icons.api,
-                          name: enabledFeatures[index].toUpperCase(),
+                          name: nameMap[enabledFeatures[index]]??"ERROR",
                           path: "/extras/${enabledFeatures[index]}",
                         ),
                       );

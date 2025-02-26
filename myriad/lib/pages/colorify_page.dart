@@ -4,10 +4,14 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as img;
-import 'package:colornames/colornames.dart';
+import 'package:myriad/helper/tts_functions.dart';
 
 class ColorifyPage extends StatefulWidget {
-  const ColorifyPage({super.key});
+  final bool talkback;
+  const ColorifyPage({
+    super.key,
+    this.talkback = false,
+  });
 
   @override
   State<ColorifyPage> createState() => _ColorDetectionPageState();
@@ -15,12 +19,16 @@ class ColorifyPage extends StatefulWidget {
 
 class _ColorDetectionPageState extends State<ColorifyPage> {
   CameraController? _controller;
+  TTS tts = TTS();
   List<CameraDescription>? cameras;
   Color selectedColor = Colors.white;
 
   @override
   void initState() {
     super.initState();
+    if (widget.talkback) {
+      tts.initTTS();
+    }
     _initializeCamera();
   }
 
@@ -78,7 +86,11 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
           });
 
           // Show the detected color
-          _showColorDialog(_getColorName(selectedColor));
+          if (widget.talkback) {
+            tts.speak(_getColorName(selectedColor));
+          } else {
+            _showColorDialog(_getColorName(selectedColor));
+          }
         }
       }
     } catch (e) {
@@ -109,11 +121,6 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            // const SizedBox(height: 10),
-            // Text(
-            //   'RGB: (${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b})',
-            //   style: const TextStyle(fontSize: 12),
-            // ),
           ],
         ),
         actions: [
@@ -129,12 +136,68 @@ class _ColorDetectionPageState extends State<ColorifyPage> {
   }
 
   String _getColorName(Color color) {
-    return ColorNames.guess(color);
+    // return ColorNames.guess(color);
+    return getNearestColorName(color);
+  }
+
+  static const Map<String, Color> basicColors = {
+    "Light Red": Color(0xFFFFA07A),
+    "Red": Colors.red,
+    "Dark Red": Color(0xFF8B0000),
+    "Light Green": Color(0xFF90EE90),
+    "Green": Colors.green,
+    "Dark Green": Color(0xFF006400),
+    "Light Blue": Color(0xFFADD8E6),
+    "Blue": Colors.blue,
+    "Dark Blue": Color(0xFF00008B),
+    "Light Yellow": Color(0xFFFFFFE0),
+    "Yellow": Colors.yellow,
+    "Dark Yellow": Color(0xFF9B870C),
+    "Light Orange": Color(0xFFFFDAB9),
+    "Orange": Colors.orange,
+    "Dark Orange": Color(0xFFFF8C00),
+    "Light Purple": Color(0xFFD8BFD8),
+    "Purple": Colors.purple,
+    "Dark Purple": Color(0xFF4B0082),
+    "Light Brown": Color(0xFFF5DEB3),
+    "Brown": Colors.brown,
+    "Dark Brown": Color(0xFF654321),
+    "Light Grey": Color(0xFFD3D3D3),
+    "Grey": Colors.grey,
+    "Dark Grey": Color(0xFF505050),
+    "Black": Colors.black,
+    "White": Colors.white,
+  };
+
+  /// Function to get the nearest basic color name
+  String getNearestColorName(Color color) {
+    String closestColor = "Unknown";
+    double minDistance = double.infinity;
+
+    for (var entry in basicColors.entries) {
+      double distance = _colorDistance(color, entry.value);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestColor = entry.key;
+      }
+    }
+
+    return closestColor;
+  }
+
+  /// Function to calculate color distance
+  double _colorDistance(Color c1, Color c2) {
+    return (c1.r - c2.r) * (c1.r - c2.r) +
+        (c1.g - c2.g) * (c1.g - c2.g) +
+        (c1.b - c2.b) * (c1.b - c2.b) * 1.0; // Ensure it returns double
   }
 
   @override
   void dispose() {
     _controller?.dispose();
+    if(widget.talkback) {
+      tts.dispose();
+    }
     super.dispose();
   }
 

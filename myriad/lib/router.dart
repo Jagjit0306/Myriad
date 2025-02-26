@@ -120,6 +120,10 @@ final router = GoRouter(
                   builder: (context, state) => const ColorifyPage(),
                 ),
                 GoRoute(
+                  path: 'colorify_talkback',
+                  builder: (context, state) => const ColorifyPage(talkback: true,),
+                ),
+                GoRoute(
                   path: 'hearify',
                   builder: (context, state) => const HearifyPage(),
                 ),

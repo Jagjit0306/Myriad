@@ -14,6 +14,7 @@ Future<List<String>> configurator() async {
   List<String> features = [
     "sightify",
     'colorify',
+    'colorify_talkback',
     "hearify",
     "vibraillify",
     "speakify",
@@ -33,6 +34,8 @@ Future<List<String>> configurator() async {
     "vibraillify": ["Hearing Support", "Vision Support"],
     "wheelify": ["Wheelchair Support"],
     "medify": [],
+    "colorify": ["Colorblindness Support"],
+    "colorify_talkback": ["Vision Support"],
     "serenify": [],
     "sightify": ["Vision Support"],
     "speakify": ["Speech Assistance"],
@@ -42,12 +45,12 @@ Future<List<String>> configurator() async {
   // ignore: non_constant_identifier_names
   Map<String, List<String>> ANYgreenCards = {
     // any 1 will enable the feature
-    "colorify": ["Vision Support", "Colorblindness Support"],
   };
 
   Map<String, List<dynamic>> conflicts = {
     // neither
-    "colorify": [],
+    "colorify": ["Vision Support"],
+    "colorify_talkback": ["Hearing Support"],
     "hearify": ["Vision Support", "Speech Assistance"],
     "vibraillify": [],
     "wheelify": ["Vision Support"],
