@@ -6,6 +6,8 @@ import 'package:myriad/components/my_textfield.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+// import 'package:intl/intl.dart';
+// import 'package:myriad/helper/medify_functions.dart';
 
 class MedicationSchedule {
   final String medicineName;
@@ -382,56 +384,56 @@ class _MedicationPageState extends State<MedicationPage> {
                       color: Theme.of(context).colorScheme.onSecondaryContainer,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          title: Text(
-                            medication.medicineName,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 8),
-                              SizedBox(
-                                height:
-                                    40, // Fixed height for the scrolling area
-                                child: ListView.separated(
-                                  physics: BouncingScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  separatorBuilder: (context, index) =>
-                                      const SizedBox(width: 8),
-                                  itemCount: medication.times.length,
-                                  itemBuilder: (context, index) => Chip(
-                                    label: Text(
-                                      medication.times[index],
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                    backgroundColor: Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                  ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              title: Text(
+                                medication.medicineName,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                            ],
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              size: 30,
-                              color: Color.fromARGB(255, 255, 130, 121),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 8),
+                                  SizedBox(
+                                    height: 40, // Fixed height for the scrolling area
+                                    child: ListView.separated(
+                                      physics: BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      separatorBuilder: (context, index) => const SizedBox(width: 8),
+                                      itemCount: medication.times.length,
+                                      itemBuilder: (context, timeIndex) => InkWell(
+                                        child: Chip(
+                                          label: Text(
+                                            medication.times[timeIndex],
+                                            style: TextStyle(
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(
+                                  Icons.delete,
+                                  size: 30,
+                                  color: Color.fromARGB(255, 255, 130, 121),
+                                ),
+                                onPressed: () => _deleteMedication(index),
+                              ),
                             ),
-                            onPressed: () => _deleteMedication(index),
-                          ),
+                          ],
                         ),
                       ),
                     );
