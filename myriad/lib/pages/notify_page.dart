@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:myriad/helper/mental_health.dart';
+import 'package:myriad/helper/medify_functions.dart';
+import 'package:intl/intl.dart';
 
 class NotifyPage extends StatefulWidget {
   final bool hideMediGraph;
@@ -15,13 +17,21 @@ class NotifyPage extends StatefulWidget {
 
 class _NotifyPageState extends State<NotifyPage> {
   final MentalHealthAnalyzer _analyzer = MentalHealthAnalyzer();
+  final MedifyHistory _medifyHistory = MedifyHistory();
+  late final MedifyConsistencyCalculator _consistencyCalculator;
+  
   int _mentalHealthScore = 0;
   bool mentalHealthIsLoading = true;
+  List<DailyConsistency> _consistencyData = [];
+  bool _isLoading = true;
+  int _streak = 0;
 
   @override
   void initState() {
     super.initState();
+    _consistencyCalculator = MedifyConsistencyCalculator(_medifyHistory);
     _updateMentalHealthScore();
+    _loadConsistencyData();
   }
 
   Future<void> _updateMentalHealthScore() async {
@@ -32,19 +42,31 @@ class _NotifyPageState extends State<NotifyPage> {
     });
   }
 
+  Future<void> _loadConsistencyData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    
+    try {
+      // Get consistency data from MedifyHistory
+      final data = await _consistencyCalculator.getConsistencyForLastWeek();
+      final streak = await _consistencyCalculator.calculateConsistencyStreak();
+      
+      setState(() {
+        _consistencyData = data;
+        _streak = streak;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading consistency data: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Sample data for the past 7 days
-    final List<MedicineData> chartData = [
-      MedicineData(10, 4200),
-      MedicineData(11, 4000),
-      MedicineData(12, 4300),
-      MedicineData(13, 4500),
-      MedicineData(14, 4100),
-      MedicineData(15, 4400),
-      MedicineData(16, 4200),
-    ];
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
@@ -77,7 +99,9 @@ class _NotifyPageState extends State<NotifyPage> {
                     ),
                   ),
                   Text(
-                    '5 Days',
+                    _isLoading 
+                        ? 'Calculating...' 
+                        : '$_streak Days',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSecondary,
                       fontSize: 24,
@@ -85,39 +109,56 @@ class _NotifyPageState extends State<NotifyPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  SizedBox(
-                    height: 200,
-                    child: SfCartesianChart(
-                      plotAreaBorderWidth: 0,
-                      primaryXAxis: NumericAxis(
-                        minimum: 10,
-                        maximum: 16,
-                        interval: 1,
-                        majorGridLines:
-                            const MajorGridLines(width: 1, color: Colors.grey),
-                        axisLine: const AxisLine(width: 0),
-                        labelStyle: const TextStyle(color: Colors.grey),
+                  _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.inversePrimary,
                       ),
-                      primaryYAxis: NumericAxis(
-                        minimum: 3500,
-                        maximum: 5000,
-                        interval: 500,
-                        axisLine: const AxisLine(width: 0),
-                        majorGridLines:
-                            const MajorGridLines(width: 1, color: Colors.grey),
-                        labelStyle: const TextStyle(color: Colors.grey),
-                      ),
-                      series: <CartesianSeries>[
-                        SplineSeries<MedicineData, int>(
-                          dataSource: chartData,
-                          xValueMapper: (MedicineData data, _) => data.day,
-                          yValueMapper: (MedicineData data, _) => data.value,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          width: 2,
+                    )
+                  : SizedBox(
+                      height: 200,
+                      child: SfCartesianChart(
+                        plotAreaBorderWidth: 0,
+                        primaryXAxis: DateTimeAxis(
+                          dateFormat: DateFormat.d(),
+                          intervalType: DateTimeIntervalType.days,
+                          interval: 1,
+                          majorGridLines: const MajorGridLines(
+                              width: 1, color: Colors.grey),
+                          axisLine: const AxisLine(width: 0),
+                          labelStyle: const TextStyle(color: Colors.grey),
                         ),
-                      ],
+                        primaryYAxis: NumericAxis(
+                          minimum: 0,
+                          maximum: 100,
+                          interval: 20,
+                          axisLine: const AxisLine(width: 0),
+                          majorGridLines: const MajorGridLines(
+                              width: 1, color: Colors.grey),
+                          labelStyle: const TextStyle(color: Colors.grey),
+                          labelFormat: '{value}%',
+                        ),
+                        series: <CartesianSeries>[
+                          SplineSeries<DailyConsistency, DateTime>(
+                            dataSource: _consistencyData,
+                            xValueMapper: (DailyConsistency data, _) => data.date,
+                            yValueMapper: (DailyConsistency data, _) => data.percentage,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            width: 2,
+                            markerSettings: MarkerSettings(
+                              isVisible: true,
+                              color: Theme.of(context).colorScheme.inversePrimary,
+                              borderWidth: 2,
+                              borderColor: Theme.of(context).colorScheme.onSecondary,
+                            ),
+                          ),
+                        ],
+                        tooltipBehavior: TooltipBehavior(
+                          enable: true,
+                          format: 'Day {point.x}: {point.y.toStringAsFixed(1)}%',
+                        ),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -198,11 +239,12 @@ class _NotifyPageState extends State<NotifyPage> {
                     child: IconButton(
                       onPressed: () {
                         _updateMentalHealthScore();
+                        _loadConsistencyData();
                       },
                       icon: Icon(
                         Icons.refresh_rounded,
                         color: Theme.of(context).colorScheme.inversePrimary,
-                        semanticLabel: "Refresh mental health score",
+                        semanticLabel: "Refresh data",
                       ),
                     ),
                   ),
@@ -222,11 +264,4 @@ class _NotifyPageState extends State<NotifyPage> {
     if (score >= 20) return 'Needs Attention';
     return 'Seek Support';
   }
-}
-
-class MedicineData {
-  final int day;
-  final double value;
-
-  MedicineData(this.day, this.value);
 }
