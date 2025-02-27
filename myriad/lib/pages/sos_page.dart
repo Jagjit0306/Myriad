@@ -361,7 +361,7 @@ class _SosPageState extends State<SosPage> {
             ),
             const SizedBox(height: 40),
             Expanded(
-              child: Center
+              child: Center(
                 child: Column(
                   children: [
                     GridView.count(
