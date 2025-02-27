@@ -51,54 +51,58 @@ class _MedifyTrackerState extends State<MedifyTracker> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Medication History',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.inversePrimary,
-          ),
-        ),
-        SizedBox(
-          height: 310,
-          child: records.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : PageView.builder(
-                  controller: _pageController,
-                  itemCount: records.length,
-                  itemBuilder: (context, index) {
-                    return AnimatedBuilder(
-                      animation: _pageController,
-                      builder: (context, child) {
-                        double scale = 1.0;
-                        if (_pageController.position.haveDimensions) {
-                          double pageOffset = _pageController.page! - index;
-                          scale =
-                              (1 - (pageOffset.abs() * 0.2)).clamp(0.8, 1.0);
-                        }
-                        return Transform.scale(
-                          scale: scale,
-                          child: _MedifyRecordCard(
-                            item: records[index],
-                            recordIndex: index,
-                            onToggle: toggleMedicineStatus,
-                          ),
-                        );
-                      },
-                    );
-                  },
+    // return (!(records.length == 1 && records[0]["records"].length == 0))
+    return (!(records.every((e) => e["records"].length == 0)))
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Medication History',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.inversePrimary,
                 ),
-        ),
-        MyButton(
-          text: "Clear History",
-          enabled: true,
-          onTap: medifyHistory.clearData,
-        ),
-      ],
-    );
+              ),
+              SizedBox(
+                height: 310,
+                child: records.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : PageView.builder(
+                        controller: _pageController,
+                        itemCount: records.length,
+                        itemBuilder: (context, index) {
+                          return AnimatedBuilder(
+                            animation: _pageController,
+                            builder: (context, child) {
+                              double scale = 1.0;
+                              if (_pageController.position.haveDimensions) {
+                                double pageOffset =
+                                    _pageController.page! - index;
+                                scale = (1 - (pageOffset.abs() * 0.2))
+                                    .clamp(0.8, 1.0);
+                              }
+                              return Transform.scale(
+                                scale: scale,
+                                child: _MedifyRecordCard(
+                                  item: records[index],
+                                  recordIndex: index,
+                                  onToggle: toggleMedicineStatus,
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+              ),
+              MyButton(
+                text: "Clear History",
+                enabled: true,
+                onTap: medifyHistory.clearData,
+              ),
+            ],
+          )
+        : SizedBox.shrink();
   }
 }
 
@@ -131,20 +135,24 @@ class _MedifyRecordCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: item["records"].length,
-                itemBuilder: (context, index) {
-                  return _MedifyRecordMedicine(
-                    med: item["records"][index],
-                    recordIndex: recordIndex,
-                    medicineIndex: index,
-                    onToggle: onToggle,
-                  );
-                },
-              ),
-            )
+            (item["records"].length != 0)
+                ? Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: item["records"].length,
+                      itemBuilder: (context, index) {
+                        return _MedifyRecordMedicine(
+                          med: item["records"][index],
+                          recordIndex: recordIndex,
+                          medicineIndex: index,
+                          onToggle: onToggle,
+                        );
+                      },
+                    ),
+                  )
+                : Center(
+                    child: const Text("No data for this date"),
+                  )
           ],
         ),
       ),
