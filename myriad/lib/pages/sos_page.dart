@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:myriad/components/my_app_bar.dart';
 import 'package:myriad/database/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:geolocator/geolocator.dart';
@@ -18,6 +21,7 @@ class SosPage extends StatefulWidget {
 
 class _SosPageState extends State<SosPage> {
   final UserDatabase userDatabase = UserDatabase();
+  bool showScream = false;
 
   String guardianNumber = "";
   Position? _currentPosition;
@@ -38,6 +42,21 @@ class _SosPageState extends State<SosPage> {
     super.initState();
     _getCurrentLocation();
     _getGuardianNumber();
+    _getScreamStatus();
+  }
+
+  Future<void> _getScreamStatus() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? prefString = prefs.getString("prefs");
+    if (prefString!.isNotEmpty) {
+      final List<dynamic> preferences = jsonDecode(prefString);
+      if (preferences.any((e) =>
+          e.keys.first == "Speech Assistance" && e.values.first == true)) {
+        setState(() {
+          showScream = true;
+        });
+      }
+    }
   }
 
   Future<void> _getGuardianNumber() async {
@@ -289,7 +308,10 @@ class _SosPageState extends State<SosPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: MyAppBar(title: 'SOS', hideSos: true,),
+      appBar: MyAppBar(
+        title: 'SOS',
+        hideSos: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -339,35 +361,43 @@ class _SosPageState extends State<SosPage> {
             ),
             const SizedBox(height: 40),
             Expanded(
-              child: Center(
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 600),
-                  child: GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 1.5,
-                    children: [
-                      _buildEmergencyOption(
-                        context,
-                        "Ambulance",
-                        LucideIcons.ambulance
-                      ),
-                      _buildEmergencyOption(
-                        context,
-                        "Guardian",
-                        Icons.phone,
-                      ),
+              child: Center
+                child: Column(
+                  children: [
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 1.5,
+                      children: [
+                        _buildEmergencyOption(
+                          context,
+                          "Ambulance",
+                          LucideIcons.ambulance,
+                        ),
+                        _buildEmergencyOption(
+                          context,
+                          "Guardian",
+                          Icons.phone,
+                        ),
+                        if (showScream)
+                          _buildEmergencyOption(
+                            context,
+                            "SOS",
+                            Icons.notification_important,
+                          ),
+                        if (showScream) _ScreamButton(),
+                      ],
+                    ),
+                    if (!showScream)
                       _buildEmergencyOption(
                         context,
                         "SOS",
                         Icons.notification_important,
                       ),
-                      _ScreamButton(),
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -448,6 +478,7 @@ class _SosPageState extends State<SosPage> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: SizedBox(
+          width: double.infinity,
           height: 100,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
