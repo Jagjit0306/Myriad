@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:myriad/passwords.dart';
 import 'package:map_launcher/map_launcher.dart';
+import  'package:lucide_icons_flutter/lucide_icons.dart';
 
 class SosPage extends StatefulWidget {
   const SosPage({super.key});
@@ -327,7 +328,7 @@ class _SosPageState extends State<SosPage> {
                     child: _buildDistanceCard(
                       context,
                       "Hospital",
-                      Icons.local_hospital,
+                      LucideIcons.hospital,
                       _formatDistance(distances['Hospital']!),
                     ),
                   ),
@@ -339,7 +340,7 @@ class _SosPageState extends State<SosPage> {
                     child: _buildDistanceCard(
                       context,
                       "Fire\nStation",
-                      Icons.local_fire_department,
+                      LucideIcons.fireExtinguisher,
                       _formatDistance(distances['Fire Station']!),
                     ),
                   ),
@@ -360,7 +361,7 @@ class _SosPageState extends State<SosPage> {
             ),
             const SizedBox(height: 40),
             Expanded(
-              child: Center(
+              child: Center
                 child: Column(
                   children: [
                     GridView.count(
@@ -374,7 +375,7 @@ class _SosPageState extends State<SosPage> {
                         _buildEmergencyOption(
                           context,
                           "Ambulance",
-                          Icons.medical_services,
+                          LucideIcons.ambulance,
                         ),
                         _buildEmergencyOption(
                           context,
