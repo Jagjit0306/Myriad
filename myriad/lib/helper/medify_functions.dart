@@ -200,3 +200,88 @@ class MedifyHistory {
         .reduce((a, b) => DateTime.parse(a).isAfter(DateTime.parse(b)) ? a : b);
   }
 }
+
+class DailyConsistency {
+  final DateTime date;
+  final int day;
+  final double percentage;
+  
+  DailyConsistency({
+    required this.date,
+    required this.day,
+    required this.percentage,
+  });
+}
+
+class MedifyConsistencyCalculator {
+  final MedifyHistory _medifyHistory;
+  
+  MedifyConsistencyCalculator(this._medifyHistory);
+  
+  // Calculate daily consistency percentages for the last 7 days
+  Future<List<DailyConsistency>> getConsistencyForLastWeek() async {
+    await _medifyHistory.init(); // Make sure history is initialized
+    final records = _medifyHistory.getRecords();
+    
+    // List to store the consistency data for each day
+    final List<DailyConsistency> consistencyData = [];
+    
+    // Calculate last 7 days (including today)
+    for (int i = 6; i >= 0; i--) {
+      final date = DateTime.now().subtract(Duration(days: i));
+      final dateString = DateFormat('yyyy-MM-dd').format(date);
+      
+      // Find the record for this date
+      final recordForDay = records.firstWhere(
+        (record) => record["date"] == dateString,
+        orElse: () => {"date": dateString, "records": []}
+      );
+      
+      // Calculate the adherence percentage for this day
+      double percentage = 0.0;
+      int totalMedicationTimes = 0;
+      int takenMedicationTimes = 0;
+      
+      for (var medicine in recordForDay["records"]) {
+        for (var timeSlot in medicine["times"]) {
+          totalMedicationTimes++;
+          // Each timeSlot is a map like {"08:00": true} or {"08:00": false}
+          if (timeSlot.values.first == true) {
+            takenMedicationTimes++;
+          }
+        }
+      }
+      
+      // Calculate percentage if there were any medications scheduled
+      if (totalMedicationTimes > 0) {
+        percentage = (takenMedicationTimes / totalMedicationTimes) * 100;
+      }
+      
+      // Add to consistency data
+      consistencyData.add(DailyConsistency(
+        date: date,
+        day: date.day,
+        percentage: percentage,
+      ));
+    }
+    
+    return consistencyData;
+  }
+  
+  // Calculate the current streak (consecutive days where medication consistency >= 80%)
+  Future<int> calculateConsistencyStreak() async {
+    final consistencyData = await getConsistencyForLastWeek();
+    int streak = 0;
+    
+    // Start from the most recent day and go backwards
+    for (int i = consistencyData.length - 1; i >= 0; i--) {
+      if (consistencyData[i].percentage >= 80) {
+        streak++;
+      } else {
+        break; // Break the streak
+      }
+    }
+    
+    return streak;
+  }
+}
