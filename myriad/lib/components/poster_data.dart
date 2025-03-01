@@ -1,11 +1,15 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myriad/components/circular_image.dart';
 import 'package:myriad/helper/helper_functions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PosterData extends StatefulWidget {
-  final String op;
+  final String op; //email
   final Timestamp timestamp;
   const PosterData({super.key, required this.op, required this.timestamp});
 
@@ -15,6 +19,7 @@ class PosterData extends StatefulWidget {
 
 class _PosterDataState extends State<PosterData> {
   Map<String, dynamic> userData = {};
+  late final SharedPreferences _prefs;
 
   @override
   void initState() {
@@ -22,20 +27,77 @@ class _PosterDataState extends State<PosterData> {
     _getUserData();
   }
 
+  Future<void> _initializePreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
   Future<void> _getUserData() async {
-    final CollectionReference users =
-        FirebaseFirestore.instance.collection("Users");
-    final op = await users.where('email', isEqualTo: widget.op).get();
-    if (op.docs.isNotEmpty && mounted) {
+    await _initializePreferences();
+    final Map<String, dynamic> cacheState = await _checkUserCache();
+    if (cacheState["exists"]) {
       setState(() {
-        userData = op.docs.first.data() as Map<String, dynamic>;
+        userData = cacheState["data"];
       });
+    } else {
+      final CollectionReference users =
+          FirebaseFirestore.instance.collection("Users");
+      final op = await users.where('email', isEqualTo: widget.op).get();
+      if (op.docs.isNotEmpty) {
+        final Map<String, dynamic> fetchedData =
+            op.docs.first.data() as Map<String, dynamic>;
+        await _updateUserCache(fetchedData);
+        setState(() {
+          userData = fetchedData;
+        });
+      }
     }
   }
 
-  Future<dynamic> _checkUserCache() async {}
+  /* 
+  user cache format => 
+    {
+      "email0":
+      {
+        "validUntil": xyz-int,
+        "data" : {}-object
+      },
+    }
+  */
 
-  Future<void> _updateUserCache() async {}
+  Future<Map<String, dynamic>> _checkUserCache() async {
+    final String userDataString = _prefs.getString("user_data_cache") ?? "";
+    if (userDataString.isEmpty) {
+      return {"exists": false};
+    } else {
+      final Map<String, dynamic> userDataSaved = jsonDecode(userDataString);
+      if (userDataSaved.keys.contains(widget.op)) {
+        if (userDataSaved[widget.op]["validUntil"] <
+            DateTime.now().millisecondsSinceEpoch) {
+          // cache has expired
+          return {"exists": false};
+        } else {
+          log("USER DATA CACHE ACCESSEDD");
+          return {"data": userDataSaved[widget.op]["data"], "exists": true};
+        }
+      } else {
+        return {"exists": false};
+      }
+    }
+  }
+
+  Future<void> _updateUserCache(Map<String, dynamic> currUserData) async {
+    final String userDataString = _prefs.getString("user_data_cache") ?? "";
+    Map<String, dynamic> newUserData = {};
+    if (userDataString.isNotEmpty) {
+      newUserData = jsonDecode(userDataString);
+    }
+    newUserData[widget.op] = {
+      "validUntil": DateTime.now().millisecondsSinceEpoch +
+          (3600000 * 0.5), // change integer for no. of hour
+      "data": currUserData
+    };
+    _prefs.setString("user_data_cache", jsonEncode(newUserData));
+  }
 
   @override
   Widget build(BuildContext context) {
