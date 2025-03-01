@@ -248,7 +248,7 @@ class _ChatbotHomePageState extends State<ChatbotHomePage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (messages.isEmpty) Banner1(bannerIcon: Icons.auto_awesome),
+            if (messages.isEmpty) Banner1(bannerIcon: Icons.auto_awesome, desc: "My AI\nYour always and everything companion",),
             Expanded(
               child: DashChat(
                 messages: messages,
