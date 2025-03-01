@@ -61,24 +61,6 @@ class _VoicifyPageState extends State<VoicifyPage> {
     });
   }
 
-  // void _onSpeechResult(SpeechRecognitionResult result) {
-  //   setState(() {
-  //     _lastWords = "$_lastWords${result.recognizedWords} ";
-  //     _textController.text = _lastWords;
-
-  //     if (result.recognizedWords.isNotEmpty) {
-  //       messages = [
-  //         ChatMessage(
-  //           user: _botUser,
-  //           text: result.recognizedWords,
-  //           createdAt: DateTime.now(),
-  //         ),
-  //         ...messages,
-  //       ];
-  //     }
-  //   });
-  // }
-
   Future<void> _getChats() async {
     try {
       SharedPreferences localPrefs = await SharedPreferences.getInstance();
@@ -153,7 +135,11 @@ class _VoicifyPageState extends State<VoicifyPage> {
       ),
       body: Column(
         children: [
-          if (messages.isEmpty) Banner1(bannerIcon: Icons.loop),
+          if (messages.isEmpty)
+            Banner1(
+              bannerIcon: Icons.loop,
+              desc: "Voicify\nempowering conversations",
+            ),
           Expanded(
             child: DashChat(
               currentUser: _currentUser,

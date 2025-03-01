@@ -4,10 +4,12 @@ import 'package:myriad/components/logo_component.dart';
 class Banner1 extends StatelessWidget {
   final IconData bannerIcon;
   final double tilt;
+  final String desc;
   const Banner1({
     super.key,
     required this.bannerIcon,
     this.tilt = 0,
+    this.desc = "",
   });
 
   @override
@@ -22,12 +24,13 @@ class Banner1 extends StatelessWidget {
           'Featuring',
           style: TextStyle(
             color: Theme.of(context).colorScheme.inversePrimary,
-            fontSize: 24,
-            fontWeight: FontWeight.w400,
+            fontSize: 23,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.65,
             decorationThickness: 2,
           ),
         ),
-        const SizedBox(height: 40),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -52,6 +55,13 @@ class Banner1 extends StatelessWidget {
             ),
           ],
         ),
+        if (desc.isNotEmpty) SizedBox(height: 20),
+        if (desc.isNotEmpty)
+          Text(
+            desc,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            textAlign: TextAlign.center,
+          ),
       ],
     );
   }
