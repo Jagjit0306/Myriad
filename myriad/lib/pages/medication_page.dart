@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:myriad/components/medify_tracker.dart';
 import 'package:myriad/components/my_button.dart';
-import 'package:myriad/components/my_textfield.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-// import 'package:intl/intl.dart';
-// import 'package:myriad/helper/medify_functions.dart';
+import 'package:myriad/components/add_medication_form.dart';
 
 class MedicationSchedule {
   final String medicineName;
@@ -43,12 +41,6 @@ class MedicationPage extends StatefulWidget {
 }
 
 class _MedicationPageState extends State<MedicationPage> {
-  // final MedifyHistory medifyHistory = MedifyHistory();
-  final TextEditingController _medicineNameController = TextEditingController();
-  final List<TextEditingController> _timeControllers = List.generate(
-    6, // Maximum number of time slots
-    (index) => TextEditingController(),
-  );
   List<MedicationSchedule> _medications = [];
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -59,21 +51,6 @@ class _MedicationPageState extends State<MedicationPage> {
     super.initState();
     _initializeNotifications();
     _loadMedications();
-    // medifyHistory.init();
-
-    // Add listeners to all time controllers to trigger UI updates
-    for (var controller in _timeControllers) {
-      controller.addListener(() {
-        setState(() {}); // Rebuild UI when any time input changes
-      });
-    }
-  }
-
-  bool _shouldShowTimeField(int index) {
-    if (index == 0) return true; // Always show first time field
-
-    // Show this field only if the previous field is filled
-    return _timeControllers[index - 1].text.isNotEmpty;
   }
 
   Future<void> _initializeNotifications() async {
@@ -172,14 +149,14 @@ class _MedicationPageState extends State<MedicationPage> {
     }
   }
 
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content: Text(message,
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-          backgroundColor: Theme.of(context).colorScheme.error),
-    );
-  }
+  // void _showError(String message) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //         content: Text(message,
+  //             style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+  //         backgroundColor: Theme.of(context).colorScheme.error),
+  //   );
+  // }
 
   void _showSuccess(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -190,33 +167,9 @@ class _MedicationPageState extends State<MedicationPage> {
     );
   }
 
-  Future<void> _saveMedication() async {
-    if (_medicineNameController.text.isEmpty) {
-      _showError('Please enter a prescription name');
-      return;
-    }
-
-    final timeRegex = RegExp(r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$');
-    final times = <String>[];
-
-    // Only collect non-empty time inputs
-    for (var controller in _timeControllers) {
-      if (controller.text.isNotEmpty) {
-        if (!timeRegex.hasMatch(controller.text)) {
-          _showError('Please enter valid times in 24-hour format (HH:mm)');
-          return;
-        }
-        times.add(controller.text);
-      }
-    }
-
-    if (times.isEmpty) {
-      _showError('Please enter at least one time');
-      return;
-    }
-
+  Future<void> _addNewMedication(String medicineName, List<String> times) async {
     final medication = MedicationSchedule(
-      medicineName: _medicineNameController.text,
+      medicineName: medicineName,
       times: times,
       id: _nextId,
     );
@@ -230,12 +183,10 @@ class _MedicationPageState extends State<MedicationPage> {
     await _scheduleNotifications(medication);
     await _saveMedications();
 
-    _medicineNameController.clear();
-    for (var controller in _timeControllers) {
-      controller.clear();
-    }
-
     _showSuccess('Medication added successfully');
+    if(mounted) {
+      Navigator.pop(context); // Close the modal
+    }
   }
 
   Future<void> _deleteMedication(int index) async {
@@ -253,90 +204,18 @@ class _MedicationPageState extends State<MedicationPage> {
     _showSuccess('Medication deleted successfully');
   }
 
-  Future<void> _selectTime(BuildContext context, int index) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-      builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-          child: child!,
-        );
-      },
-    );
-
-    if (picked != null) {
-      String formattedTime =
-          '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
-      _timeControllers[index].text = formattedTime;
-    }
-  }
-
   void showAddMedicationModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Theme.of(context).colorScheme.secondary,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 30,
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'Add Reminder',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              MyTextfield(
-                hintText: "Prescription Name",
-                controller: _medicineNameController,
-                onChanged: (v) {},
-              ),
-              const SizedBox(height: 16),
-              ...List.generate(_timeControllers.length, (index) {
-                // Only show this time field if all previous ones are filled
-                if (!_shouldShowTimeField(index)) {
-                  return const SizedBox.shrink(); // Hidden field
-                }
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      _selectTime(context, index);
-                    },
-                    child: MyTextfield(
-                      hintText:
-                          "Dosage ${index + 1}${index == 0 ? '' : ' (optional)'}",
-                      controller: _timeControllers[index],
-                      onChanged: (v) {},
-                      readOnly: true,
-                      enabled: false,
-                    ),
-                  ),
-                );
-              }),
-              const SizedBox(height: 16),
-              MyButton(
-                text: "Add to Schedule",
-                enabled: true,
-                onTap: _saveMedication,
-                fontSize: 18,
-              ),
-            ],
+          child: AddMedicationForm(
+            onSave: _addNewMedication,
           ),
         );
       },
@@ -445,14 +324,5 @@ class _MedicationPageState extends State<MedicationPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _medicineNameController.dispose();
-    for (var controller in _timeControllers) {
-      controller.dispose();
-    }
-    super.dispose();
   }
 }
