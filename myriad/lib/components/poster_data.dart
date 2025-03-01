@@ -76,7 +76,6 @@ class _PosterDataState extends State<PosterData> {
           // cache has expired
           return {"exists": false};
         } else {
-          log("USER DATA CACHE ACCESSEDD");
           return {"data": userDataSaved[widget.op]["data"], "exists": true};
         }
       } else {
