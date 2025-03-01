@@ -14,8 +14,13 @@ class PosterData extends StatefulWidget {
 }
 
 class _PosterDataState extends State<PosterData> {
-  // ignore: prefer_typing_uninitialized_variables
-  var userData;
+  Map<String, dynamic> userData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserData();
+  }
 
   Future<void> _getUserData() async {
     final CollectionReference users =
@@ -28,11 +33,12 @@ class _PosterDataState extends State<PosterData> {
     }
   }
 
+  Future<dynamic> _checkUserCache() async {}
+
+  Future<void> _updateUserCache() async {}
+
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getUserData();
-    });
     return GestureDetector(
       onTap: () {
         context.push('/profile/${widget.op}');
@@ -43,7 +49,7 @@ class _PosterDataState extends State<PosterData> {
           Row(
             children: [
               CircularImage(
-                imageUrl: userData != null ? userData['profileLink'] ?? "" : "",
+                imageUrl: userData['profileLink'] ?? "",
                 placeholder: Icon(
                   Icons.person,
                   size: 40,
@@ -54,9 +60,7 @@ class _PosterDataState extends State<PosterData> {
                 width: 10,
               ),
               Text(
-                userData != null
-                    ? userData['username'] ?? "Name Error"
-                    : "Loading...",
+                userData['username'] ?? "Name Error",
                 style: TextStyle(fontSize: 15),
               ),
             ],
@@ -64,16 +68,11 @@ class _PosterDataState extends State<PosterData> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
             child: Text(timeSince(widget.timestamp),
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondary)),
           ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
