@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myriad/components/circular_image.dart';
+import 'package:myriad/components/poster_data.dart';
 import 'package:myriad/database/community.dart';
-import 'package:myriad/helper/helper_functions.dart';
 import 'package:myriad/pages/community_thread.dart';
-import 'package:go_router/go_router.dart';
 
 class CommunityPost extends StatelessWidget {
   final String postId;
@@ -119,80 +116,6 @@ class CommunityPost extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class PosterData extends StatefulWidget {
-  final String op;
-  final Timestamp timestamp;
-  const PosterData({super.key, required this.op, required this.timestamp});
-
-  @override
-  State<PosterData> createState() => _PosterDataState();
-}
-
-class _PosterDataState extends State<PosterData> {
-  // ignore: prefer_typing_uninitialized_variables
-  var userData;
-
-  Future<void> _getUserData() async {
-    final CollectionReference users =
-        FirebaseFirestore.instance.collection("Users");
-    final op = await users.where('email', isEqualTo: widget.op).get();
-    if (op.docs.isNotEmpty && mounted) {
-      setState(() {
-        userData = op.docs.first.data() as Map<String, dynamic>;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getUserData();
-    });
-    return GestureDetector(
-      onTap: () {
-        context.push('/profile/${widget.op}');
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              CircularImage(
-                imageUrl: userData != null ? userData['profileLink'] ?? "" : "",
-                placeholder: Icon(
-                  Icons.person,
-                  size: 40,
-                ),
-                size: 40.0,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                userData != null
-                    ? userData['username'] ?? "Name Error"
-                    : "Loading...",
-                style: TextStyle(fontSize: 15),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-            child: Text(timeSince(widget.timestamp),
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
 
