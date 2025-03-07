@@ -73,6 +73,16 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> updateUserInfo() async {
     final User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
+      await FirebaseFirestore.instance.collection('Users').doc(currentUser.email).update({
+        "username": nameController.text,
+        "bio": bioController.text,
+      });
+    }
+  }
+
+  Future<void> updateAccessibilityPreferences() async {
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
       // Convert prefs list to a map for easier storage
       Map<String, bool> prefsMap = {};
       for (var pref in prefs) {
@@ -80,8 +90,6 @@ class _SettingsPageState extends State<SettingsPage> {
       }
 
       await FirebaseFirestore.instance.collection('Users').doc(currentUser.email).update({
-        "username": nameController.text,
-        "bio": bioController.text,
         "accessibility_preferences": prefsMap,
       });
     }
@@ -107,7 +115,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Profile Name:", style: TextStyle(fontSize: 16)),
                         MyTextfield(
                           hintText: 'Enter Name',
                           inputType: TextInputType.name,
@@ -116,7 +123,6 @@ class _SettingsPageState extends State<SettingsPage> {
                           onChanged: (value) {},
                         ),
                         const SizedBox(height: 10),
-                        const Text("Profile Bio:", style: TextStyle(fontSize: 16)),
                         MyTextfield(
                           hintText: 'Enter Bio',
                           inputType: TextInputType.multiline,
@@ -174,12 +180,35 @@ class _SettingsPageState extends State<SettingsPage> {
                               setState(() {
                                 prefs[prefs.indexOf(pref)] = {pref.keys.first: newValue!};
                               });
-                              // Auto-save preferences when changed
-                              updateUserInfo();
                             },
                           );
                         }),
                         const SizedBox(height: 10),
+                        MyButton(
+                          text: 'Save Preferences',
+                          onTap: () async {
+                            try {
+                              await updateAccessibilityPreferences();
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Preferences updated successfully'),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error updating preferences: $e'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          enabled: anyPrefSelected(),
+                        ),
                       ],
                     ),
                   ),
