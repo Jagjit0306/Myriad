@@ -132,7 +132,11 @@ class _HearifyPageState extends State<HearifyPage> {
       ),
       body: Column(
         children: [
-          if (messages.isEmpty) Banner1(bannerIcon: Icons.hearing),
+          if (messages.isEmpty)
+            Banner1(
+              bannerIcon: Icons.hearing,
+              desc: "Hearify\nempowering conversations",
+            ),
           Expanded(
             child: DashChat(
               currentUser: _currentUser,

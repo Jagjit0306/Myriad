@@ -116,6 +116,7 @@ class _SpeakifyPageState extends State<SpeakifyPage> {
           if (messages.isEmpty)
             Banner1(
               bannerIcon: Icons.record_voice_over,
+              desc: "Speakify\nempowering conversations.",
             ),
           Expanded(
             child: DashChat(
