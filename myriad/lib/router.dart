@@ -30,6 +30,7 @@ import 'package:myriad/pages/vb_settings_page.dart';
 import 'package:myriad/pages/vibraillify_page.dart';
 import 'package:myriad/pages/voicify_page.dart';
 import 'package:myriad/pages/user_profile_page.dart';
+import 'package:myriad/pages/serenify_affirmate_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
@@ -64,6 +65,10 @@ final router = GoRouter(
     GoRoute(
       path: '/serenify_breathe',
       builder: (context, state) => const SerenifyBreathePage(),
+    ),
+    GoRoute(
+      path: '/serenify_affirmate',
+      builder: (context, state) => const SerenifyAffirmatePage(),
     ),
     GoRoute(
       path: '/sos_page',
