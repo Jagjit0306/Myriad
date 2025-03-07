@@ -89,7 +89,7 @@ class _SerenifyPageState extends State<SerenifyPage> {
                     ),
                     SerenifySubWidget(
                       imgPath: 'assets/Frame_Affirmate.png',
-                      link: '/serenify_meditate',
+                      link: '/serenify_affirmate',
                     ),
                   ],
                 ),
