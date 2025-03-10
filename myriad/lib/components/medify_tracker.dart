@@ -1,15 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:myriad/components/my_button.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:myriad/helper/medify_functions.dart';
 
 class MedifyTracker extends StatefulWidget {
   const MedifyTracker({super.key});
 
   @override
-  State<MedifyTracker> createState() => _MedifyTrackerState();
+  State<MedifyTracker> createState() => MedifyTrackerState();
 }
 
-class _MedifyTrackerState extends State<MedifyTracker> {
+class MedifyTrackerState extends State<MedifyTracker> {
   final MedifyHistory medifyHistory = MedifyHistory();
   final PageController _pageController = PageController(viewportFraction: 0.9);
   List<dynamic> records = [];
@@ -21,9 +23,10 @@ class _MedifyTrackerState extends State<MedifyTracker> {
   }
 
   void initMedify() async {
+    log("LOADING NEW TRACKER");
     await medifyHistory.init();
     setState(() {
-      records = medifyHistory.getRecords();
+      records = medifyHistory.getRecords().reversed.toList();
     });
   }
 
@@ -56,19 +59,45 @@ class _MedifyTrackerState extends State<MedifyTracker> {
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Medication History',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Medication History',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ),
+                  PopupMenuButton(
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    onSelected: (value) {
+                      switch (value) {
+                        case 'clrmedhist':
+                          medifyHistory.clearData();
+                          initMedify();
+                          break;
+                        default:
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 'clrmedhist',
+                        child: Text("Clear History"),
+                      ),
+                    ],
+                  )
+                ],
               ),
               SizedBox(
                 height: 310,
                 child: records.isEmpty
                     ? const Center(child: CircularProgressIndicator())
                     : PageView.builder(
+                        reverse: true,
                         controller: _pageController,
                         itemCount: records.length,
                         itemBuilder: (context, index) {
@@ -94,11 +123,6 @@ class _MedifyTrackerState extends State<MedifyTracker> {
                           );
                         },
                       ),
-              ),
-              MyButton(
-                text: "Clear History",
-                enabled: true,
-                onTap: medifyHistory.clearData,
               ),
             ],
           )
@@ -127,12 +151,23 @@ class _MedifyRecordCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(
-              item["date"],
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 15,
+              children: [
+                Icon(
+                  Icons.date_range_outlined,
+                  size: 20,
+                ),
+                Text(
+                  item["date"],
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             (item["records"].length != 0)
@@ -176,19 +211,33 @@ class _MedifyRecordMedicine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.onSecondary.withAlpha(130),
+      color: Theme.of(context).colorScheme.secondaryContainer,
       margin: const EdgeInsets.only(bottom: 4),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              med["medicineName"],
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                spacing: 15,
+                children: [
+                  Icon(
+                    LucideIcons.pill,
+                    size: 20,
+                  ),
+                  Text(
+                    med["medicineName"],
+                    style: const TextStyle(
+                      // color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -207,27 +256,20 @@ class _MedifyRecordMedicine extends StatelessWidget {
                         onTap: () =>
                             onToggle(recordIndex, medicineIndex, index),
                         child: Chip(
-                          label: Row(
-                            spacing: 5,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                timing.keys.first,
-                                style: TextStyle(fontWeight: FontWeight.w500),
-                              ),
-                              Icon(
-                                timing.values.first
-                                    ? Icons.check
-                                    : Icons.question_mark,
-                                size: 15,
-                              )
-                            ],
+                          label: Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: Text(
+                              timing.keys.first,
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            ),
                           ),
                           backgroundColor: timing.values.first
-                              ? Colors.green
-                              : Color.fromARGB(255, 182, 39, 54),
+                              ? Color(0xFF9bbb4f)
+                              : Color(0xFFdb4d58),
+                          side: BorderSide(
+                            color: Colors.transparent,
+                            width: 0,
+                          ),
                         ),
                       ),
                     );

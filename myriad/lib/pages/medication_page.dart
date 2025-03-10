@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:myriad/components/medify_tracker.dart';
@@ -41,6 +43,15 @@ class MedicationPage extends StatefulWidget {
 }
 
 class _MedicationPageState extends State<MedicationPage> {
+  // final GlobalKey<_ChildWidgetState> _childKey = GlobalKey<_ChildWidgetState>();
+  final GlobalKey<MedifyTrackerState> _childKey =
+      GlobalKey<MedifyTrackerState>();
+
+  void refreshMedifyTracker() {
+    log("TRYING TO REFRESH");
+    _childKey.currentState?.initMedify();
+  }
+
   List<MedicationSchedule> _medications = [];
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -167,7 +178,8 @@ class _MedicationPageState extends State<MedicationPage> {
     );
   }
 
-  Future<void> _addNewMedication(String medicineName, List<String> times) async {
+  Future<void> _addNewMedication(
+      String medicineName, List<String> times) async {
     final medication = MedicationSchedule(
       medicineName: medicineName,
       times: times,
@@ -184,9 +196,10 @@ class _MedicationPageState extends State<MedicationPage> {
     await _saveMedications();
 
     _showSuccess('Medication added successfully');
-    if(mounted) {
+    if (mounted) {
       Navigator.pop(context); // Close the modal
     }
+    refreshMedifyTracker();
   }
 
   Future<void> _deleteMedication(int index) async {
@@ -202,6 +215,8 @@ class _MedicationPageState extends State<MedicationPage> {
 
     await _saveMedications();
     _showSuccess('Medication deleted successfully');
+
+    refreshMedifyTracker();
   }
 
   void showAddMedicationModal(BuildContext context) {
@@ -236,7 +251,7 @@ class _MedicationPageState extends State<MedicationPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 30),
-              MedifyTracker(),
+              MedifyTracker(key: _childKey),
               MyButton(
                 text: "Add a reminder",
                 enabled: true,
@@ -270,7 +285,8 @@ class _MedicationPageState extends State<MedicationPage> {
                               title: Text(
                                 medication.medicineName,
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -280,23 +296,31 @@ class _MedicationPageState extends State<MedicationPage> {
                                 children: [
                                   const SizedBox(height: 8),
                                   SizedBox(
-                                    height: 40, // Fixed height for the scrolling area
+                                    height:
+                                        40, // Fixed height for the scrolling area
                                     child: ListView.separated(
                                       physics: BouncingScrollPhysics(),
                                       scrollDirection: Axis.horizontal,
-                                      separatorBuilder: (context, index) => const SizedBox(width: 8),
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(width: 8),
                                       itemCount: medication.times.length,
-                                      itemBuilder: (context, timeIndex) => InkWell(
+                                      itemBuilder: (context, timeIndex) =>
+                                          InkWell(
                                         child: Chip(
                                           label: Text(
                                             medication.times[timeIndex],
                                             style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onSurface,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
                                               fontSize: 13,
                                             ),
                                           ),
-                                          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-                                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondaryContainer,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
                                         ),
                                       ),
                                     ),
