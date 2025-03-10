@@ -168,6 +168,7 @@ class _MedicationPageState extends State<MedicationPage> {
   }
 
   Future<void> _addNewMedication(String medicineName, List<String> times) async {
+    // TODO : refresh the tracker
     final medication = MedicationSchedule(
       medicineName: medicineName,
       times: times,
@@ -187,9 +188,13 @@ class _MedicationPageState extends State<MedicationPage> {
     if(mounted) {
       Navigator.pop(context); // Close the modal
     }
+    setState(() {
+      
+    });
   }
 
   Future<void> _deleteMedication(int index) async {
+    // TODO : refresh the tracker
     final medication = _medications[index];
     // Cancel all notifications for this medication
     for (int i = 0; i < medication.times.length; i++) {
