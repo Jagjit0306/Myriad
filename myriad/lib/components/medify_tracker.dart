@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:myriad/helper/medify_functions.dart';
@@ -6,10 +8,10 @@ class MedifyTracker extends StatefulWidget {
   const MedifyTracker({super.key});
 
   @override
-  State<MedifyTracker> createState() => _MedifyTrackerState();
+  State<MedifyTracker> createState() => MedifyTrackerState();
 }
 
-class _MedifyTrackerState extends State<MedifyTracker> {
+class MedifyTrackerState extends State<MedifyTracker> {
   final MedifyHistory medifyHistory = MedifyHistory();
   final PageController _pageController = PageController(viewportFraction: 0.9);
   List<dynamic> records = [];
@@ -21,6 +23,7 @@ class _MedifyTrackerState extends State<MedifyTracker> {
   }
 
   void initMedify() async {
+    log("LOADING NEW TRACKER");
     await medifyHistory.init();
     setState(() {
       records = medifyHistory.getRecords().reversed.toList();
