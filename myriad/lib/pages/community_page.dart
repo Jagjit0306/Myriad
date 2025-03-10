@@ -87,42 +87,46 @@ class _CommunityPageState extends State<CommunityPage> {
                       );
                     } else if (snapshot.hasData) {
                       List allCommunityPosts = snapshot.data!.docs;
+                      List filteredPosts = allCommunityPosts.where((post) {
+                        Map<String, dynamic> data =
+                            post.data() as Map<String, dynamic>;
+                        List<dynamic> postCategories = data['categories'] ?? [];
+                        return postCategories.any((category) => categories
+                            .where((map) => map.values.first == true)
+                            .map((map) => map.keys.first)
+                            .toList()
+                            .contains(category));
+                      }).toList();
+
+                      if (filteredPosts.isEmpty) {
+                        return const SliverFillRemaining(
+                          child: Center(
+                            child:
+                                Text('No Posts match the selected categories.'),
+                          ),
+                        );
+                      }
 
                       return SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
                             DocumentSnapshot communityPost =
-                                allCommunityPosts[index];
+                                filteredPosts[index];
                             Map<String, dynamic> data =
                                 communityPost.data() as Map<String, dynamic>;
-
-                            // Verify if the 'categories' field has at least one matching category
-                            List<dynamic> postCategories =
-                                data['categories'] ?? [];
-                            bool hasMatchingCategory = postCategories.any(
-                                (category) => categories
-                                    .where((map) => map.values.first == true)
-                                    .map((map) => map.keys.first)
-                                    .toList()
-                                    .contains(category));
-
-                            if (!hasMatchingCategory) {
-                              return const SizedBox
-                                  .shrink(); // Skip this post if no match
-                            }
 
                             return CommunityPost(
                               postId: communityPost.id,
                               data: data,
                             );
                           },
-                          childCount: allCommunityPosts.length,
+                          childCount: filteredPosts.length,
                         ),
                       );
                     } else {
                       return const SliverFillRemaining(
                         child: Center(
-                          child: Text('No Data'),
+                          child: Text('No Posts were found...'),
                         ),
                       );
                     }
