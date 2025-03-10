@@ -83,129 +83,132 @@ class _VbChatBotMonitorState extends State<VbChatBotMonitor> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.85,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Chat History",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
-                ),
-                PopupMenuButton(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  onSelected: (value) {
-                    switch (value) {
-                      case 'clrcht':
-                        _clearChats();
-                        break;
-                      default:
-                        break;
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 'clrcht',
-                      child: Text("Clear Chat"),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.primary,
-                    width: 2,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.85,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Chat History",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
                   ),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: (messages.isEmpty)
-                    ? Center(
-                        child: const Text(
-                        "There is no chat history",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ))
-                    : DashChat(
-                        currentUser: currentUser,
-                        onSend: (m) {},
-                        messages: messages,
-                        messageOptions: MessageOptions(
-                          currentUserContainerColor:
-                              Theme.of(context).colorScheme.inversePrimary,
-                          containerColor: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                          textColor:
-                              Theme.of(context).colorScheme.inversePrimary,
-                          currentUserTextColor:
-                              Theme.of(context).colorScheme.surface,
-                        ),
-                        scrollToBottomOptions: ScrollToBottomOptions(
-                          scrollToBottomBuilder: (scrollController) {
-                            return Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .inversePrimary,
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black26,
-                                        blurRadius: 4,
-                                        offset: Offset(2, 2),
-                                      ),
-                                    ],
-                                  ),
-                                  child: IconButton(
-                                    icon: Icon(
-                                      Icons.arrow_downward,
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
-                                    ),
-                                    onPressed: () {
-                                      scrollController.animateTo(
-                                        scrollController
-                                            .position.minScrollExtent,
-                                        duration: Duration(milliseconds: 300),
-                                        curve: Curves.easeOut,
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        readOnly: true,
+                  PopupMenuButton(
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    onSelected: (value) {
+                      switch (value) {
+                        case 'clrcht':
+                          _clearChats();
+                          break;
+                        default:
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 'clrcht',
+                        child: Text("Clear Chat"),
                       ),
+                    ],
+                  )
+                ],
               ),
             ),
-          ),
-          NotifyPage(
-            hideMediGraph: true,
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: (messages.isEmpty)
+                      ? Center(
+                          child: const Text(
+                          "There is no chat history",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ))
+                      : DashChat(
+                          currentUser: currentUser,
+                          onSend: (m) {},
+                          messages: messages,
+                          messageOptions: MessageOptions(
+                            currentUserContainerColor:
+                                Theme.of(context).colorScheme.inversePrimary,
+                            containerColor: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
+                            textColor:
+                                Theme.of(context).colorScheme.inversePrimary,
+                            currentUserTextColor:
+                                Theme.of(context).colorScheme.surface,
+                          ),
+                          scrollToBottomOptions: ScrollToBottomOptions(
+                            scrollToBottomBuilder: (scrollController) {
+                              return Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black26,
+                                          blurRadius: 4,
+                                          offset: Offset(2, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.arrow_downward,
+                                        color:
+                                            Theme.of(context).colorScheme.surface,
+                                      ),
+                                      onPressed: () {
+                                        scrollController.animateTo(
+                                          scrollController
+                                              .position.minScrollExtent,
+                                          duration: Duration(milliseconds: 300),
+                                          curve: Curves.easeOut,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          readOnly: true,
+                        ),
+                ),
+              ),
+            ),
+            NotifyPage(
+              hideMediGraph: true,
+            ),
+          ],
+        ),
       ),
     );
   }

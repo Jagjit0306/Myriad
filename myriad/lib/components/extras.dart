@@ -98,30 +98,30 @@ class _ExtrasState extends State<Extras> {
                       );
                     }),
                   ),
-                SmoothButtonEntry(
-                  isVisible: true,
-                  delay: 400,
-                  child: ExtraButton(
-                    path: "/onboarding",
-                    iconData: Icons.star,
-                    name: "ONBOARDING",
-                    color: Colors.green,
-                  ),
-                ),
-                SmoothButtonEntry(
-                  isVisible: true,
-                  delay: 500,
-                  child: ExtraButton(
-                    path: "",
-                    customCallback: () {
-                      signOutFromGoogle();
-                      context.push("/auth");
-                    },
-                    iconData: Icons.logout,
-                    color: Colors.red,
-                    name: "LOGOUT",
-                  ),
-                ),
+                // SmoothButtonEntry(
+                //   isVisible: true,
+                //   delay: 400,
+                //   child: ExtraButton(
+                //     path: "/onboarding",
+                //     iconData: Icons.star,
+                //     name: "ONBOARDING",
+                //     color: Colors.green,
+                //   ),
+                // ),
+                // SmoothButtonEntry(
+                //   isVisible: true,
+                //   delay: 500,
+                //   child: ExtraButton(
+                //     path: "",
+                //     customCallback: () {
+                //       signOutFromGoogle();
+                //       context.push("/auth");
+                //     },
+                //     iconData: Icons.logout,
+                //     color: Colors.red,
+                //     name: "LOGOUT",
+                //   ),
+                // ),
                 SizedBox(
                   height: 20,
                 ),

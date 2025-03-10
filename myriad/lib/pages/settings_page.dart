@@ -1,11 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:myriad/auth/google_auth.dart';
+import 'package:myriad/components/extras.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_textfield.dart';
+import 'package:myriad/components/vb_chat_bot_monitor.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  final bool vb;
+  const SettingsPage({
+    super.key,
+    this.vb = false,
+  });
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -50,16 +58,22 @@ class _SettingsPageState extends State<SettingsPage> {
           .collection('Users')
           .doc(currentUser.email)
           .get();
-      
+
       if (userData.exists) {
         final data = userData.data();
         setState(() {
           nameController.text = data?['username'] ?? '';
           bioController.text = data?['bio'] ?? '';
-          
+
           // Load saved preferences
-          final savedPrefs = data?['accessibility_preferences'] as Map<String, dynamic>?;
-          if (savedPrefs != null) {
+          final savedPrefs = <String, dynamic>{};
+          final List<dynamic>? prefsList = data?['prefs'] as List<dynamic>?;
+          if (prefsList != null) {
+            for (var pref in prefsList) {
+              savedPrefs.addAll(pref as Map<String, dynamic>);
+            }
+          }
+          if (savedPrefs.isNotEmpty) {
             for (int i = 0; i < prefs.length; i++) {
               String key = prefs[i].keys.first;
               prefs[i] = {key: savedPrefs[key] ?? false};
@@ -73,7 +87,10 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> updateUserInfo() async {
     final User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      await FirebaseFirestore.instance.collection('Users').doc(currentUser.email).update({
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser.email)
+          .update({
         "username": nameController.text,
         "bio": bioController.text,
       });
@@ -89,8 +106,13 @@ class _SettingsPageState extends State<SettingsPage> {
         prefsMap[pref.keys.first] = pref.values.first;
       }
 
-      await FirebaseFirestore.instance.collection('Users').doc(currentUser.email).update({
-        "accessibility_preferences": prefsMap,
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser.email)
+          .update({
+        "prefs": prefsMap.entries.map((entry) {
+          return {entry.key: entry.value};
+        }).toList(),
       });
     }
   }
@@ -98,124 +120,150 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+        title: const Text('Settings'),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              // Edit Personal Information Section
-              ExpansionTile(
-                title: const Text("Edit Personal Information",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        MyTextfield(
-                          hintText: 'Enter Name',
-                          inputType: TextInputType.name,
-                          obscureText: false,
-                          controller: nameController,
-                          onChanged: (value) {},
-                        ),
-                        const SizedBox(height: 10),
-                        MyTextfield(
-                          hintText: 'Enter Bio',
-                          inputType: TextInputType.multiline,
-                          obscureText: false,
-                          controller: bioController,
-                          onChanged: (value) {},
-                        ),
-                        const SizedBox(height: 10),
-                        MyButton(
-                          text: 'Update Information',
-                          onTap: () async {
-                            try {
-                              await updateUserInfo();
-                              if (mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Information updated successfully'),
-                                  ),
-                                );
-                              }
-                            } catch (e) {
-                              if (mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Error updating information: $e'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              }
+        child: Column(
+          children: [
+            if (widget.vb) VbChatBotMonitor(),
+            // Edit Personal Information Section
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: const Text("Edit Personal Information",
+                  style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MyTextfield(
+                        hintText: 'Update Name',
+                        inputType: TextInputType.name,
+                        obscureText: false,
+                        controller: nameController,
+                        onChanged: (value) {},
+                      ),
+                      const SizedBox(height: 10),
+                      MyTextfield(
+                        hintText: 'Update Bio',
+                        inputType: TextInputType.multiline,
+                        obscureText: false,
+                        controller: bioController,
+                        onChanged: (value) {},
+                      ),
+                      const SizedBox(height: 10),
+                      MyButton(
+                        text: 'Update Information',
+                        onTap: () async {
+                          try {
+                            await updateUserInfo();
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Information updated successfully'),
+                                ),
+                              );
+                              context.go("/go_to_home");
                             }
-                          },
-                          enabled: nameController.text.isNotEmpty,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              // Accessibility Preferences Section
-              ExpansionTile(
-                title: const Text("Customize Accessibility Preferences",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      children: [
-                        ...prefs.map((pref) {
-                          return CheckboxListTile(
-                            title: Text(pref.keys.first),
-                            value: pref.values.first,
-                            onChanged: (bool? newValue) {
-                              setState(() {
-                                prefs[prefs.indexOf(pref)] = {pref.keys.first: newValue!};
-                              });
-                            },
-                          );
-                        }),
-                        const SizedBox(height: 10),
-                        MyButton(
-                          text: 'Save Preferences',
-                          onTap: () async {
-                            try {
-                              await updateAccessibilityPreferences();
-                              if (mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Preferences updated successfully'),
-                                  ),
-                                );
-                              }
-                            } catch (e) {
-                              if (mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Error updating preferences: $e'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              }
+                          } catch (e) {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text('Error updating information: $e'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
                             }
-                          },
-                          enabled: anyPrefSelected(),
-                        ),
-                      ],
-                    ),
+                          }
+                        },
+                        enabled: nameController.text.isNotEmpty,
+                      ),
+                    ],
                   ),
-                ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+        
+            // Accessibility Preferences Section
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: const Text("Customize Accessibility Preferences",
+                  style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      ...prefs.map((pref) {
+                        return CheckboxListTile(
+                          title: Text(pref.keys.first),
+                          value: pref.values.first,
+                          onChanged: (bool? newValue) {
+                            setState(() {
+                              prefs[prefs.indexOf(pref)] = {
+                                pref.keys.first: newValue!
+                              };
+                            });
+                          },
+                        );
+                      }),
+                      const SizedBox(height: 10),
+                      MyButton(
+                        text: 'Save Preferences',
+                        onTap: () async {
+                          try {
+                            await updateAccessibilityPreferences();
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Preferences updated successfully'),
+                                ),
+                              );
+                              context.go('/go_to_home');
+                            }
+                          } catch (e) {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text('Error updating preferences: $e'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        enabled: anyPrefSelected(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: ExtraButton(
+                path: "",
+                customCallback: () {
+                  signOutFromGoogle();
+                  context.push("/auth");
+                },
+                iconData: Icons.logout,
+                color: Colors.red,
+                name: "LOGOUT",
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

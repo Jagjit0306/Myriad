@@ -26,7 +26,6 @@ import 'package:myriad/pages/settings_page.dart';
 import 'package:myriad/pages/sightify_page.dart';
 import 'package:myriad/pages/sos_page.dart';
 import 'package:myriad/pages/speakify_page.dart';
-import 'package:myriad/pages/vb_settings_page.dart';
 import 'package:myriad/pages/vibraillify_page.dart';
 import 'package:myriad/pages/voicify_page.dart';
 import 'package:myriad/pages/user_profile_page.dart';
@@ -126,7 +125,9 @@ final router = GoRouter(
                 ),
                 GoRoute(
                   path: 'colorify_talkback',
-                  builder: (context, state) => const ColorifyPage(talkback: true,),
+                  builder: (context, state) => const ColorifyPage(
+                    talkback: true,
+                  ),
                 ),
                 GoRoute(
                   path: 'hearify',
@@ -212,7 +213,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/vb_settings',
-      builder: (context, state) => const VbSettingsPage(),
+      builder: (context, state) => const SettingsPage(vb: true),
     ),
   ],
 );
