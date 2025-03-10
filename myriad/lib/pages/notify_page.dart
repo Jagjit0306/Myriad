@@ -19,7 +19,7 @@ class _NotifyPageState extends State<NotifyPage> {
   final MentalHealthAnalyzer _analyzer = MentalHealthAnalyzer();
   final MedifyHistory _medifyHistory = MedifyHistory();
   late final MedifyConsistencyCalculator _consistencyCalculator;
-  
+
   int _mentalHealthScore = 0;
   bool mentalHealthIsLoading = true;
   List<DailyConsistency> _consistencyData = [];
@@ -46,12 +46,12 @@ class _NotifyPageState extends State<NotifyPage> {
     setState(() {
       _isLoading = true;
     });
-    
+
     try {
       // Get consistency data from MedifyHistory
       final data = await _consistencyCalculator.getConsistencyForLastWeek();
       final streak = await _consistencyCalculator.calculateConsistencyStreak();
-      
+
       setState(() {
         _consistencyData = data;
         _streak = streak;
@@ -82,89 +82,119 @@ class _NotifyPageState extends State<NotifyPage> {
           SizedBox(
             height: 15,
           ),
-          if(!widget.hideMediGraph)
-          Card(
-            color: Theme.of(context).colorScheme.secondary,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Medicine Consistency',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    _isLoading 
-                        ? 'Calculating...' 
-                        : '$_streak Days',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondary,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  _isLoading
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                    )
-                  : SizedBox(
-                      height: 200,
-                      child: SfCartesianChart(
-                        plotAreaBorderWidth: 0,
-                        primaryXAxis: DateTimeAxis(
-                          dateFormat: DateFormat.d(),
-                          intervalType: DateTimeIntervalType.days,
-                          interval: 1,
-                          majorGridLines: const MajorGridLines(
-                              width: 1, color: Colors.grey),
-                          axisLine: const AxisLine(width: 0),
-                          labelStyle: const TextStyle(color: Colors.grey),
-                        ),
-                        primaryYAxis: NumericAxis(
-                          minimum: 0,
-                          maximum: 100,
-                          interval: 20,
-                          axisLine: const AxisLine(width: 0),
-                          majorGridLines: const MajorGridLines(
-                              width: 1, color: Colors.grey),
-                          labelStyle: const TextStyle(color: Colors.grey),
-                          labelFormat: '{value}%',
-                        ),
-                        series: <CartesianSeries>[
-                          SplineSeries<DailyConsistency, DateTime>(
-                            dataSource: _consistencyData,
-                            xValueMapper: (DailyConsistency data, _) => data.date,
-                            yValueMapper: (DailyConsistency data, _) => data.percentage,
+          if (!widget.hideMediGraph)
+            Stack(
+              children: [
+                Card(
+                  color: Theme.of(context).colorScheme.secondary,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Medicine Consistency',
+                          style: TextStyle(
                             color: Theme.of(context).colorScheme.inversePrimary,
-                            width: 2,
-                            markerSettings: MarkerSettings(
-                              isVisible: true,
-                              color: Theme.of(context).colorScheme.inversePrimary,
-                              borderWidth: 2,
-                              borderColor: Theme.of(context).colorScheme.onSecondary,
-                            ),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
                           ),
-                        ],
-                        tooltipBehavior: TooltipBehavior(
-                          enable: true,
-                          format: 'Day {point.x}: {point.y.toStringAsFixed(1)}%',
                         ),
-                      ),
+                        Text(
+                          _isLoading ? 'Calculating...' : '$_streak Days',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        _isLoading
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                ),
+                              )
+                            : SizedBox(
+                                height: 200,
+                                child: SfCartesianChart(
+                                  plotAreaBorderWidth: 0,
+                                  primaryXAxis: DateTimeAxis(
+                                    dateFormat: DateFormat.d(),
+                                    intervalType: DateTimeIntervalType.days,
+                                    interval: 1,
+                                    majorGridLines: const MajorGridLines(
+                                        width: 1, color: Colors.grey),
+                                    axisLine: const AxisLine(width: 0),
+                                    labelStyle:
+                                        const TextStyle(color: Colors.grey),
+                                  ),
+                                  primaryYAxis: NumericAxis(
+                                    minimum: 0,
+                                    maximum: 100,
+                                    interval: 20,
+                                    axisLine: const AxisLine(width: 0),
+                                    majorGridLines: const MajorGridLines(
+                                        width: 1, color: Colors.grey),
+                                    labelStyle:
+                                        const TextStyle(color: Colors.grey),
+                                    labelFormat: '{value}%',
+                                  ),
+                                  series: <CartesianSeries>[
+                                    SplineSeries<DailyConsistency, DateTime>(
+                                      dataSource: _consistencyData,
+                                      xValueMapper:
+                                          (DailyConsistency data, _) =>
+                                              data.date,
+                                      yValueMapper:
+                                          (DailyConsistency data, _) =>
+                                              data.percentage,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                      width: 2,
+                                      markerSettings: MarkerSettings(
+                                        isVisible: true,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
+                                        borderWidth: 2,
+                                        borderColor: Theme.of(context)
+                                            .colorScheme
+                                            .onSecondary,
+                                      ),
+                                    ),
+                                  ],
+                                  tooltipBehavior: TooltipBehavior(
+                                    enable: true,
+                                    format:
+                                        'Day {point.x}: {point.y.toStringAsFixed(1)}%',
+                                  ),
+                                ),
+                              ),
+                      ],
                     ),
-                ],
-              ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    onPressed: () {
+                      // _updateMentalHealthScore();
+                      _loadConsistencyData();
+                    },
+                    icon: Icon(
+                      Icons.refresh_rounded,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      semanticLabel: "Refresh data",
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          if(!widget.hideMediGraph)
-          const SizedBox(height: 20),
+          if (!widget.hideMediGraph) const SizedBox(height: 20),
           Center(
             child: Card(
               color: Theme.of(context).colorScheme.secondary,
@@ -239,7 +269,7 @@ class _NotifyPageState extends State<NotifyPage> {
                     child: IconButton(
                       onPressed: () {
                         _updateMentalHealthScore();
-                        _loadConsistencyData();
+                        // _loadConsistencyData();
                       },
                       icon: Icon(
                         Icons.refresh_rounded,

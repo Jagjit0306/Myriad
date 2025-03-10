@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myriad/components/home_page_notes.dart';
+// import 'package:myriad/components/home_page_notes.dart';
 import 'package:myriad/components/my_app_bar.dart';
 import 'package:myriad/components/welcome_card.dart';
 import 'package:myriad/pages/notify_page.dart';
@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             WelcomeCard(),
-            HomePageNotes(),
+            // HomePageNotes(),
             NotifyPage(),
           ],
         ),
