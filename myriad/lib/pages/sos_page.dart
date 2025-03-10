@@ -363,6 +363,7 @@ class _SosPageState extends State<SosPage> {
             Expanded(
               child: Center(
                 child: Column(
+                  spacing: 10,
                   children: [
                     GridView.count(
                       shrinkWrap: true,
