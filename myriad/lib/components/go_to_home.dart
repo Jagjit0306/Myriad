@@ -19,13 +19,10 @@ class _GoToHomeState extends State<GoToHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CircularProgressIndicator.adaptive(),
-      ],
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
     );
   }
 }
