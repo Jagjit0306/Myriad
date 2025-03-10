@@ -134,6 +134,7 @@ class _NotifyPageState extends State<NotifyPage> {
                                   primaryYAxis: NumericAxis(
                                     minimum: 0,
                                     maximum: 100,
+                                    plotOffset: 20,
                                     interval: 20,
                                     axisLine: const AxisLine(width: 0),
                                     majorGridLines: const MajorGridLines(
