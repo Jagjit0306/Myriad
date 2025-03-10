@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myriad/auth/google_auth.dart';
 import 'package:myriad/helper/configurator.dart';
 
 Map<String, IconData> iconMap = {
   "colorify": Icons.color_lens_outlined,
+  "colorify_talkback": Icons.color_lens_outlined,
   "hearify": Icons.hearing_outlined,
   "vibraillify": Icons.drag_indicator_outlined,
   "wheelify": Icons.accessible_outlined,
