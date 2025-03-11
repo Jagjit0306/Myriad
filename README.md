@@ -38,47 +38,47 @@
 - Predefined phrases for quick interaction.
 <!-- - Customizable voice tones and accents. -->
 
-### 5. **Wheelify (Wheelchair Arrangement Services)**
+### 6. **Wheelify (Wheelchair Arrangement Services)**
 - Users can request wheelchair assistance at specific locations.
 - Will help expand wheelchair accessibility at places over time.
 - Maps integrated for accessible route planning.
 - Wheelchair-friendly location suggestions.
 
-### 6. **Sightify (Visual Accessibility for the Blind)**
+### 7. **Sightify (Visual Accessibility for the Blind)**
 - Helps blind users capture images of their surroundings.
 - Users can tap on different areas of the image, and AI will describe what is present in that region via voice output.
 
-### 7. **Colorify (Color Identification for Color-Blind Individuals)**
+### 8. **Colorify (Color Identification for Color-Blind Individuals)**
 - Allows color-blind users to click pictures and identify colors in real time.
 - AI detects objects and labels their colors accurately, enhancing accessibility for daily activities.
 
-### 8. **Medify (Medication Reminder & Storage)**
+### 9. **Medify (Medication Reminder & Storage)**
 - Stores and tracks medicine schedules.
 - Sends reminders for timely medication intake.
 - Tracks medical history and medicine consistency.
 <!-- - Tracks medical history and doctor appointments. -->
 
-### 9. **Vibraillify (Braille via Vibration)**
+### 10. **Vibraillify (Braille via Vibration)**
 - Converts text into Vibraille, allowing users to read via sequential phone vibrations.
 - Requires no extra device, making Braille more accessible on standard smartphones.
 
-### 10. **Vibraille Chatbot (AI Chat for the Blind & Deafblind)**
+### 11. **Vibraille Chatbot (AI Chat for the Blind & Deafblind)**
 - Users input queries using voice commands.
 - The chatbot responds in Vibraille format, allowing users to feel the response through vibrations in distinct patterns.
 
-### 11. **Serenify (Mental Wellness Suite)**
+### 12. **Serenify (Mental Wellness Suite)**
 A specialized module offering four essential tools:
 - **Meditate:** Guided meditation sessions.
 - **Sleep:** Sleep-inducing soundtracks and exercises.
 - **Affirmate:** Positive affirmations for motivation.
 - **Breathe:** Breathing exercises for relaxation.
 
-### 12. **My AI (Personalized AI Chatbot)**
+### 13. **My AI (Personalized AI Chatbot)**
 - An AI-powered assistant that helps provides both technical and emotional assistance.
 - Provides motivation, mental health tips, and practical advice.
 - Learns user preferences to offer personalized assistance.
 
-### 13. **SOS & Emergency Support**
+### 14. **SOS & Emergency Support**
 - Quick access to emergency contacts.
 - Automated alerts to caregivers or medical assistance services.
 - Location tracking for faster emergency response.
