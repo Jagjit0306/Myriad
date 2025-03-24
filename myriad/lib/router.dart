@@ -7,6 +7,7 @@ import 'package:myriad/components/go_to_home.dart';
 import 'package:myriad/components/home_configurator.dart';
 import 'package:myriad/layout/layout_scaffold.dart';
 import 'package:myriad/layout/layout_scaffold_2.dart';
+import 'package:myriad/pages/serenify_sleep_page.dart';
 import 'package:myriad/pages/vb_chat_bot.dart';
 import 'package:myriad/pages/chatbot_home_page.dart';
 import 'package:myriad/pages/colorify_page.dart';
@@ -68,6 +69,10 @@ final router = GoRouter(
     GoRoute(
       path: '/serenify_affirmate',
       builder: (context, state) => const SerenifyAffirmatePage(),
+    ),
+    GoRoute(
+      path: '/serenify_sleep',
+      builder: (context, state) => const SerenifySleepPage(),
     ),
     GoRoute(
       path: '/sos_page',

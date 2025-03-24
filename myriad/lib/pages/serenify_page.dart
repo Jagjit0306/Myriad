@@ -81,7 +81,7 @@ class _SerenifyPageState extends State<SerenifyPage> {
                     ),
                     SerenifySubWidget(
                       imgPath: 'assets/Frame_Sleep.png',
-                      link: '/serenify_meditate',
+                      link: '/serenify_sleep',
                     ),
                     SerenifySubWidget(
                       imgPath: 'assets/Frame_Breathe.png',
