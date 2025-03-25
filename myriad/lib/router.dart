@@ -8,6 +8,7 @@ import 'package:myriad/components/home_configurator.dart';
 import 'package:myriad/layout/layout_scaffold.dart';
 import 'package:myriad/layout/layout_scaffold_2.dart';
 import 'package:myriad/pages/serenify_sleep_page.dart';
+import 'package:myriad/pages/sightify_asl_page.dart';
 import 'package:myriad/pages/vb_chat_bot.dart';
 import 'package:myriad/pages/chatbot_home_page.dart';
 import 'package:myriad/pages/colorify_page.dart';
@@ -153,6 +154,10 @@ final router = GoRouter(
                 GoRoute(
                   path: 'sightify',
                   builder: (context, state) => const SightifyPage(),
+                ),
+                GoRoute(
+                  path: '/sightify_asl',
+                  builder: (context, state) => const SightifyASLPage(),
                 ),
                 GoRoute(
                   path: 'speakify',
