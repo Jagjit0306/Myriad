@@ -381,13 +381,13 @@ class _SosPageState extends State<SosPage> {
                         _buildEmergencyOption(
                           context,
                           "Guardian",
-                          Icons.phone,
+                          Icons.phone_outlined,
                         ),
                         if (showScream)
                           _buildEmergencyOption(
                             context,
                             "SOS",
-                            Icons.notification_important,
+                            Icons.notification_important_outlined,
                           ),
                         if (showScream) _ScreamButton(),
                       ],
@@ -396,7 +396,7 @@ class _SosPageState extends State<SosPage> {
                       _buildEmergencyOption(
                         context,
                         "SOS",
-                        Icons.notification_important,
+                        Icons.notification_important_outlined,
                       ),
                   ],
                 ),

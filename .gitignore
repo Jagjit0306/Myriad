@@ -157,4 +157,5 @@ app.*.symbols
 .python-version
 .gclient_previous_custom_vars
 .gclient_previous_sync_commits
-/myriad/android/app/.cxx/Debug/6f1f4z1w
+/myriad/android/app/.cxx
+.vscode/settings.json
