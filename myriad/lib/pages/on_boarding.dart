@@ -27,6 +27,7 @@ class _OnBoardingState extends State<OnBoarding> {
     {'Wheelchair Support': false},
     {'Limb Diversity Support': false},
     {'Paralysis Support': false},
+    {'Stress Management': false},
   ];
 
   bool isUsernameUnique = false;

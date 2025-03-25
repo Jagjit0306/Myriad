@@ -32,6 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
     {'Wheelchair Support': false},
     {'Limb Diversity Support': false},
     {'Paralysis Support': false},
+    {'Stress Management': false},
   ];
 
   @override

@@ -38,7 +38,7 @@ Future<List<String>> configurator() async {
     "medify": [],
     "colorify": ["Colorblindness Support"],
     "colorify_talkback": ["Vision Support"],
-    "serenify": [],
+    "serenify": ['Stress Management'],
     "sightify": ["Vision Support"],
     "sightify_asl": ["Hearing Support"],
     "speakify": ["Speech Assistance"],
