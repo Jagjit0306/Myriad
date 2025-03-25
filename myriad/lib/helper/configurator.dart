@@ -22,6 +22,7 @@ Future<List<String>> configurator() async {
     "wheelify",
     "serenify",
     "medify",
+    "sightify_asl",
   ];
 
   if (!true) return features;
@@ -38,6 +39,7 @@ Future<List<String>> configurator() async {
     "colorify_talkback": ["Vision Support"],
     "serenify": [],
     "sightify": ["Vision Support"],
+    "sightify_asl": ["Hearing Support"],
     "speakify": ["Speech Assistance"],
     "voicify": ["Speech Assistance", "Hearing Support"],
   };
