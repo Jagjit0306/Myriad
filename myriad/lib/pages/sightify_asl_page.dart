@@ -5,7 +5,6 @@ import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:myriad/components/banner_1.dart';
 import 'package:myriad/components/round_button.dart';
 import 'package:camera/camera.dart';
-import 'package:myriad/helper/tts_functions.dart';
 import 'package:myriad/pages/sightify_page.dart';
 
 class SightifyASLPage extends StatefulWidget {
@@ -17,7 +16,6 @@ class SightifyASLPage extends StatefulWidget {
 
 class _SightifyASLPageState extends State<SightifyASLPage>
     with WidgetsBindingObserver {
-  final TTS tts = TTS();
   File? _imageFile;
   CameraController? _controller;
   bool _isTakingPicture = false;
@@ -27,7 +25,6 @@ class _SightifyASLPageState extends State<SightifyASLPage>
   @override
   void initState() {
     super.initState();
-    tts.initTTS();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -35,15 +32,7 @@ class _SightifyASLPageState extends State<SightifyASLPage>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _controller?.dispose();
-    tts.dispose();
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      tts.dispose();
-    }
   }
 
   Future<void> _takeInstantPicture() async {
@@ -103,25 +92,6 @@ class _SightifyASLPageState extends State<SightifyASLPage>
     });
   }
 
-  void askGeminiOnTouch(File croppedImg) {
-    gemini.textAndImage(
-      text: "Focus on the hand gesture in the center of this image. If it's a sign language gesture, tell me what it means. Be very brief.",
-      images: [croppedImg.readAsBytesSync()],
-    ).then(
-      (value) {
-        final dataContent = jsonDecode(jsonEncode(value!.content!.parts![0]))
-            as Map<String, dynamic>;
-        _showResponseDialog(dataContent['text'] ?? "Error encountered!");
-      },
-    ).catchError((e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("We cannot reach our service right now")),
-        );
-      }
-    });
-  }
-
   void _showResponseDialog(String response) {
     showDialog(
       context: context,
@@ -136,18 +106,6 @@ class _SightifyASLPageState extends State<SightifyASLPage>
         ],
       ),
     );
-  }
-
-  Future<void> cropAndGemini(double x, double y) async {
-    tts.dispose();
-    final newImg = await cropImageWithRatios(
-      imageFile: _imageFile!,
-      xRatio: x,
-      yRatio: y,
-      widthRatio: 0.3,
-      heightRatio: 0.3,
-    );
-    askGeminiOnTouch(newImg);
   }
 
   @override
@@ -173,15 +131,6 @@ class _SightifyASLPageState extends State<SightifyASLPage>
                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
                 child: GestureDetector(
                   key: _key,
-                  onTapDown: (details) {
-                    Feedback.forTap(context);
-                    final RenderBox box =
-                        _key.currentContext!.findRenderObject() as RenderBox;
-                    final Size size = box.size;
-                    final position = details.localPosition;
-                    cropAndGemini(
-                        position.dx / size.width, position.dy / size.height);
-                  },
                   child: Container(
                     height: double.infinity,
                     width: double.infinity,
