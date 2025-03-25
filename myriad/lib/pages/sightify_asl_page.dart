@@ -92,7 +92,7 @@ class _SightifyASLPageState extends State<SightifyASLPage>
       (value) {
         final dataContent = jsonDecode(jsonEncode(value!.content!.parts![0]))
             as Map<String, dynamic>;
-        tts.speak(dataContent['text'] ?? "Error encountered!");
+        _showResponseDialog(dataContent['text'] ?? "Error encountered!");
       },
     ).catchError((e) {
       if (mounted) {
@@ -111,7 +111,7 @@ class _SightifyASLPageState extends State<SightifyASLPage>
       (value) {
         final dataContent = jsonDecode(jsonEncode(value!.content!.parts![0]))
             as Map<String, dynamic>;
-        tts.speak(dataContent['text'] ?? "Error encountered!");
+        _showResponseDialog(dataContent['text'] ?? "Error encountered!");
       },
     ).catchError((e) {
       if (mounted) {
@@ -120,6 +120,22 @@ class _SightifyASLPageState extends State<SightifyASLPage>
         );
       }
     });
+  }
+
+  void _showResponseDialog(String response) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Response'),
+        content: Text(response),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> cropAndGemini(double x, double y) async {
