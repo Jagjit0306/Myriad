@@ -10,6 +10,7 @@ Map<String, IconData> iconMap = {
   "wheelify": Icons.accessible_outlined,
   "medify": Icons.medical_services_outlined,
   "sightify": Icons.visibility_outlined,
+  "sightify_asl": Icons.sign_language_outlined,
   "serenify": Icons.self_improvement_rounded,
   "speakify": Icons.record_voice_over_outlined,
   "voicify": Icons.loop_outlined,
@@ -23,6 +24,7 @@ Map<String, String> nameMap = {
   "wheelify": "WHEELIFY",
   "medify": "MEDIFY",
   "sightify": "SIGHTIFY",
+  "sightify_asl": "ASL",
   "serenify": "SERENIFY",
   "speakify": "SPEAKIFY",
   "voicify": "VOICIFY",
@@ -92,36 +94,12 @@ class _ExtrasState extends State<Extras> {
                         child: ExtraButton(
                           iconData:
                               iconMap[enabledFeatures[index]] ?? Icons.api,
-                          name: nameMap[enabledFeatures[index]]??"ERROR",
+                          name: nameMap[enabledFeatures[index]] ?? "ERROR",
                           path: "/extras/${enabledFeatures[index]}",
                         ),
                       );
                     }),
                   ),
-                // SmoothButtonEntry(
-                //   isVisible: true,
-                //   delay: 400,
-                //   child: ExtraButton(
-                //     path: "/onboarding",
-                //     iconData: Icons.star,
-                //     name: "ONBOARDING",
-                //     color: Colors.green,
-                //   ),
-                // ),
-                // SmoothButtonEntry(
-                //   isVisible: true,
-                //   delay: 500,
-                //   child: ExtraButton(
-                //     path: "",
-                //     customCallback: () {
-                //       signOutFromGoogle();
-                //       context.push("/auth");
-                //     },
-                //     iconData: Icons.logout,
-                //     color: Colors.red,
-                //     name: "LOGOUT",
-                //   ),
-                // ),
                 SizedBox(
                   height: 20,
                 ),

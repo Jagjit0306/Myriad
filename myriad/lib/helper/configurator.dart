@@ -11,10 +11,12 @@ Future<List<String>> configurator() async {
 
   List<String> result = [];
 
+  // This order governs the order in which it appears in the extras menu
   List<String> features = [
     "sightify",
     'colorify',
     'colorify_talkback',
+    "sightify_asl",
     "hearify",
     "vibraillify",
     "speakify",
@@ -22,7 +24,6 @@ Future<List<String>> configurator() async {
     "wheelify",
     "serenify",
     "medify",
-    "sightify_asl",
   ];
 
   if (!true) return features;
@@ -59,6 +60,7 @@ Future<List<String>> configurator() async {
     "medify": ["Dexterity Support"],
     "serenify": ["Vision Support"],
     "sightify": ["Hearing Support"],
+    "sightify_asl": ["Vision Support"],
     "speakify": ["Dexterity Support", "Hearing Support"],
     "voicify": ["Dexterity Support"],
   };
