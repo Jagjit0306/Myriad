@@ -75,7 +75,7 @@ class _SightifyASLPageState extends State<SightifyASLPage>
 
   void askGemini() {
     gemini.textAndImage(
-      text: "Identify and interpret any sign language gestures in this image. If you see ASL (American Sign Language) gestures, tell me what they mean. Keep the response concise.",
+      text: "Identify and interpret any sign language gestures in this image. If you see ASL (American Sign Language) gestures, tell me what they mean. Keep the response concise. VERY CONCISE, AROUND 5 WORDS",
       images: [_imageFile!.readAsBytesSync()],
     ).then(
       (value) {
@@ -96,7 +96,7 @@ class _SightifyASLPageState extends State<SightifyASLPage>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Response'),
+        title: const Text('Translation'),
         content: Text(response),
         actions: [
           TextButton(
