@@ -149,19 +149,25 @@ A specialized module offering four essential tools:
 <img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488254/rz9gamgxa7zbtlzcvdnj.jpg" width="20%" alt="Hearify Screenshot">
 
 ### Community  
-<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488254/mvh6yw2g2ajzzjukdu0t.jpg" width="20%" alt="Community Screenshot">
+<img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742988024/Community_mtgu40.jpg" width="20%" alt="Community Screenshot">
 
 ### SOS  
-<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488254/wiopigvpdvq8hjh5rjpt.jpg" width="20%" alt="SOS Screenshot">
+<img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742987297/sos_uomndn.jpg" width="20%" alt="SOS Screenshot">
 
 ### New Thread  
 <img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488254/k8mz8ablu4jdzgtwh7yb.jpg" width="20%" alt="New Thread Screenshot">
 
-### Notify  
-<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488254/jgq8gvrc2ggdsmmalmvv.jpg" width="20%" alt="Notify Screenshot">
+### Dashboard  
+<img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742987305/Dashboard_nwewcm.jpg" width="20%" alt="Dashboard Page Screenshot">
 
 ### Meditation Page  
 <img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488253/w6frtge83gmerb5wq9nb.jpg" width="20%" alt="Meditation Page Screenshot">
+
+### Affirmate Page  
+<img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742987303/Affirmate_ij22xs.jpg" width="20%" alt="Meditation Page Screenshot">
+
+### Sleep Page  
+<img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742987305/Sleep_dweucg.jpg" width="20%" alt="Sleep Page Screenshot">
 
 ### Onboarding  
 <img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488253/t5skwenphijfhdjnze09.jpg" width="20%" alt="Onboarding Screenshot">
@@ -173,13 +179,13 @@ A specialized module offering four essential tools:
 <img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488252/s7bfula9ghiegy969f5w.jpg" width="20%" alt="Medify Timer Screenshot">
 
 ### Medify  
-<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488252/jivnjkrasjtcjudkz5bm.jpg" width="20%" alt="Medify Screenshot">
+<img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742988141/medify_ocoh7r.jpg" width="20%" alt="Medify Screenshot">
 
 ### My AI  
-<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488252/fd8vxaqsrpyochjuixxe.jpg" width="20%" alt="My AI Screenshot">
+<img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742987304/MyAI_wya8kg.jpg" width="20%" alt="My AI Screenshot">
 
-### Myriad  
-<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488252/zr8fl8dr90pivpdh3orr.jpg" width="20%" alt="Myriad Screenshot">
+### Myriad Menu 
+<img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742987304/Menu_qopfhj.jpg" width="20%" alt="Myriad Menu Screenshot">
 
 </div>
 
