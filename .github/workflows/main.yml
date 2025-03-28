@@ -46,7 +46,7 @@ jobs:  # Telling what jobs we need to happen
 
       - name: Adding API Key to local.properties
         run: |
-          echo "${{ secrets.PW_1 }}" >> myriad/android/local.properties
+          echo "GM_KEY = ${{ secrets.PW_3 }}" >> myriad/android/local.properties
       
       - name: Adding API Keys to passwords.dart
         run: |
