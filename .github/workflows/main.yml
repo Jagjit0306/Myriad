@@ -44,10 +44,10 @@ jobs:  # Telling what jobs we need to happen
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> myriad/android/key.properties
           echo "storeFile=keystore.jks" >> myriad/android/key.properties
 
-      - name: Adding API Key to local.properties
+      - name: Replace GM_KEY in AndroidManifest.xml
         run: |
-          echo "GM_KEY = ${{ secrets.PW_3 }}" >> myriad/android/local.properties
-      
+          sed -i 's/\${GM_KEY}/'"${{ secrets.PW_3 }}"'/g' myriad/android/app/src/main/AndroidManifest.xml
+        
       - name: Adding API Keys to passwords.dart
         run: |
           echo "final GEMINI_API_KEY = '${{ secrets.PW_2 }}';" >> myriad/lib/passwords.dart
