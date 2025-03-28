@@ -50,7 +50,8 @@ jobs:  # Telling what jobs we need to happen
       
       - name: Adding API Keys to passwords.dart
         run: |
-          echo "${{ secrets.PW_2 }}" >> myriad/lib/passwords.dart
+          echo "final GEMINI_API_KEY = ${{ secrets.PW_2 }};" >> myriad/lib/passwords.dart
+          echo "final MAPS_API_KEY = ${{ secrets.PW_3 }};" >> myriad/lib/passwords.dart
 
       - name: Remove invalid Java home from gradle.properties
         run: sed -i '/^org.gradle.java.home/d' myriad/android/gradle.properties
