@@ -44,11 +44,11 @@ jobs:  # Telling what jobs we need to happen
 
       - name: Adding API Key to local.properties
         run: |
-          echo "${{ secrets.pw_1 }}" >> myriad/android/local.properties
+          echo "${{ secrets.PW_1 }}" >> myriad/android/local.properties
       
       - name: Adding API Keys to passwords.dart
         run: |
-          echo "${{ secrets.pw_2 }}" >> myriad/lib/passwords.dart
+          echo "${{ secrets.PW_2 }}" >> myriad/lib/passwords.dart
 
       - name: Build APK
         run: |
