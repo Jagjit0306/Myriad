@@ -59,8 +59,7 @@ jobs:  # Telling what jobs we need to happen
         uses: actions/upload-artifact@v2
         with:
           name: Releases
-          path: |
-            myriad/build/app/outputs/flutter-apk/app-release.apk
+          path: myriad/build/app/outputs/flutter-apk/app-release.apk
 
       - name: Extract version from pubspec.yaml
         id: extract_version
