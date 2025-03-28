@@ -52,6 +52,9 @@ jobs:  # Telling what jobs we need to happen
         run: |
           echo "${{ secrets.PW_2 }}" >> myriad/lib/passwords.dart
 
+      - name: Remove invalid Java home from gradle.properties
+        run: sed -i '/^org.gradle.java.home/d' myriad/android/gradle.properties
+        
       - name: Build APK
         run: |
           cd myriad
