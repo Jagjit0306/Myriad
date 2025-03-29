@@ -475,7 +475,7 @@ class _SosPageState extends State<SosPage> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.inversePrimary,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: SizedBox(
@@ -494,7 +494,7 @@ class _SosPageState extends State<SosPage> {
               ),
               Icon(
                 icon,
-                color: Theme.of(context).colorScheme.surface,
+                color: Colors.black,
                 size: 40,
               ),
             ],
@@ -534,7 +534,7 @@ class _ScreamButtonState extends State<_ScreamButton> {
       onTap: _toggleScreamSound,
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.inversePrimary,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: SizedBox(
@@ -552,7 +552,7 @@ class _ScreamButtonState extends State<_ScreamButton> {
               ),
               Icon(
                 Icons.campaign,
-                color: Theme.of(context).colorScheme.surface,
+                color: Colors.black,
                 size: 40,
               ),
             ],
