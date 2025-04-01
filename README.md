@@ -1,14 +1,13 @@
-# Myriad - Empowering Specially Abled Individuals
+# Myriad - The App That Adapts To You
 
 <div align="center">
 
-### Logo  
 <img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488253/daghv8xm2ssfdhlrp5vr.png" width="20%" alt="Hearify Screenshot">
 
 </div>
 
 ## About Myriad
-**Myriad** is an inclusive platform designed specifically for specially abled individuals. It personalizes user experience based on your needs and provides essential features to improve accessibility, communication, and well-being. It is inspired by platforms like Reddit while integrating assistive technologies tailored for different needs.
+**Myriad** is an inclusive platform designed specifically for specially abled individuals. It personalizes user experience based on your needs and provides essential features to improve accessibility, communication, and well-being. It has a tag-driven community platform while integrating assistive technologies tailored for different needs.
 
 ---
 
@@ -189,7 +188,7 @@ A specialized module offering four essential tools:
 
 </div>
 
-🎥 **Demo Video:** [Insert Link to Video]
+🎥 **Demo Video:** [Watch on YouTube](https://www.youtube.com/watch?v=6TVBvX6TG5s)
 
 ---
 
@@ -248,7 +247,7 @@ For funding inquiries, reach out to **jayantjoshi0001@gmail.com**.
 Meet the dedicated minds behind Myriad:
 
 - **Jagjit Singh** - Mobile Developer
-- **Jayant Joshi** - UI/UX Designer & Mobile Developer
+- **Jayant Joshi** - UI/UX Designer
 - **Gurshaan Singh** - Mobile Developer
 
 Together, we are committed to building an inclusive and empowering experience for specially abled individuals worldwide.
