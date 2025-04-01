@@ -77,6 +77,11 @@ A specialized module offering four essential tools:
 - Provides motivation, mental health tips, and practical advice.
 - Learns user preferences to offer personalized assistance.
 
+### 14. **ASL (Sign Language Interpreter)**
+- Real-time sign language interpretation for seamless communication.
+- Converts spoken language into ASL (American Sign Language) through an animated avatar or video.
+- Enables sign language users to communicate with non-signers effectively.
+
 ### 14. **SOS & Emergency Support**
 - Quick access to emergency contacts.
 - Automated alerts to caregivers or medical assistance services.
@@ -182,6 +187,14 @@ A specialized module offering four essential tools:
 
 ### My AI  
 <img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742987304/MyAI_wya8kg.jpg" width="20%" alt="My AI Screenshot">
+
+### ASL (Sign Language Interpreter)
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1743512303/asl_rw36vt.jpg" width="20%" alt="ASL (Sign Language Interpreter)">
+
+### Vibraillify
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1743512655/WhatsApp_Image_2025-04-01_at_18.33.51_b6d2ded3_hrk81s.jpg" width="20%" alt="Vibraillify">
+
+
 
 ### Myriad Menu 
 <img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742987304/Menu_qopfhj.jpg" width="20%" alt="Myriad Menu Screenshot">
