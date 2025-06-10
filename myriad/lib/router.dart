@@ -29,6 +29,7 @@ import 'package:myriad/pages/sightify_page.dart';
 import 'package:myriad/pages/sos_page.dart';
 import 'package:myriad/pages/speakify_page.dart';
 import 'package:myriad/pages/vibraillify_page.dart';
+import 'package:myriad/pages/vision_support_layout.dart';
 import 'package:myriad/pages/voicify_page.dart';
 import 'package:myriad/pages/user_profile_page.dart';
 import 'package:myriad/pages/serenify_affirmate_page.dart';
@@ -78,6 +79,18 @@ final router = GoRouter(
     GoRoute(
       path: '/sos_page',
       builder: (context, state) => const SosPage(),
+    ),
+    GoRoute(
+      path: '/vision_support_layout',
+      builder: (context, state) => VisionSupportLayout(),
+    ),
+    GoRoute(
+      path: '/vision_support_sightify',
+      builder: (context, state) => const SightifyPage(),
+    ),
+    GoRoute(
+      path: '/vision_support_serenify',
+      builder: (context, state) => const SightifyPage(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => LayoutScaffold(

@@ -1,14 +1,13 @@
-# Myriad - Empowering Specially Abled Individuals
+# Myriad - The App That Adapts To You
 
 <div align="center">
 
-### Logo  
 <img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1740488253/daghv8xm2ssfdhlrp5vr.png" width="20%" alt="Hearify Screenshot">
 
 </div>
 
 ## About Myriad
-**Myriad** is an inclusive platform designed specifically for specially abled individuals. It personalizes user experience based on your needs and provides essential features to improve accessibility, communication, and well-being. It is inspired by platforms like Reddit while integrating assistive technologies tailored for different needs.
+**Myriad** is an inclusive platform designed specifically for specially abled individuals. It personalizes user experience based on your needs and provides essential features to improve accessibility, communication, and well-being. It has a tag-driven community platform while integrating assistive technologies tailored for different needs.
 
 ---
 
@@ -77,6 +76,11 @@ A specialized module offering four essential tools:
 - An AI-powered assistant that helps provides both technical and emotional assistance.
 - Provides motivation, mental health tips, and practical advice.
 - Learns user preferences to offer personalized assistance.
+
+### 14. **ASL (Sign Language Interpreter)**
+- Real-time sign language interpretation for seamless communication.
+- Converts spoken language into ASL (American Sign Language) through an animated avatar or video.
+- Enables sign language users to communicate with non-signers effectively.
 
 ### 14. **SOS & Emergency Support**
 - Quick access to emergency contacts.
@@ -184,12 +188,20 @@ A specialized module offering four essential tools:
 ### My AI  
 <img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742987304/MyAI_wya8kg.jpg" width="20%" alt="My AI Screenshot">
 
+### ASL (Sign Language Interpreter)
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1743512303/asl_rw36vt.jpg" width="20%" alt="ASL (Sign Language Interpreter)">
+
+### Vibraillify
+<img src="https://res.cloudinary.com/deysmiqsk/image/upload/v1743512655/WhatsApp_Image_2025-04-01_at_18.33.51_b6d2ded3_hrk81s.jpg" width="20%" alt="Vibraillify">
+
+
+
 ### Myriad Menu 
 <img src="https://res.cloudinary.com/du7a1obsy/image/upload/v1742987304/Menu_qopfhj.jpg" width="20%" alt="Myriad Menu Screenshot">
 
 </div>
 
-🎥 **Demo Video:** [Insert Link to Video]
+🎥 **Demo Video:** [Watch on YouTube](https://www.youtube.com/watch?v=6TVBvX6TG5s)
 
 ---
 
@@ -248,7 +260,7 @@ For funding inquiries, reach out to **jayantjoshi0001@gmail.com**.
 Meet the dedicated minds behind Myriad:
 
 - **Jagjit Singh** - Mobile Developer
-- **Jayant Joshi** - UI/UX Designer & Mobile Developer
+- **Jayant Joshi** - UI/UX Designer
 - **Gurshaan Singh** - Mobile Developer
 
 Together, we are committed to building an inclusive and empowering experience for specially abled individuals worldwide.
