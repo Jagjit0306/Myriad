@@ -8,6 +8,8 @@ import 'package:myriad/router.dart';
 import 'package:myriad/themes/dark_mode.dart';
 import 'package:myriad/themes/light_mode.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:myriad/helper/fall_detection.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +23,10 @@ void main() async {
   Gemini.init(
     apiKey: GEMINI_API_KEY,
   );
-  // FallDetectionService();
+  FallDetectionService().startMonitoring(() async {
+    final player = AudioPlayer();
+    await player.play(AssetSource('scream.mp3'));
+  });
   tz.initializeTimeZones();
   runApp(const MainApp());
 }
