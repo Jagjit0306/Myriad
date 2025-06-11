@@ -1,5 +1,6 @@
 final List<Map<String, bool>> prefsList = [
   {'Vision Support': false},
+  {'Vision Support (Simplified)': false},
   {'Hearing Support': false},
   {'Speech Assistance': false},
   {'Colorblindness Support': false},
@@ -8,4 +9,8 @@ final List<Map<String, bool>> prefsList = [
   {'Limb Diversity Support': false},
   {'Paralysis Support': false},
   {'Stress Management': false},
+];
+
+final List<List<String>> prefsExclusiveGroupings = [
+  ['Vision Support', 'Vision Support (Simplified)']
 ];

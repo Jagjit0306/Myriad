@@ -25,6 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController bioController = TextEditingController();
 
   List<Map<String, bool>> prefs = prefsList;
+  List<List<String>> prefsExclusive = prefsExclusiveGroupings;
 
   @override
   void initState() {
@@ -203,6 +204,21 @@ class _SettingsPageState extends State<SettingsPage> {
                                 pref.keys.first: newValue!
                               };
                             });
+
+                            if (newValue == true) {
+                              //Coz we only need 1 from them, or neither
+                              for (var group in prefsExclusive) {
+                                if (group.contains(pref.keys.first)) {
+                                  for (var groupPref in group) {
+                                    if (groupPref != pref.keys.first) {
+                                      prefs.firstWhere((element) =>
+                                          element.keys.first ==
+                                          groupPref)[groupPref] = false;
+                                    }
+                                  }
+                                }
+                              }
+                            }
                           },
                         );
                       }),
