@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myriad/all_preferences.dart';
 import 'package:myriad/auth/google_auth.dart';
 import 'package:myriad/components/extras.dart';
 import 'package:myriad/components/my_button.dart';
@@ -23,17 +24,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
 
-  List<Map<String, bool>> prefs = [
-    {'Vision Support': false},
-    {'Hearing Support': false},
-    {'Speech Assistance': false},
-    {'Colorblindness Support': false},
-    {'Dexterity Support': false},
-    {'Wheelchair Support': false},
-    {'Limb Diversity Support': false},
-    {'Paralysis Support': false},
-    {'Stress Management': false},
-  ];
+  List<Map<String, bool>> prefs = prefsList;
 
   @override
   void initState() {
@@ -134,8 +125,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ExpansionTile(
               initiallyExpanded: true,
               title: const Text("Edit Personal Information",
-                  style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
               children: [
                 Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -166,8 +156,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text(
-                                      'Information updated successfully'),
+                                  content:
+                                      Text('Information updated successfully'),
                                 ),
                               );
                               context.go("/go_to_home");
@@ -192,13 +182,12 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
             const SizedBox(height: 20),
-        
+
             // Accessibility Preferences Section
             ExpansionTile(
               initiallyExpanded: true,
               title: const Text("Customize Accessibility Preferences",
-                  style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
               children: [
                 Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -226,8 +215,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text(
-                                      'Preferences updated successfully'),
+                                  content:
+                                      Text('Preferences updated successfully'),
                                 ),
                               );
                               context.go('/go_to_home');

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myriad/all_preferences.dart';
 import 'package:myriad/components/logo_component.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_textfield.dart';
@@ -18,17 +19,7 @@ class _OnBoardingState extends State<OnBoarding> {
   final TextEditingController guardianPhoneController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
 
-  List<Map<String, bool>> prefs = [
-    {'Vision Support': false},
-    {'Hearing Support': false},
-    {'Speech Assistance': false},
-    {'Colorblindness Support': false},
-    {'Dexterity Support': false},
-    {'Wheelchair Support': false},
-    {'Limb Diversity Support': false},
-    {'Paralysis Support': false},
-    {'Stress Management': false},
-  ];
+  List<Map<String, bool>> prefs = prefsList;
 
   bool isUsernameUnique = false;
 
