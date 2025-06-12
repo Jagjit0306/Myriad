@@ -10,6 +10,9 @@ import 'package:myriad/themes/light_mode.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:myriad/helper/fall_detection.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +44,16 @@ class MainApp extends StatelessWidget {
       routerConfig: router,
       theme: lightMode,
       darkTheme: darkMode,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('hi'), // Hindi
+      ],
     );
   }
 }

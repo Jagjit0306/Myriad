@@ -1,0 +1,23 @@
+{
+    "appTitle": "मायरियड",
+    "settings": "सेटिंग्स",
+    "editPersonalInfo": "व्यक्तिगत जानकारी संपादित करें",
+    "updateName": "नाम अपडेट करें",
+    "updateBio": "बायो अपडेट करें",
+    "updateInformation": "जानकारी अपडेट करें",
+    "customizeAccessibility": "एक्सेसिबिलिटी प्राथमिकताएं कस्टमाइज़ करें",
+    "visionSupport": "दृष्टि सहायता",
+    "hearingSupport": "श्रवण सहायता",
+    "speechAssistance": "भाषण सहायता",
+    "colorblindnessSupport": "रंग अंधापन सहायता",
+    "dexteritySupport": "निपुणता सहायता",
+    "wheelchairSupport": "व्हीलचेयर सहायता",
+    "limbDiversitySupport": "अंग विविधता सहायता",
+    "paralysisSupport": "पक्षाघात सहायता",
+    "stressManagement": "तनाव प्रबंधन",
+    "savePreferences": "प्राथमिकताएं सहेजें",
+    "logout": "लॉग आउट",
+    "language": "भाषा",
+    "english": "अंग्रेज़ी",
+    "hindi": "हिंदी"
+}

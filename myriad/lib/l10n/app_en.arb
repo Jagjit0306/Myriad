@@ -1,0 +1,23 @@
+{
+    "appTitle": "Myriad",
+    "settings": "Settings",
+    "editPersonalInfo": "Edit Personal Information",
+    "updateName": "Update Name",
+    "updateBio": "Update Bio",
+    "updateInformation": "Update Information",
+    "customizeAccessibility": "Customize Accessibility Preferences",
+    "visionSupport": "Vision Support",
+    "hearingSupport": "Hearing Support",
+    "speechAssistance": "Speech Assistance",
+    "colorblindnessSupport": "Colorblindness Support",
+    "dexteritySupport": "Dexterity Support",
+    "wheelchairSupport": "Wheelchair Support",
+    "limbDiversitySupport": "Limb Diversity Support",
+    "paralysisSupport": "Paralysis Support",
+    "stressManagement": "Stress Management",
+    "savePreferences": "Save Preferences",
+    "logout": "LOGOUT",
+    "language": "Language",
+    "english": "English",
+    "hindi": "Hindi"
+}
