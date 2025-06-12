@@ -27,15 +27,15 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController bioController = TextEditingController();
 
   List<Map<String, bool>> prefs = [
-    {'Vision Support': false},
-    {'Hearing Support': false},
-    {'Speech Assistance': false},
-    {'Colorblindness Support': false},
-    {'Dexterity Support': false},
-    {'Wheelchair Support': false},
-    {'Limb Diversity Support': false},
-    {'Paralysis Support': false},
-    {'Stress Management': false},
+    {'visionSupport': false},
+    {'hearingSupport': false},
+    {'speechAssistance': false},
+    {'colorblindnessSupport': false},
+    {'dexteritySupport': false},
+    {'wheelchairSupport': false},
+    {'limbDiversitySupport': false},
+    {'paralysisSupport': false},
+    {'stressManagement': false},
   ];
 
   String _currentLanguage = 'en';
@@ -193,6 +193,44 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
+    // Convert the prefs list to use localized strings
+    final localizedPrefs = prefs.map((pref) {
+      final key = pref.keys.first;
+      String localizedKey;
+      switch (key) {
+        case 'visionSupport':
+          localizedKey = l10n.visionSupport;
+          break;
+        case 'hearingSupport':
+          localizedKey = l10n.hearingSupport;
+          break;
+        case 'speechAssistance':
+          localizedKey = l10n.speechAssistance;
+          break;
+        case 'colorblindnessSupport':
+          localizedKey = l10n.colorblindnessSupport;
+          break;
+        case 'dexteritySupport':
+          localizedKey = l10n.dexteritySupport;
+          break;
+        case 'wheelchairSupport':
+          localizedKey = l10n.wheelchairSupport;
+          break;
+        case 'limbDiversitySupport':
+          localizedKey = l10n.limbDiversitySupport;
+          break;
+        case 'paralysisSupport':
+          localizedKey = l10n.paralysisSupport;
+          break;
+        case 'stressManagement':
+          localizedKey = l10n.stressManagement;
+          break;
+        default:
+          localizedKey = key;
+      }
+      return {localizedKey: pref.values.first};
+    }).toList();
+
     return WillPopScope(
       onWillPop: () async {
         if (_isChangingLanguage) return false;
@@ -314,15 +352,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
                       children: [
-                        ...prefs.map((pref) {
+                        ...localizedPrefs.map((pref) {
                           return CheckboxListTile(
                             title: Text(pref.keys.first),
                             value: pref.values.first,
                             onChanged: (bool? newValue) {
                               setState(() {
-                                prefs[prefs.indexOf(pref)] = {
-                                  pref.keys.first: newValue!
-                                };
+                                final originalKey = prefs[localizedPrefs.indexOf(pref)].keys.first;
+                                prefs[localizedPrefs.indexOf(pref)] = {originalKey: newValue!};
                               });
                             },
                           );

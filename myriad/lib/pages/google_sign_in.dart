@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:myriad/components/logo_component.dart';
 import 'package:myriad/database/user.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GoogleSignInScreen extends StatefulWidget {
   const GoogleSignInScreen({super.key});
@@ -39,14 +40,15 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             LogoComponent(size: 150),
-            const Text(
-              "Myriad",
+            Text(
+              l10n.appTitle,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 28,
@@ -54,7 +56,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
             ),
             const SizedBox(height: 25),
             Text(
-              'Overcoming challenges together, with AI',
+              l10n.overcomingChallenges,
               style: TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w600,
