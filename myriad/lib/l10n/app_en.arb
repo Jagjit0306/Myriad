@@ -19,5 +19,65 @@
     "logout": "LOGOUT",
     "language": "Language",
     "english": "English",
-    "hindi": "Hindi"
+    "hindi": "Hindi",
+    "preferencesUpdated": "Preferences updated successfully",
+    "errorUpdatingInfo": "Error updating information: {error}",
+    "errorUpdatingPrefs": "Error updating preferences: {error}",
+    "languageChanged": "Language changed",
+    "newThread": "New Thread",
+    "authorNewPost": "Author a new post",
+    "postTitle": "Post title",
+    "tags": "Tags",
+    "postContent": "Post content",
+    "postToMyriad": "Post to Myriad",
+    "featuring": "Featuring",
+    "welcomeToMyriad": "Welcome to Myriad",
+    "overcomingChallenges": "Overcoming challenges together, with AI",
+    "morningGreeting": "Morning, {name}!",
+    "startMindfulness": "Start your mindfulness journey",
+    "overview": "Here is your overview",
+    "medicineConsistency": "Medicine Consistency",
+    "calculating": "Calculating...",
+    "days": "{count} Days",
+    "requestWheelchair": "Request Wheelchair\nAccessibility",
+    "wheelchairRequestSent": "Wheelchair request sent",
+    "wheelchairRequestMessage": "Your wheelchair accessibility request has been submitted. Special arrangements will be made for you at your specified date for your convenience.",
+    "username": "Username",
+    "usernameTaken": "THIS USERNAME IS TAKEN/INVALID",
+    "guardianPhone": "Guardian Phone",
+    "bio": "Bio",
+    "selectPreferences": "Select your preferences",
+    "sleepDuration": "Sleep Duration",
+    "guardianNotFound": "Guardian number not found.",
+    "guardian": "Guardian",
+    "sos": "SOS",
+    "ambulance": "Ambulance",
+    "@errorUpdatingInfo": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "@errorUpdatingPrefs": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "@morningGreeting": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "@days": {
+        "placeholders": {
+            "count": {
+                "type": "String"
+            }
+        }
+    }
 }

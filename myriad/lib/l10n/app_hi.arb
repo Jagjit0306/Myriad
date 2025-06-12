@@ -19,5 +19,65 @@
     "logout": "लॉग आउट",
     "language": "भाषा",
     "english": "अंग्रेज़ी",
-    "hindi": "हिंदी"
+    "hindi": "हिंदी",
+    "preferencesUpdated": "प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
+    "errorUpdatingInfo": "जानकारी अपडेट करने में त्रुटि: {error}",
+    "errorUpdatingPrefs": "प्राथमिकताएं अपडेट करने में त्रुटि: {error}",
+    "languageChanged": "भाषा बदली गई",
+    "newThread": "नया थ्रेड",
+    "authorNewPost": "नई पोस्ट लिखें",
+    "postTitle": "पोस्ट का शीर्षक",
+    "tags": "टैग",
+    "postContent": "पोस्ट की सामग्री",
+    "postToMyriad": "मायरियड पर पोस्ट करें",
+    "featuring": "विशेष",
+    "welcomeToMyriad": "मायरियड में आपका स्वागत है",
+    "overcomingChallenges": "एआई के साथ मिलकर चुनौतियों पर विजय",
+    "morningGreeting": "सुप्रभात, {name}!",
+    "startMindfulness": "अपनी माइंडफुलनेस यात्रा शुरू करें",
+    "overview": "यहां आपका अवलोकन है",
+    "medicineConsistency": "दवा नियमितता",
+    "calculating": "गणना कर रहे हैं...",
+    "days": "{count} दिन",
+    "requestWheelchair": "व्हीलचेयर\nएक्सेसिबिलिटी का अनुरोध करें",
+    "wheelchairRequestSent": "व्हीलचेयर अनुरोध भेजा गया",
+    "wheelchairRequestMessage": "आपका व्हीलचेयर एक्सेसिबिलिटी अनुरोध प्रस्तुत कर दिया गया है। आपकी सुविधा के लिए निर्दिष्ट तिथि पर विशेष व्यवस्था की जाएगी।",
+    "username": "उपयोगकर्ता नाम",
+    "usernameTaken": "यह उपयोगकर्ता नाम पहले से लिया गया है/अमान्य है",
+    "guardianPhone": "अभिभावक का फोन",
+    "bio": "बायो",
+    "selectPreferences": "अपनी प्राथमिकताएं चुनें",
+    "sleepDuration": "नींद की अवधि",
+    "guardianNotFound": "अभिभावक का नंबर नहीं मिला।",
+    "guardian": "अभिभावक",
+    "sos": "एसओएस",
+    "ambulance": "एम्बुलेंस",
+    "@errorUpdatingInfo": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "@errorUpdatingPrefs": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "@morningGreeting": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "@days": {
+        "placeholders": {
+            "count": {
+                "type": "String"
+            }
+        }
+    }
 }
