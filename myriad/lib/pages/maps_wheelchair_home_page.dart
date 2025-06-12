@@ -8,6 +8,7 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:myriad/passwords.dart';
 import 'package:http/http.dart' as http;
 // import 'package:syncfusion_flutter_charts/charts.dart' as charts;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MapsWheelchairHomePage extends StatefulWidget {
   const MapsWheelchairHomePage({super.key});
@@ -172,6 +173,7 @@ class _MapsWheelchairHomePageState extends State<MapsWheelchairHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -240,6 +242,7 @@ class _WheelchairRequestSectionState extends State<WheelchairRequestSection> {
 
   // @override
   Widget _build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         (!sent)
@@ -293,7 +296,7 @@ class _WheelchairRequestSectionState extends State<WheelchairRequestSection> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
-                                "Request Wheelchair\nAccessibility",
+                                l10n.requestWheelchair,
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w700,
@@ -316,8 +319,8 @@ class _WheelchairRequestSectionState extends State<WheelchairRequestSection> {
               )
             : Column(
                 children: [
-                  const Text(
-                    "Your wheelchair accessibility request has been submitted. Special arrangments will be made for you at your specified date for your convenience.",
+                  Text(
+                    l10n.wheelchairRequestMessage,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
@@ -335,7 +338,7 @@ class _WheelchairRequestSectionState extends State<WheelchairRequestSection> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
-                              "Wheelchair request sent",
+                              l10n.wheelchairRequestSent,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,

@@ -1,0 +1,108 @@
+{
+    "appTitle": "Myriad",
+    "settings": "Settings",
+    "editPersonalInfo": "Edit Personal Information",
+    "updateName": "Update Name",
+    "updateBio": "Update Bio",
+    "updateInformation": "Update Information",
+    "customizeAccessibility": "Customize Accessibility Preferences",
+    "visionSupport": "Vision Support",
+    "hearingSupport": "Hearing Support",
+    "speechAssistance": "Speech Assistance",
+    "colorblindnessSupport": "Colorblindness Support",
+    "dexteritySupport": "Dexterity Support",
+    "wheelchairSupport": "Wheelchair Support",
+    "limbDiversitySupport": "Limb Diversity Support",
+    "paralysisSupport": "Paralysis Support",
+    "stressManagement": "Stress Management",
+    "savePreferences": "Save Preferences",
+    "logout": "LOGOUT",
+    "language": "Language",
+    "english": "English",
+    "hindi": "Hindi",
+    "preferencesUpdated": "Preferences updated successfully",
+    "errorUpdatingInfo": "Error updating information: {error}",
+    "errorUpdatingPrefs": "Error updating preferences: {error}",
+    "languageChanged": "Language changed",
+    "newThread": "New Thread",
+    "authorNewPost": "Author a new post",
+    "postTitle": "Post title",
+    "tags": "Tags",
+    "postContent": "Post content",
+    "postToMyriad": "Post to Myriad",
+    "featuring": "Featuring",
+    "welcomeToMyriad": "Welcome to Myriad",
+    "overcomingChallenges": "Overcoming challenges together, with AI",
+    "morningGreeting": "Morning, {name}!",
+    "startMindfulness": "Start your mindfulness journey",
+    "overview": "Here is your overview",
+    "medicineConsistency": "Medicine Consistency",
+    "calculating": "Calculating...",
+    "days": "{count} Days",
+    "requestWheelchair": "Request Wheelchair\nAccessibility",
+    "wheelchairRequestSent": "Wheelchair request sent",
+    "wheelchairRequestMessage": "Your wheelchair accessibility request has been submitted. Special arrangements will be made for you at your specified date for your convenience.",
+    "username": "Username",
+    "usernameTaken": "THIS USERNAME IS TAKEN/INVALID",
+    "guardianPhone": "Guardian Phone",
+    "bio": "Bio",
+    "selectPreferences": "Select your preferences",
+    "sleepDuration": "Sleep Duration",
+    "guardianNotFound": "Guardian number not found.",
+    "guardian": "Guardian",
+    "sos": "SOS",
+    "hospital": "Hospital",
+    "fireStation": "Fire Station",
+    "policeStation": "Police Station",
+    "ambulance": "Ambulance",
+    "scream": "Scream",
+    "openWith": "Open with:",
+    "locationServicesDisabled": "Location services are disabled.",
+    "locationPermissionsDenied": "Location permissions are denied.",
+    "locationPermissionsPermanentlyDenied": "Location permissions are permanently denied.",
+    "errorGettingLocation": "Error getting location: {error}",
+    "errorFindingServices": "Error finding emergency services: {error}",
+    "locationNotAvailable": "Location information not available yet.",
+    "noMapApps": "No map apps found on device.",
+    "home": "H O M E",
+    "community": "C O M M U N I T Y",
+    "myAi": "M Y   A I",
+    "serenify": "S E R E N I F Y",
+    "sightify": "S I G H T I F Y",
+    "colorify": "C O L O R I F Y",
+    "speakify": "S P E A K I F Y",
+    "hearify": "H E A R I F Y",
+    "voicify": "V O I C I F Y",
+    "vibraillify": "V I B R A I L L I F Y",
+    "wheelify": "W H E E L I F Y",
+    "onboarding": "O N B O A R D I N G",
+    "medify": "M E D I F Y",
+    "@errorUpdatingInfo": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "@errorUpdatingPrefs": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "@morningGreeting": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "@days": {
+        "placeholders": {
+            "count": {
+                "type": "String"
+            }
+        }
+    }
+}

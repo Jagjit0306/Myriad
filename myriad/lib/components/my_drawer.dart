@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:myriad/auth/google_auth.dart';
 import 'package:myriad/pages/google_sign_in.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.secondary,
       child: Column(
@@ -30,7 +33,7 @@ class MyDrawer extends StatelessWidget {
                       Icons.home,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
-                    title: Text('H O M E'),
+                    title: Text(l10n.home),
                     onTap: () {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
@@ -45,9 +48,8 @@ class MyDrawer extends StatelessWidget {
                       Icons.group,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
-                    title: Text('C O M M U N I T Y'),
+                    title: Text(l10n.community),
                     onTap: () {
-                      //this is already the homescreen so pop drawer
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/community_page');
                     },
@@ -59,9 +61,8 @@ class MyDrawer extends StatelessWidget {
                       Icons.self_improvement_rounded,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
-                    title: Text('M Y   A I'),
+                    title: Text(l10n.myAi),
                     onTap: () {
-                      //this is already the homescreen so pop drawer
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/gemini_chat');
                     },
@@ -214,9 +215,8 @@ class MyDrawer extends StatelessWidget {
               Icons.logout,
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
-            title: Text('L O G O U T'),
+            title: Text(l10n.logout),
             onTap: () {
-              //this is already the homescreen so pop drawer
               Navigator.pop(context);
               signOutFromGoogle();
               if (context.mounted) {
