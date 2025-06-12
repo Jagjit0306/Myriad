@@ -9,6 +9,7 @@ import 'package:myriad/components/my_textfield.dart';
 import 'package:myriad/components/vb_chat_bot_monitor.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:myriad/main.dart';
 
 class SettingsPage extends StatefulWidget {
   final bool vb;
@@ -149,7 +150,7 @@ class _SettingsPageState extends State<SettingsPage> {
       await prefs.setString('language', languageCode);
 
       if (mounted) {
-        // Show snackbar first
+        // Show snackbar
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(languageCode == 'hi' ? 'भाषा बदली गई' : 'Language changed'),
@@ -157,12 +158,16 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         );
 
-        // Wait for snackbar to show
-        await Future.delayed(const Duration(milliseconds: 500));
-
-        // Then navigate
-        if (mounted) {
-          context.go('/go_to_home');
+        // Update the app's locale
+        if (context.mounted) {
+          final mainApp = context.findAncestorStateOfType<MainAppState>();
+          if (mainApp != null) {
+            mainApp.changeLocale(Locale(languageCode));
+            // Update the current language state
+            setState(() {
+              _currentLanguage = languageCode;
+            });
+          }
         }
       }
     } catch (e) {
