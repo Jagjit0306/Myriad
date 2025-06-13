@@ -1,0 +1,108 @@
+{
+    "appTitle": "मायरियड",
+    "settings": "सेटिंग्स",
+    "editPersonalInfo": "व्यक्तिगत जानकारी संपादित करें",
+    "updateName": "नाम अपडेट करें",
+    "updateBio": "बायो अपडेट करें",
+    "updateInformation": "जानकारी अपडेट करें",
+    "customizeAccessibility": "एक्सेसिबिलिटी प्राथमिकताएं कस्टमाइज़ करें",
+    "visionSupport": "दृष्टि सहायता",
+    "hearingSupport": "श्रवण सहायता",
+    "speechAssistance": "भाषण सहायता",
+    "colorblindnessSupport": "रंग अंधापन सहायता",
+    "dexteritySupport": "निपुणता सहायता",
+    "wheelchairSupport": "व्हीलचेयर सहायता",
+    "limbDiversitySupport": "अंग विविधता सहायता",
+    "paralysisSupport": "पक्षाघात सहायता",
+    "stressManagement": "तनाव प्रबंधन",
+    "savePreferences": "प्राथमिकताएं सहेजें",
+    "logout": "लॉग आउट",
+    "language": "भाषा",
+    "english": "अंग्रेज़ी",
+    "hindi": "हिंदी",
+    "preferencesUpdated": "प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
+    "errorUpdatingInfo": "जानकारी अपडेट करने में त्रुटि: {error}",
+    "errorUpdatingPrefs": "प्राथमिकताएं अपडेट करने में त्रुटि: {error}",
+    "languageChanged": "भाषा बदली गई",
+    "newThread": "नया थ्रेड",
+    "authorNewPost": "नई पोस्ट लिखें",
+    "postTitle": "पोस्ट का शीर्षक",
+    "tags": "टैग",
+    "postContent": "पोस्ट की सामग्री",
+    "postToMyriad": "मायरियड पर पोस्ट करें",
+    "featuring": "विशेष",
+    "welcomeToMyriad": "मायरियड में आपका स्वागत है",
+    "overcomingChallenges": "एआई के साथ मिलकर चुनौतियों पर विजय",
+    "morningGreeting": "सुप्रभात, {name}!",
+    "startMindfulness": "अपनी माइंडफुलनेस यात्रा शुरू करें",
+    "overview": "यहां आपका अवलोकन है",
+    "medicineConsistency": "दवा नियमितता",
+    "calculating": "गणना कर रहे हैं...",
+    "days": "{count} दिन",
+    "requestWheelchair": "व्हीलचेयर\nएक्सेसिबिलिटी का अनुरोध करें",
+    "wheelchairRequestSent": "व्हीलचेयर अनुरोध भेजा गया",
+    "wheelchairRequestMessage": "आपका व्हीलचेयर एक्सेसिबिलिटी अनुरोध प्रस्तुत कर दिया गया है। आपकी सुविधा के लिए निर्दिष्ट तिथि पर विशेष व्यवस्था की जाएगी।",
+    "username": "उपयोगकर्ता नाम",
+    "usernameTaken": "यह उपयोगकर्ता नाम पहले से लिया गया है/अमान्य है",
+    "guardianPhone": "अभिभावक का फोन",
+    "bio": "बायो",
+    "selectPreferences": "अपनी प्राथमिकताएं चुनें",
+    "sleepDuration": "नींद की अवधि",
+    "guardianNotFound": "अभिभावक का नंबर नहीं मिला।",
+    "guardian": "अभिभावक",
+    "sos": "एसओएस",
+    "ambulance": "एम्बुलेंस",
+    "hospital": "अस्पताल",
+    "fireStation": "अग्निशमन केंद्र",
+    "policeStation": "पुलिस स्टेशन",
+    "scream": "चीख",
+    "openWith": "इसके साथ खोलें:",
+    "locationServicesDisabled": "स्थान सेवाएं अक्षम हैं।",
+    "locationPermissionsDenied": "स्थान अनुमतियां अस्वीकृत हैं।",
+    "locationPermissionsPermanentlyDenied": "स्थान अनुमतियां स्थायी रूप से अस्वीकृत हैं।",
+    "errorGettingLocation": "स्थान प्राप्त करने में त्रुटि: {error}",
+    "errorFindingServices": "आपातकालीन सेवाएं खोजने में त्रुटि: {error}",
+    "locationNotAvailable": "स्थान जानकारी अभी उपलब्ध नहीं है।",
+    "noMapApps": "डिवाइस पर कोई मैप ऐप नहीं मिला।",
+    "home": "होम",
+    "community": "कम्युनिटी",
+    "myAi": "मेरी एआई",
+    "serenify": "सेरेनिफाई",
+    "sightify": "साइटिफाई",
+    "colorify": "कलरिफाई",
+    "speakify": "स्पीकिफाई",
+    "hearify": "हीरिफाई",
+    "voicify": "वॉइसिफाई",
+    "vibraillify": "वाइब्रैलिफाई",
+    "wheelify": "व्हीलिफाई",
+    "onboarding": "ऑनबोर्डिंग",
+    "medify": "मेडिफाई",
+    "@errorUpdatingInfo": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "@errorUpdatingPrefs": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "@morningGreeting": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "@days": {
+        "placeholders": {
+            "count": {
+                "type": "String"
+            }
+        }
+    }
+}

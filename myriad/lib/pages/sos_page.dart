@@ -11,6 +11,7 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:myriad/passwords.dart';
 import 'package:map_launcher/map_launcher.dart';
 import  'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SosPage extends StatefulWidget {
   const SosPage({super.key});
@@ -306,10 +307,12 @@ class _SosPageState extends State<SosPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: MyAppBar(
-        title: 'SOS',
+        title: l10n.sos,
         hideSos: true,
       ),
       body: Padding(
@@ -327,7 +330,7 @@ class _SosPageState extends State<SosPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: _buildDistanceCard(
                       context,
-                      "Hospital",
+                      l10n.hospital,
                       LucideIcons.hospital,
                       _formatDistance(distances['Hospital']!),
                     ),
@@ -339,7 +342,7 @@ class _SosPageState extends State<SosPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: _buildDistanceCard(
                       context,
-                      "Fire\nStation",
+                      l10n.fireStation,
                       LucideIcons.fireExtinguisher,
                       _formatDistance(distances['Fire Station']!),
                     ),
@@ -351,7 +354,7 @@ class _SosPageState extends State<SosPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: _buildDistanceCard(
                       context,
-                      "Police\nStation",
+                      l10n.policeStation,
                       Icons.local_police,
                       _formatDistance(distances['Police Station']!),
                     ),
@@ -375,18 +378,18 @@ class _SosPageState extends State<SosPage> {
                       children: [
                         _buildEmergencyOption(
                           context,
-                          "Ambulance",
+                          l10n.ambulance,
                           LucideIcons.ambulance,
                         ),
                         _buildEmergencyOption(
                           context,
-                          "Guardian",
+                          l10n.guardian,
                           Icons.phone_outlined,
                         ),
                         if (showScream)
                           _buildEmergencyOption(
                             context,
-                            "SOS",
+                            l10n.sos,
                             Icons.notification_important_outlined,
                           ),
                         if (showScream) _ScreamButton(),
@@ -395,7 +398,7 @@ class _SosPageState extends State<SosPage> {
                     if (!showScream)
                       _buildEmergencyOption(
                         context,
-                        "SOS",
+                        l10n.sos,
                         Icons.notification_important_outlined,
                       ),
                   ],

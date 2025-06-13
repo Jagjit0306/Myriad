@@ -3,6 +3,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:myriad/helper/mental_health.dart';
 import 'package:myriad/helper/medify_functions.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotifyPage extends StatefulWidget {
   final bool hideMediGraph;
@@ -67,13 +68,14 @@ class _NotifyPageState extends State<NotifyPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Here is your overview",
+            l10n.overview,
             style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 fontSize: 24,
@@ -93,7 +95,7 @@ class _NotifyPageState extends State<NotifyPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Medicine Consistency',
+                          l10n.medicineConsistency,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.inversePrimary,
                             fontSize: 20,

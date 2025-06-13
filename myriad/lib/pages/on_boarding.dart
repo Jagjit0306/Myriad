@@ -6,6 +6,7 @@ import 'package:myriad/all_preferences.dart';
 import 'package:myriad/components/logo_component.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_textfield.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnBoarding extends StatefulWidget {
   const OnBoarding({super.key});
@@ -62,6 +63,7 @@ class _OnBoardingState extends State<OnBoarding> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -81,14 +83,14 @@ class _OnBoardingState extends State<OnBoarding> {
                 ),
               ),
               Text(
-                "Welcome to Myriad",
+                l10n.welcomeToMyriad,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
               ),
               const SizedBox(
                 height: 25,
               ),
               MyTextfield(
-                hintText: 'Username',
+                hintText: l10n.username,
                 inputType: TextInputType.name,
                 obscureText: false,
                 controller: usernameController,
@@ -97,12 +99,12 @@ class _OnBoardingState extends State<OnBoarding> {
                 },
               ),
               if (!isUsernameUnique && usernameController.text.isNotEmpty)
-                const Text("THIS USERNAME IS TAKEN/INVALID"),
+                Text(l10n.usernameTaken),
               const SizedBox(
                 height: 25,
               ),
               MyTextfield(
-                hintText: 'Guardian Phone',
+                hintText: l10n.guardianPhone,
                 inputType: TextInputType.phone,
                 obscureText: false,
                 controller: guardianPhoneController,
@@ -112,7 +114,7 @@ class _OnBoardingState extends State<OnBoarding> {
                 height: 25,
               ),
               MyTextfield(
-                hintText: 'Bio',
+                hintText: l10n.bio,
                 inputType: TextInputType.multiline,
                 obscureText: false,
                 controller: bioController,
@@ -122,7 +124,7 @@ class _OnBoardingState extends State<OnBoarding> {
                 height: 25,
               ),
               Text(
-                "Select your preferences",
+                l10n.selectPreferences,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
               Padding(

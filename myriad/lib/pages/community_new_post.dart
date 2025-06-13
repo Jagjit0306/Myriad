@@ -6,6 +6,7 @@ import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_chips.dart';
 import 'package:myriad/components/my_textfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CommunityNewPost extends StatefulWidget {
   const CommunityNewPost({super.key});
@@ -60,10 +61,11 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('New Thread'),
+        title: Text(l10n.newThread),
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -75,7 +77,7 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
               child: Text(
-                'Author a new post',
+                l10n.authorNewPost,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -86,7 +88,7 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
               height: 20,
             ),
             MyTextfield(
-                hintText: 'Post title',
+                hintText: l10n.postTitle,
                 obscureText: false,
                 onChanged: (xyz) {},
                 controller: titleController),
@@ -96,7 +98,7 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
               child: Text(
-                'Tags',
+                l10n.tags,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -115,7 +117,7 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
               },
             ),
             MyTextfield(
-                hintText: 'Post content',
+                hintText: l10n.postContent,
                 obscureText: false,
                 inputType: TextInputType.multiline,
                 onChanged: (xyz) {},
@@ -125,7 +127,7 @@ class _CommunityNewPostState extends State<CommunityNewPost> {
               height: 10,
             ),
             MyButton(
-              text: 'Post to Myriad',
+              text: l10n.postToMyriad,
               onTap: () {
                 communityDatabase.addCommunityPost(
                     titleController.text, contentController.text, categories);
