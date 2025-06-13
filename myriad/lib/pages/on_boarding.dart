@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myriad/all_preferences.dart';
 import 'package:myriad/components/logo_component.dart';
 import 'package:myriad/components/my_button.dart';
 import 'package:myriad/components/my_textfield.dart';
@@ -19,17 +20,8 @@ class _OnBoardingState extends State<OnBoarding> {
   final TextEditingController guardianPhoneController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
 
-  List<Map<String, bool>> prefs = [
-    {'Vision Support': false},
-    {'Hearing Support': false},
-    {'Speech Assistance': false},
-    {'Colorblindness Support': false},
-    {'Dexterity Support': false},
-    {'Wheelchair Support': false},
-    {'Limb Diversity Support': false},
-    {'Paralysis Support': false},
-    {'Stress Management': false},
-  ];
+  List<Map<String, bool>> prefs = prefsList;
+  List<List<String>> prefsExclusive = prefsExclusiveGroupings;
 
   bool isUsernameUnique = false;
 
@@ -155,6 +147,19 @@ class _OnBoardingState extends State<OnBoarding> {
                                   prefs[index].keys.first: newValue!
                                 };
                               });
+                              // TODO: Handle exclusive groupings
+
+                              if(newValue == true) { //Coz we only need 1 from them, or neither
+                                for(var group in prefsExclusive) {
+                                  if(group.contains(prefs[index].keys.first)) {
+                                    for(var pref in group) {
+                                      if(pref != prefs[index].keys.first) {
+                                        prefs.firstWhere((element) => element.keys.first == pref)[pref] = false;
+                                      }
+                                    }
+                                  }
+                                }
+                              }
                             },
                           ),
                           if (index < prefs.length - 1)

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myriad/all_preferences.dart';
 import 'package:myriad/auth/google_auth.dart';
 import 'package:myriad/components/extras.dart';
 import 'package:myriad/components/my_button.dart';
@@ -26,20 +27,10 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
 
-  List<Map<String, bool>> prefs = [
-    {'visionSupport': false},
-    {'hearingSupport': false},
-    {'speechAssistance': false},
-    {'colorblindnessSupport': false},
-    {'dexteritySupport': false},
-    {'wheelchairSupport': false},
-    {'limbDiversitySupport': false},
-    {'paralysisSupport': false},
-    {'stressManagement': false},
-  ];
-
   String _currentLanguage = 'en';
   bool _isChangingLanguage = false;
+  List<Map<String, bool>> prefs = prefsList;
+  List<List<String>> prefsExclusive = prefsExclusiveGroupings;
 
   @override
   void initState() {
@@ -153,7 +144,8 @@ class _SettingsPageState extends State<SettingsPage> {
         // Show snackbar
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(languageCode == 'hi' ? 'भाषा बदली गई' : 'Language changed'),
+            content: Text(
+                languageCode == 'hi' ? 'भाषा बदली गई' : 'Language changed'),
             duration: const Duration(seconds: 1),
           ),
         );
@@ -192,7 +184,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     // Convert the prefs list to use localized strings
     final localizedPrefs = prefs.map((pref) {
       final key = pref.keys.first;
@@ -250,7 +242,8 @@ class _SettingsPageState extends State<SettingsPage> {
               ExpansionTile(
                 initiallyExpanded: true,
                 title: Text(l10n.language,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500)),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -260,21 +253,25 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: Text(l10n.english),
                           value: 'en',
                           groupValue: _currentLanguage,
-                          onChanged: _isChangingLanguage ? null : (value) {
-                            if (value != null) {
-                              _changeLanguage(value);
-                            }
-                          },
+                          onChanged: _isChangingLanguage
+                              ? null
+                              : (value) {
+                                  if (value != null) {
+                                    _changeLanguage(value);
+                                  }
+                                },
                         ),
                         RadioListTile<String>(
                           title: Text(l10n.hindi),
                           value: 'hi',
                           groupValue: _currentLanguage,
-                          onChanged: _isChangingLanguage ? null : (value) {
-                            if (value != null) {
-                              _changeLanguage(value);
-                            }
-                          },
+                          onChanged: _isChangingLanguage
+                              ? null
+                              : (value) {
+                                  if (value != null) {
+                                    _changeLanguage(value);
+                                  }
+                                },
                         ),
                       ],
                     ),
@@ -285,7 +282,8 @@ class _SettingsPageState extends State<SettingsPage> {
               ExpansionTile(
                 initiallyExpanded: true,
                 title: Text(l10n.editPersonalInfo,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500)),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -325,7 +323,8 @@ class _SettingsPageState extends State<SettingsPage> {
                               if (mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text('Error updating information: $e'),
+                                    content:
+                                        Text('Error updating information: $e'),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -340,7 +339,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               const SizedBox(height: 20),
-          
+
               // Accessibility Preferences Section
               ExpansionTile(
                 initiallyExpanded: true,
@@ -358,9 +357,29 @@ class _SettingsPageState extends State<SettingsPage> {
                             value: pref.values.first,
                             onChanged: (bool? newValue) {
                               setState(() {
-                                final originalKey = prefs[localizedPrefs.indexOf(pref)].keys.first;
-                                prefs[localizedPrefs.indexOf(pref)] = {originalKey: newValue!};
+                                final originalKey =
+                                    prefs[localizedPrefs.indexOf(pref)]
+                                        .keys
+                                        .first;
+                                prefs[localizedPrefs.indexOf(pref)] = {
+                                  originalKey: newValue!
+                                };
                               });
+
+                              if (newValue == true) {
+                                //Coz we only need 1 from them, or neither
+                                for (var group in prefsExclusive) {
+                                  if (group.contains(pref.keys.first)) {
+                                    for (var groupPref in group) {
+                                      if (groupPref != pref.keys.first) {
+                                        prefs.firstWhere((element) =>
+                                            element.keys.first ==
+                                            groupPref)[groupPref] = false;
+                                      }
+                                    }
+                                  }
+                                }
+                              }
                             },
                           );
                         }),
