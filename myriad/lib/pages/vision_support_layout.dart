@@ -13,6 +13,12 @@ class VisionSupportLayout extends StatelessWidget {
       appBar: MyAppBar(
         title: 'Myriad - Vision+',
         hideSos: true,
+        actions: [
+          AppbarIcon(
+            onTouch: () => context.push('/vision_support_settings'),
+            iconData: Icons.settings,
+          ),
+        ],
       ),
       body: Column(children: [
         SizedBox(

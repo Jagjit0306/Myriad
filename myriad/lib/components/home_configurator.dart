@@ -36,8 +36,12 @@ class _HomeConfiguratorState extends State<HomeConfigurator> {
     if (config!.isNotEmpty) {
       final Map<String, bool> c =
           config.fold({}, (acc, map) => {...acc, ...map});
-      if (c["Vision Support"] == true && c["Hearing Support"] == true) {
+      if ((c["Vision Support"] == true ||
+              c["Vision Support (Simplified)"] == true) &&
+          c["Hearing Support"] == true) {
         context.go('/vb_chat_bot');
+      } else if (c["Vision Support (Simplified)"] == true) {
+        context.go('/vision_support_layout');
       } else {
         context.go('/home');
       }

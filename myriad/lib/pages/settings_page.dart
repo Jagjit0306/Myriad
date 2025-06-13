@@ -193,6 +193,9 @@ class _SettingsPageState extends State<SettingsPage> {
         case 'visionSupport':
           localizedKey = l10n.visionSupport;
           break;
+        case 'visionSupportSimplified':
+          localizedKey = l10n.visionSupportSimplified;
+          break;
         case 'hearingSupport':
           localizedKey = l10n.hearingSupport;
           break;
@@ -366,20 +369,26 @@ class _SettingsPageState extends State<SettingsPage> {
                                 };
                               });
 
-                              if (newValue == true) {
-                                //Coz we only need 1 from them, or neither
+                                if (newValue == true) {
+                                // Get the original key for the current preference
+                                final originalKey = prefs[localizedPrefs.indexOf(pref)].keys.first;
+                                
+                                // Check exclusive groups using original keys
                                 for (var group in prefsExclusive) {
-                                  if (group.contains(pref.keys.first)) {
-                                    for (var groupPref in group) {
-                                      if (groupPref != pref.keys.first) {
-                                        prefs.firstWhere((element) =>
-                                            element.keys.first ==
-                                            groupPref)[groupPref] = false;
-                                      }
+                                  if (group.contains(originalKey)) {
+                                  for (var groupPref in group) {
+                                    if (groupPref != originalKey) {
+                                    // Find and update the original preference
+                                    final prefIndex = prefs.indexWhere(
+                                      (element) => element.keys.first == groupPref);
+                                    if (prefIndex != -1) {
+                                      prefs[prefIndex] = {groupPref: false};
+                                    }
                                     }
                                   }
+                                  }
                                 }
-                              }
+                                }
                             },
                           );
                         }),
