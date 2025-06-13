@@ -92,6 +92,10 @@ final router = GoRouter(
       path: '/vision_support_serenify',
       builder: (context, state) => const SightifyPage(),
     ),
+    GoRoute(
+      path: '/vision_support_settings',
+      builder: (context, state) => SettingsPage(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => LayoutScaffold(
         navigationShell: navigationShell,

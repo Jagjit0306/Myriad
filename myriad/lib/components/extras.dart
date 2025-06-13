@@ -100,11 +100,6 @@ class _ExtrasState extends State<Extras> {
                       );
                     }),
                   ),
-                ExtraButton(
-                  iconData: Icons.api,
-                  name: "VIS_SUPP_TEMP",
-                  path: "/vision_support_layout",
-                ),
                 SizedBox(
                   height: 20,
                 ),
