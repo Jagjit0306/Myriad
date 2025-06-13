@@ -1,7 +1,7 @@
 name: myriad
 description: "The App That Adapts to You"
 publish_to: 'none'
-version: 0.1.0
+version: 0.1.2
 
 environment:
   sdk: ^3.6.0
